@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
@@ -60,19 +60,31 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
+    meta: { title: '1024管理', icon: 'el-icon-s-help' },
     children: [
       {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: '账号管理', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'check',
+        name: 'Check',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: '账号监管', icon: 'tree' }
+      },
+      {
+        path: 'regist',
+        name: 'Regist',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '账号注册', icon: 'tree' }
+      },
+      {
+        path: 'manage',
+        name: 'Manage',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '邀请码管理', icon: 'tree' }
       }
     ]
   },
@@ -85,18 +97,17 @@ export const constantRoutes = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        meta: { title: '蓝奏云盘', icon: 'form' }
       }
     ]
   },
-
   {
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',
     name: 'Nested',
     meta: {
-      title: 'Nested',
+      title: '商品管理',
       icon: 'nested'
     },
     children: [
@@ -155,7 +166,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        meta: { title: '支付管理', icon: 'link' }
       }
     ]
   },
