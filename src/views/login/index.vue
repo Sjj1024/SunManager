@@ -74,7 +74,7 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
+        username: '1024小神',
         password: '111111'
       },
       loginRules: {
@@ -110,6 +110,7 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
+            console.log('his.$store.dispatch');
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {

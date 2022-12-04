@@ -6,7 +6,7 @@ function resolve(dir) {
   return path.join(__dirname, dir);
 }
 
-const name = defaultSettings.title || "vue Admin Template"; // page title
+const name = defaultSettings.title || "帐号管理"; // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -36,7 +36,19 @@ module.exports = {
       warnings: false,
       errors: true,
     },
-    before: require("./mock/mock-server.js"),
+    // before: require("./mock/mock-server.js"),
+    proxy: {
+      //跨域代理
+      '/user': {
+        target: 'http://localhost:5000',
+        // ws: true,
+        // secure: false,
+        changeOrigin: true, //是否开启跨域
+        // pathRewrite: {
+        //   '^/user': '', //让路径以/api开头的字段为空
+        // },
+      },
+    },
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
