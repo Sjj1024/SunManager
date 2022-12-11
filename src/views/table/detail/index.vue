@@ -1,10 +1,46 @@
 <template>
-  <div class="detail-box">这是详情页</div>
+  <div class="detail-box">
+    <el-tabs
+      v-model="activeName"
+      @tab-click="handleClick"
+    >
+      <el-tab-pane
+        label="基本信息"
+        name="first"
+      >
+        <BaseInfo></BaseInfo>
+      </el-tab-pane>
+      <el-tab-pane
+        label="编辑资料"
+        name="second"
+      >
+        <EditInfo></EditInfo>
+      </el-tab-pane>
+      <el-tab-pane
+        label="我的文章"
+        name="third"
+      >
+        <MyArticle></MyArticle>
+      </el-tab-pane>
+      <el-tab-pane
+        label="租借信息"
+        name="fourth"
+      >
+        <LeaseInfo></LeaseInfo>
+      </el-tab-pane>
+    </el-tabs>
+  </div>
 </template>
 
 <script>
+import BaseInfo from '@/views/table/detail/component/baseInfo'
+import EditInfo from '@/views/table/detail/component/editInfo'
+import MyArticle from '@/views/table/detail/component/myArticle'
+import LeaseInfo from '@/views/table/detail/component/leaseInfo'
+
 export default {
   name: 'Detail',
+  components: { BaseInfo, EditInfo, MyArticle, LeaseInfo },
   props: {
     person: {
       type: Object,
@@ -29,7 +65,13 @@ export default {
   },
   data() {
     return {
-      id: ''
+      id: '',
+      activeName: 'first'
+    }
+  },
+  methods: {
+    handleClick(tab, event) {
+      console.log(tab, event)
     }
   }
 }
