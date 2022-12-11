@@ -39,7 +39,7 @@ module.exports = {
     // before: require("./mock/mock-server.js"),
     proxy: {
       //跨域代理
-      '/user': {
+      '/api1': {
         target: 'http://localhost:5000',
         // ws: true,
         // secure: false,
@@ -48,6 +48,15 @@ module.exports = {
         //   '^/user': '', //让路径以/api开头的字段为空
         // },
       },
+      // '/table': {
+      //   target: 'http://localhost:5000',
+      //   // ws: true,
+      //   // secure: false,
+      //   changeOrigin: true, //是否开启跨域
+      //   // pathRewrite: {
+      //   //   '^/user': '', //让路径以/api开头的字段为空
+      //   // },
+      // },
     },
   },
   configureWebpack: {
