@@ -41,22 +41,14 @@ module.exports = {
       //跨域代理
       '/api1': {
         target: 'http://localhost:5000',
+        // target: 'http://192.168.110.56:5000',
         // ws: true,
         // secure: false,
         changeOrigin: true, //是否开启跨域
         // pathRewrite: {
         //   '^/user': '', //让路径以/api开头的字段为空
         // },
-      },
-      // '/table': {
-      //   target: 'http://localhost:5000',
-      //   // ws: true,
-      //   // secure: false,
-      //   changeOrigin: true, //是否开启跨域
-      //   // pathRewrite: {
-      //   //   '^/user': '', //让路径以/api开头的字段为空
-      //   // },
-      // },
+      }
     },
   },
   configureWebpack: {

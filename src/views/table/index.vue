@@ -3,7 +3,8 @@
     <el-form
       :inline="true"
       :model="formInline"
-      ref="ruleForm"
+      size="medium"
+      ref="addForm"
       class="demo-form-inline"
     >
       <el-form-item
@@ -21,7 +22,8 @@
       >
         <el-select
           v-model="formInline.level"
-          placeholder="活动区域"
+          placeholder="等级"
+          class="select-w"
         >
           <el-option
             label="新手上路"
@@ -62,15 +64,40 @@
         prop="weiwang"
       >
         <el-input
+          class="select-w"
           v-model="formInline.weiwang"
           placeholder="威望"
         />
+      </el-form-item>
+      <el-form-item
+        label="状态"
+        prop="yaoqing"
+      >
+        <el-select
+          class="select-w"
+          v-model="formInline.status"
+          placeholder="状态"
+        >
+          <el-option
+            label="正常"
+            value="shanghai"
+          />
+          <el-option
+            label="临时禁言"
+            value="beijing"
+          />
+          <el-option
+            label="永久禁言"
+            value="beijing"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item
         label="可产邀请码"
         prop="yaoqing"
       >
         <el-select
+          class="select-w"
           v-model="formInline.yaoqing"
           placeholder="可产邀请码"
         >
@@ -87,9 +114,24 @@
       <el-form-item>
         <el-button
           type="primary"
+          size="medium"
           @click="onSubmit"
         >查询</el-button>
-        <el-button @click="resetForm">重置</el-button>
+        <el-button
+          size="medium"
+          @click="resetForm"
+        >重置</el-button>
+      </el-form-item>
+      <el-form-item class="add-btn">
+        <el-button
+          class="export-btn"
+          size="medium"
+          icon="el-icon-plus"
+          type="primary"
+          @click="addDialog = true"
+        >
+          添加用户
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -102,7 +144,12 @@
         label="用户名"
         width="150"
       >
-        <template slot-scope="scope"> {{ scope.row.username }} </template>
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            @click="detailBtn(scope.row.id)"
+          >{{ scope.row.username }}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
         align="center"
@@ -147,17 +194,21 @@
       >
         <template slot-scope="scope">23/22/2</template>
       </el-table-column>
-      <!-- <el-table-column align="center" prop="created_at" label="注册时间">
-        <template slot-scope="scope">
-          <span>2022-11-05</span>
-        </template>
-      </el-table-column> -->
       <el-table-column
         align="center"
         width="130"
         label="可产邀请码"
       >
         <template slot-scope="scope"> 是/否(禁言23天) </template>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        width="130"
+        label="状态"
+      >
+        <template slot-scope="scope">
+          <span>正常</span>
+        </template>
       </el-table-column>
       <el-table-column
         align="center"
@@ -202,6 +253,64 @@
       >
       </el-pagination>
     </div>
+    <!-- 添加用户 -->
+    <el-dialog
+      title="添加用户"
+      :visible.sync="addDialog"
+      width="30%"
+    >
+      <el-form
+        :model="addForm"
+        status-icon
+        :rules="rules"
+        ref="addForm"
+        size="medium"
+        label-width="100px"
+        class="add-Form"
+      >
+        <el-form-item
+          label="账号"
+          prop="username"
+        >
+          <el-input
+            v-model="addForm.username"
+            autocomplete="off"
+            style="width: 80%"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="密码"
+          prop="password"
+        >
+          <el-input
+            v-model="addForm.password"
+            autocomplete="off"
+            style="width: 80%"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="Token">
+          <el-input
+            v-model="addForm.token"
+            style="width: 80%"
+          ></el-input>
+        </el-form-item>
+        <div class="tip-info">提示：有账号和密码，就不必填token</div>
+      </el-form>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          @click="addDialog = false"
+          size="medium"
+        >取 消</el-button>
+        <el-button
+          type="primary"
+          size="medium"
+          @click="addUser('addForm')"
+        >添 加</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -210,26 +319,31 @@ import { getList } from '@/api/table'
 
 export default {
   name: 'Table',
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
       list: null,
       pageTotal: 0,
       listLoading: true,
+      addDialog: false,
       formInline: {
         user: '',
         weiwang: '',
         level: '',
+        status: '',
         yaoqing: ''
+      },
+      addForm: {
+        username: '',
+        password: '',
+        token: ''
+      },
+      rules: {
+        username: [
+          { required: true, message: '请选择活动区域', trigger: 'change' }
+        ],
+        password: [
+          { required: true, message: '请选择活动区域', trigger: 'change' }
+        ]
       }
     }
   },
@@ -249,7 +363,7 @@ export default {
       console.log('submit!')
     },
     resetForm(formName) {
-      this.$refs.ruleForm.resetFields()
+      this.$refs.addForm.resetFields()
       console.log('重制查询内容')
     },
     handleSizeChange(val) {
@@ -261,13 +375,35 @@ export default {
     detailBtn(id) {
       console.log('actionBtn---', id)
       this.$router.push(`/xiaoshen/detail/${id}`)
-      // this.$router.push(`/xiaoshen/manage`)
+    },
+    addUser() {
+      console.log('添加用户')
+      this.addDialog = false
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.app-container {
+  height: 100vh;
+  // overflow: auto;
+  overflow-y: scroll;
+  .add-btn {
+    float: right;
+  }
+  ::v-deep .el-dialog__footer {
+    text-align: center;
+  }
+  .tip-info {
+    margin-left: 60px;
+    color: #999;
+  }
+  .select-w {
+    width: 130px;
+  }
+}
+
 .el-dropdown-link {
   cursor: pointer;
   color: #409eff;
@@ -278,5 +414,6 @@ export default {
 
 .page-box {
   margin-top: 15px;
+  height: 80px;
 }
 </style>

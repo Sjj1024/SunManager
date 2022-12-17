@@ -1,5 +1,8 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
+  <div
+    :class="classObj"
+    class="app-wrapper"
+  >
     <div
       v-if="device === 'mobile' && sidebar.opened"
       class="drawer-bg"
@@ -55,17 +58,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
-@import "~@/styles/variables.scss";
+@import '~@/styles/mixin.scss';
+@import '~@/styles/variables.scss';
 
 .app-wrapper {
   @include clearfix;
   position: relative;
   height: 100%;
   width: 100%;
+  // ::-webkit-scrollbar {
+  //   display: none;
+  //   width: 0 !important;
+  // }
+  overflow: hidden;
   &.mobile.openSidebar {
     position: fixed;
     top: 0;
+  }
+
+  .main-container {
+    height: 100%;
+    overflow: hidden;
+    // overflow-y: scroll;
   }
 }
 .drawer-bg {
