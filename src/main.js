@@ -23,11 +23,14 @@ import "@/permission"; // permission control
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
-if (process.env.NODE_ENV === "production") {
-  const { mockXHR } = require("../mock");
-  mockXHR();
-}
+// if (process.env.NODE_ENV === "production") {
+//   const { mockXHR } = require("../mock");
+//   mockXHR();
+// }
 
+// 剪切板
+import VueClipBoard from 'vue-clipboard2'
+Vue.use(VueClipBoard)
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale });
 // 如果想要中文版 element-ui，按如下方式声明

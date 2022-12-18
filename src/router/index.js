@@ -78,7 +78,7 @@ export const constantRoutes = [
         path: 'regist',
         name: 'Regist',
         component: () => import('@/views/tree/index'),
-        meta: { title: '账号注册', icon: 'tree' }
+        meta: { title: '账号升级', icon: 'tree' }
       },
       {
         path: 'manage',

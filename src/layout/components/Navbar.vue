@@ -7,7 +7,6 @@
     />
 
     <breadcrumb class="breadcrumb-container" />
-
     <div class="right-menu">
       <el-dropdown
         class="avatar-container"
@@ -18,7 +17,7 @@
             :src="avatar+'?imageView2/1/w/80/h/80'"
             class="user-avatar"
           >
-          <i class="el-icon-caret-bottom" />
+          <!-- <i class="el-icon-caret-bottom" /> -->
         </div>
         <el-dropdown-menu
           slot="dropdown"

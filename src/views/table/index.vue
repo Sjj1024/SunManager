@@ -12,6 +12,7 @@
         prop="user"
       >
         <el-input
+          class="select-u"
           v-model="formInline.user"
           placeholder="用户名"
         />
@@ -27,35 +28,35 @@
         >
           <el-option
             label="新手上路"
-            value="shanghai"
+            value="xinshou"
           />
           <el-option
             label="侠客"
-            value="beijing"
+            value="xiake"
           />
           <el-option
             label="騎士"
-            value="beijing"
+            value="qishi"
           />
           <el-option
             label="圣騎士"
-            value="beijing"
+            value="shengqishi"
           />
           <el-option
             label="精靈王"
-            value="beijing"
+            value="jinglingwang"
           />
           <el-option
             label="風云使者"
-            value="beijing"
+            value="fengyun"
           />
           <el-option
             label="光明使者"
-            value="beijing"
+            value="guangming"
           />
           <el-option
             label="天使"
-            value="beijing"
+            value="tianshi"
           />
         </el-select>
       </el-form-item>
@@ -80,15 +81,15 @@
         >
           <el-option
             label="正常"
-            value="shanghai"
+            value="zhengchang"
           />
           <el-option
             label="临时禁言"
-            value="beijing"
+            value="linshi"
           />
           <el-option
             label="永久禁言"
-            value="beijing"
+            value="yongjiu"
           />
         </el-select>
       </el-form-item>
@@ -99,15 +100,15 @@
         <el-select
           class="select-w"
           v-model="formInline.yaoqing"
-          placeholder="可产邀请码"
+          placeholder="可产"
         >
           <el-option
             label="是"
-            value="shanghai"
+            value="yes"
           />
           <el-option
             label="否"
-            value="beijing"
+            value="no"
           />
         </el-select>
       </el-form-item>
@@ -229,11 +230,17 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
-                <span @click="detailBtn(scope.row.id)">文字按钮</span>
+                <span @click="detailBtn(scope.row.id)">详细资料</span>
               </el-dropdown-item>
-              <el-dropdown-item>复制帐号</el-dropdown-item>
-              <el-dropdown-item>复制贡献连接</el-dropdown-item>
-              <el-dropdown-item>删除</el-dropdown-item>
+              <el-dropdown-item>
+                <span @click="handelCopyUser(scope.row)">复制账号</span>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <span @click="handelCopyLink(scope.row)">贡献连接</span>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <span @click="delUser(scope.row.id)">删除账号</span>
+              </el-dropdown-item>
               <el-dropdown-item>不可用</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -288,13 +295,33 @@
             style="width: 80%"
           ></el-input>
         </el-form-item>
+        <el-form-item
+          label="邮箱"
+          prop="email"
+        >
+          <el-input
+            v-model="addForm.email"
+            autocomplete="off"
+            style="width: 80%"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="邀请码"
+          prop="invcode"
+        >
+          <el-input
+            v-model="addForm.invcode"
+            autocomplete="off"
+            style="width: 80%"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="Token">
           <el-input
             v-model="addForm.token"
             style="width: 80%"
           ></el-input>
         </el-form-item>
-        <div class="tip-info">提示：有账号和密码，就不必填token</div>
+        <div class="tip-info">提示：账号密码 / 账号密码邮箱邀请码 / Token</div>
       </el-form>
       <span
         slot="footer"
@@ -315,7 +342,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import tableApi from '@/api/table'
 
 export default {
   name: 'Table',
@@ -334,7 +361,9 @@ export default {
       },
       addForm: {
         username: '',
-        password: '',
+        password: '1024xiaoshen@gmail.com',
+        email: '1024xiaoshen@gmail.com',
+        invcode: '',
         token: ''
       },
       rules: {
@@ -353,7 +382,7 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getList().then((response) => {
+      tableApi.getList().then((response) => {
         this.list = response.data.items
         this.pageTotal = response.data.total
         this.listLoading = false
@@ -376,9 +405,34 @@ export default {
       console.log('actionBtn---', id)
       this.$router.push(`/xiaoshen/detail/${id}`)
     },
-    addUser() {
-      console.log('添加用户')
+    async addUser() {
+      console.log('添加用户-')
       this.addDialog = false
+      const res = await tableApi.addUser(this.addForm)
+      console.log('res---', res)
+    },
+    async delUser(id) {
+      console.log('删除用户-', id)
+      const res = await tableApi.delUser({ id })
+      console.log('res---', res)
+    },
+    async handelCopyUser(val) {
+      console.log('val----', val)
+      try {
+        const res = await this.$copyText(JSON.stringify(val))
+        this.$message({ message: '复制成功', type: 'success' })
+      } catch (error) {
+        this.$message.error('复制失败')
+      }
+    },
+    async handelCopyLink(val) {
+      console.log('val----', val)
+      try {
+        const res = await this.$copyText('连接')
+        this.$message({ message: '复制成功', type: 'success' })
+      } catch (error) {
+        this.$message.error('复制失败')
+      }
     }
   }
 }
@@ -400,7 +454,10 @@ export default {
     color: #999;
   }
   .select-w {
-    width: 130px;
+    width: 110px;
+  }
+  .select-u {
+    width: 150px;
   }
 }
 
