@@ -32,9 +32,18 @@ function addUpdateUser(data) {
   })
 }
 
+function getUserInfoByCookie(data) {
+  return request({
+    url: '/api1/table/queryUser',
+    method: 'POST',
+    data
+  })
+}
+
 export default {
   getList,
   addUser,
   delUser,
-  addUpdateUser
+  addUpdateUser,
+  getUserInfoByCookie
 }

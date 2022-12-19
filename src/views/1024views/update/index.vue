@@ -246,6 +246,7 @@
       title="添加用户"
       :visible.sync="addDialog"
       width="30%"
+      top="9vh"
     >
       <el-form
         :model="updateForm"
@@ -263,7 +264,7 @@
           <el-input
             v-model="updateForm.username"
             autocomplete="off"
-            style="width: 80%"
+            style="width: 85%"
             placeholder="请输入用户名"
           ></el-input>
         </el-form-item>
@@ -274,7 +275,7 @@
           <el-input
             v-model="updateForm.password"
             autocomplete="off"
-            style="width: 80%"
+            style="width: 85%"
             placeholder="请输入密码"
           ></el-input>
         </el-form-item>
@@ -285,8 +286,11 @@
           <el-input
             v-model="updateForm.cookie"
             autocomplete="off"
-            style="width: 80%"
+            style="width: 85%"
             placeholder="请输入Cookie"
+            type="textarea"
+            @input="getUserInfo"
+            :rows="7"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -296,8 +300,10 @@
           <el-input
             v-model="updateForm.userAgent"
             autocomplete="off"
-            style="width: 80%"
+            style="width: 85%"
             placeholder="请输入UserAgent"
+            type="textarea"
+            :rows="4"
           ></el-input>
         </el-form-item>
         <div class="tip-info">提示：账号密码 / Cookie</div>
@@ -381,6 +387,25 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
     },
+    async getUserInfo(val) {
+      console.log('val-------', val)
+      if (val.indexOf('winduser') !== -1) {
+        console.log('cookie正确，开始发送请求')
+        const res = await tableApi.getUserInfoByCookie(this.updateForm)
+        console.log('res---', res)
+        if (res.code === 200) {
+          const userName = res.data.userName
+          this.updateForm.username = userName
+        } else {
+          this.$message({
+            message: '查询用户名失败...cookie不可用',
+            type: 'warning'
+          })
+        }
+      } else {
+        console.log('cookie错误，不包含winduser')
+      }
+    },
     detailBtn(id) {
       console.log('actionBtn---', id)
       this.$router.push(`/xiaoshen/detail/${id}`)
@@ -390,6 +415,18 @@ export default {
       this.addDialog = false
       const res = await tableApi.addUpdateUser(this.updateForm)
       console.log('res---', res)
+      if (res.code === 200) {
+        this.$message({
+          message: '恭喜你，创建自动升级成功',
+          type: 'success'
+        })
+        let routeUrl = this.$router.resolve({
+          path: 'https://github.com/Sjj1024/Sjj1024/actions' // 这里的路径就可以正常的写，不需要添加_blank: true
+        })
+        window.open(routeUrl.href, '_blank')
+      } else {
+        this.$message.error('创建自动升级失败:' + res.message)
+      }
     },
     async delUser(id) {
       console.log('删除用户-', id)

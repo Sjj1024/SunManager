@@ -270,6 +270,7 @@
       title="添加用户"
       :visible.sync="addDialog"
       width="30%"
+      top="5vh"
     >
       <el-form
         :model="addForm"
@@ -287,7 +288,7 @@
           <el-input
             v-model="addForm.username"
             autocomplete="off"
-            style="width: 80%"
+            style="width: 85%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -297,7 +298,7 @@
           <el-input
             v-model="addForm.password"
             autocomplete="off"
-            style="width: 80%"
+            style="width: 85%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -307,7 +308,7 @@
           <el-input
             v-model="addForm.email"
             autocomplete="off"
-            style="width: 80%"
+            style="width: 85%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -317,13 +318,34 @@
           <el-input
             v-model="addForm.invcode"
             autocomplete="off"
-            style="width: 80%"
+            style="width: 85%"
           ></el-input>
         </el-form-item>
-        <el-form-item label="Token">
+        <el-form-item
+          label="Cookie"
+          prop="email"
+        >
           <el-input
-            v-model="addForm.token"
-            style="width: 80%"
+            v-model="addForm.cookie"
+            autocomplete="off"
+            style="width: 85%"
+            placeholder="请输入Cookie"
+            type="textarea"
+            @input="getUserInfo"
+            :rows="7"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="UserAgent"
+          prop="invcode"
+        >
+          <el-input
+            v-model="addForm.userAgent"
+            autocomplete="off"
+            style="width: 85%"
+            placeholder="请输入UserAgent"
+            type="textarea"
+            :rows="4"
           ></el-input>
         </el-form-item>
         <div class="tip-info">提示：账号密码 / 账号密码邮箱邀请码 / Token</div>
@@ -369,7 +391,8 @@ export default {
         password: '1024xiaoshen@gmail.com',
         email: '1024xiaoshen@gmail.com',
         invcode: '',
-        token: ''
+        cookie: '',
+        userAgent: ''
       },
       rules: {
         username: [
@@ -383,6 +406,8 @@ export default {
   },
   created() {
     this.fetchData()
+    // 设置浏览器userAgent
+    this.addForm.userAgent = navigator.userAgent
   },
   methods: {
     fetchData() {
