@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import BaseInfo from '@/views/table/detail/component/baseInfo'
-import EditInfo from '@/views/table/detail/component/editInfo'
-import MyArticle from '@/views/table/detail/component/myArticle'
-import LeaseInfo from '@/views/table/detail/component/leaseInfo'
+import BaseInfo from '@/views/1024views/table/detail/component/baseInfo'
+import EditInfo from '@/views/1024views/table/detail/component/editInfo'
+import MyArticle from '@/views/1024views/table/detail/component/myArticle'
+import LeaseInfo from '@/views/1024views/table/detail/component/leaseInfo'
 
 export default {
   name: 'Detail',

@@ -24,8 +24,17 @@ function delUser(data) {
   })
 }
 
+function addUpdateUser(data) {
+  return request({
+    url: '/api1/table/addUpdateUser',
+    method: 'POST',
+    data
+  })
+}
+
 export default {
   getList,
   addUser,
-  delUser
+  delUser,
+  addUpdateUser
 }

@@ -65,31 +65,33 @@ export const constantRoutes = [
       {
         path: 'table',
         name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '账号管理', icon: 'table' }
+        component: () => import('@/views/1024views/table/index'),
+        meta: { title: '账号信息', icon: 'table' }
       },
       {
-        path: 'check',
-        name: 'Check',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '账号监管', icon: 'tree' }
+        path: "detail/:id",
+        name: 'Detail',
+        hidden: true,
+        component: () => import("@/views/1024views/table/detail/index"),
+        meta: { title: '帐号详情', icon: 'table' }
       },
       {
         path: 'regist',
         name: 'Regist',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/1024views/update/index'),
         meta: { title: '账号升级', icon: 'tree' }
+      },
+      {
+        path: 'check',
+        name: 'Check',
+        component: () => import('@/views/1024views/watch/index'),
+        meta: { title: '账号监管', icon: 'tree' }
       },
       {
         path: 'manage',
         name: 'Manage',
         component: () => import('@/views/tree/index'),
         meta: { title: '邀请码管理', icon: 'tree' }
-      },
-      {
-        path: "detail/:id",
-        name: 'Detail',
-        component: () => import("@/views/table/detail/index")
       }
     ]
   },
