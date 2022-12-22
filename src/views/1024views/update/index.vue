@@ -124,6 +124,7 @@
       <el-table-column
         align="center"
         label="用户名"
+        width="110"
       >
         <template slot-scope="scope">
           <el-button
