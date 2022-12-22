@@ -46,7 +46,7 @@
         <span>{{ base.username }}</span>
       </div>
       <div class="right">
-        <span class="lable">定期存款:</span>
+        <span class="lable">两步认证:</span>
         <span>{{ base.id }}</span>
       </div>
     </div>
@@ -72,11 +72,11 @@
     </div>
     <div class="inline">
       <div class="left">
-        <span class="lable">两步认证:</span>
+        <span class="lable">描述信息:</span>
         <span>{{ base.username }}</span>
       </div>
       <div class="right">
-        <span class="lable">密保邮箱:</span>
+        <span class="lable">Cookie:</span>
         <span>{{ base.id }}</span>
       </div>
     </div>
@@ -86,8 +86,14 @@
         <span>{{ base.username }}</span>
       </div>
       <div class="right">
-        <span class="lable">作品展示:</span>
+        <span class="lable">UserAgent:</span>
         <span>{{ base.id }}</span>
+      </div>
+    </div>
+    <div class="inline">
+      <div class="left">
+        <span class="lable">作品展示:</span>
+        <span>{{ base.username }}</span>
       </div>
     </div>
   </div>
@@ -124,10 +130,10 @@ export default {
     flex-direction: row;
     margin-bottom: 30px;
     .left {
-      width: 50%;
+      width: 40%;
     }
     .right {
-      width: 50%;
+      width: 60%;
     }
     .lable {
       display: inline-block;

@@ -8,6 +8,14 @@ function getList(params) {
   })
 }
 
+function getUpdateList(params) {
+  return request({
+    url: '/api1/table/updateList',
+    method: 'get',
+    params
+  })
+}
+
 function addUser(data) {
   return request({
     url: '/api1/table/addUser',
@@ -32,6 +40,15 @@ function addUpdateUser(data) {
   })
 }
 
+
+function delUpdateUser(data) {
+  return request({
+    url: '/api1/table/delUpdateUser',
+    method: 'DELETE',
+    data
+  })
+}
+
 function getUserInfoByCookie(data) {
   return request({
     url: '/api1/table/queryUser',
@@ -45,5 +62,7 @@ export default {
   addUser,
   delUser,
   addUpdateUser,
-  getUserInfoByCookie
+  getUserInfoByCookie,
+  getUpdateList,
+  delUpdateUser
 }

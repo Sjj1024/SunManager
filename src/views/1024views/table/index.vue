@@ -143,7 +143,6 @@
       <el-table-column
         align="center"
         label="用户名"
-        width="150"
       >
         <template slot-scope="scope">
           <el-button
@@ -155,7 +154,6 @@
       <el-table-column
         align="center"
         label="等级"
-        width="100"
       >
         <template slot-scope="scope">
           <span>新手上路</span>
@@ -163,7 +161,6 @@
       </el-table-column>
       <el-table-column
         label="威望"
-        width="110"
         align="center"
       >
         <template slot-scope="scope">
@@ -172,7 +169,6 @@
       </el-table-column>
       <el-table-column
         label="贡献"
-        width="120"
         align="center"
       >
         <template slot-scope="scope">
@@ -181,7 +177,6 @@
       </el-table-column>
       <el-table-column
         label="金钱"
-        width="140"
         align="center"
       >
         <template slot-scope="scope">
@@ -190,21 +185,18 @@
       </el-table-column>
       <el-table-column
         align="center"
-        width="140"
-        label="发帖/回复/点评"
+        label="发帖"
       >
-        <template slot-scope="scope">23/22/2</template>
+        <template slot-scope="scope">23</template>
       </el-table-column>
       <el-table-column
         align="center"
-        width="130"
         label="可产邀请码"
       >
         <template slot-scope="scope"> 是/否(禁言23天) </template>
       </el-table-column>
       <el-table-column
         align="center"
-        width="130"
         label="状态"
       >
         <template slot-scope="scope">
@@ -213,13 +205,21 @@
       </el-table-column>
       <el-table-column
         align="center"
+        width="230"
         label="邮箱"
       >
         <template slot-scope="scope"> 1024sssssxiaoshen@gmail.com </template>
       </el-table-column>
       <el-table-column
+        label="描述信息"
         align="center"
-        width="90"
+      >
+        <template slot-scope="scope">
+          <span>这是我自己的账号</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        align="center"
         prop="created_at"
         label="更多操作"
       >
@@ -269,7 +269,7 @@
     <el-dialog
       title="添加用户"
       :visible.sync="addDialog"
-      width="30%"
+      width="40%"
       top="5vh"
     >
       <el-form
@@ -288,7 +288,7 @@
           <el-input
             v-model="addForm.username"
             autocomplete="off"
-            style="width: 85%"
+            style="width: 94%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -298,7 +298,7 @@
           <el-input
             v-model="addForm.password"
             autocomplete="off"
-            style="width: 85%"
+            style="width: 94%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -308,7 +308,7 @@
           <el-input
             v-model="addForm.email"
             autocomplete="off"
-            style="width: 85%"
+            style="width: 94%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -318,7 +318,7 @@
           <el-input
             v-model="addForm.invcode"
             autocomplete="off"
-            style="width: 85%"
+            style="width: 94%"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -328,11 +328,11 @@
           <el-input
             v-model="addForm.cookie"
             autocomplete="off"
-            style="width: 85%"
+            style="width: 94%"
             placeholder="请输入Cookie"
             type="textarea"
             @input="getUserInfo"
-            :rows="7"
+            :rows="4"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -342,10 +342,18 @@
           <el-input
             v-model="addForm.userAgent"
             autocomplete="off"
-            style="width: 85%"
+            style="width: 94%"
             placeholder="请输入UserAgent"
             type="textarea"
-            :rows="4"
+            :rows="2"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="描述信息">
+          <el-input
+            v-model="addForm.desc"
+            autocomplete="off"
+            style="width: 94%"
+            placeholder="请输入描述信息"
           ></el-input>
         </el-form-item>
         <div class="tip-info">提示：账号密码 / 账号密码邮箱邀请码 / Token</div>
@@ -392,7 +400,8 @@ export default {
         email: '1024xiaoshen@gmail.com',
         invcode: '',
         cookie: '',
-        userAgent: ''
+        userAgent: '',
+        desc: ''
       },
       rules: {
         username: [
@@ -434,6 +443,29 @@ export default {
     detailBtn(id) {
       console.log('actionBtn---', id)
       this.$router.push(`/xiaoshen/detail/${id}`)
+    },
+    async getUserInfo(val) {
+      console.log('val-------', val)
+      if (val.indexOf('winduser') !== -1) {
+        console.log('cookie正确，开始发送请求')
+        const res = await tableApi.getUserInfoByCookie(this.addForm)
+        console.log('res---', res)
+        if (res.code === 200) {
+          const userName = res.data.user_name
+          this.addForm.username = userName
+        } else {
+          this.$message({
+            message: '查询用户名失败...cookie不可用',
+            type: 'warning'
+          })
+        }
+      } else {
+        console.log('cookie错误，不包含winduser')
+        this.$message({
+          message: 'cookie错误，不包含winduser',
+          type: 'warning'
+        })
+      }
     },
     async addUser() {
       console.log('添加用户-')

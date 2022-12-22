@@ -18,7 +18,7 @@
         />
       </el-form-item>
       <el-form-item
-        label="等级"
+        label="当前等级"
         prop="level"
       >
         <el-select
@@ -61,7 +61,7 @@
         </el-select>
       </el-form-item>
       <el-form-item
-        label="威望"
+        label="当前威望"
         prop="weiwang"
       >
         <el-input
@@ -71,24 +71,24 @@
         />
       </el-form-item>
       <el-form-item
-        label="状态"
+        label="任务状态"
         prop="yaoqing"
       >
         <el-select
           class="select-w"
           v-model="formInline.status"
-          placeholder="状态"
+          placeholder="任务状态"
         >
           <el-option
-            label="正常"
+            label="暂停中"
             value="zhengchang"
           />
           <el-option
-            label="临时禁言"
+            label="运行中"
             value="linshi"
           />
           <el-option
-            label="永久禁言"
+            label="运行失败"
             value="yongjiu"
           />
         </el-select>
@@ -112,7 +112,7 @@
           type="primary"
           @click="addDialog = true"
         >
-          添加用户
+          添加任务
         </el-button>
       </el-form-item>
     </el-form>
@@ -124,83 +124,113 @@
       <el-table-column
         align="center"
         label="用户名"
-        width="150"
       >
         <template slot-scope="scope">
           <el-button
             type="text"
             @click="detailBtn(scope.row.id)"
-          >{{ scope.row.username }}</el-button>
+          >{{ scope.row.user_name }}</el-button>
         </template>
       </el-table-column>
       <el-table-column
         align="center"
-        label="等级"
-        width="100"
+        label="当前等级"
       >
         <template slot-scope="scope">
-          <span>新手上路</span>
+          <span>{{ scope.row.grade }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="威望"
+        label="当前/目标威望"
+        align="center"
         width="110"
-        align="center"
       >
         <template slot-scope="scope">
-          <span>180000 點</span>
+          <span>{{scope.row.weiwang}} / {{scope.row.target_weiwang}}點</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="贡献"
-        width="120"
+        label="当前金钱"
         align="center"
       >
         <template slot-scope="scope">
-          <span>2394727 點</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="金钱"
-        width="140"
-        align="center"
-      >
-        <template slot-scope="scope">
-          <span>2137684179 USD</span>
+          <span>{{scope.row.money}} USD</span>
         </template>
       </el-table-column>
       <el-table-column
         align="center"
-        width="140"
-        label="发帖/回复/点评"
+        label="发帖"
       >
-        <template slot-scope="scope">23/22/2</template>
+        <template slot-scope="scope">
+          {{scope.row.article_num}}
+        </template>
       </el-table-column>
       <el-table-column
         align="center"
-        width="130"
         label="可产邀请码"
       >
-        <template slot-scope="scope"> 是/否(禁言23天) </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        width="130"
-        label="状态"
-      >
         <template slot-scope="scope">
-          <span>正常</span>
+          <span>{{scope.row.able_invate}}</span>
         </template>
       </el-table-column>
       <el-table-column
         align="center"
-        label="邮箱"
+        label="任务状态"
       >
-        <template slot-scope="scope"> 1024sssssxiaoshen@gmail.com </template>
+        <template slot-scope="scope">
+
+          <el-button
+            v-if="scope.row.task_status === 0"
+            size="medium"
+            type="primary"
+            icon="el-icon-loading"
+          ></el-button>
+          <el-button
+            v-else-if="scope.row.task_status === 1"
+            size="medium"
+            type="primary"
+            icon="el-icon-video-play"
+          ></el-button>
+          <el-button
+            v-else-if="scope.row.task_status === 2"
+            size="medium"
+            type="danger"
+            icon="el-icon-error"
+          ></el-button>
+          <span v-else>{{scope.row.task_status}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         align="center"
-        width="90"
+        width="250"
+        label="任务链接"
+      >
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            @click="goWorkflows(scope.row.task_link)"
+          >**/workflows/{{ scope.row.user_name }}.yml
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="创建时间"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span>{{ scope.row.creat_time }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="描述信息"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span>{{scope.row.desc}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        align="center"
         prop="created_at"
         label="更多操作"
       >
@@ -217,15 +247,10 @@
                 <span @click="handelCopyUser(scope.row)">复制账号</span>
               </el-dropdown-item>
               <el-dropdown-item>
-                <span @click="handelCopyLink(scope.row)">贡献连接</span>
+                <span @click="delTask(scope.row.id)">删除任务</span>
               </el-dropdown-item>
-              <el-dropdown-item>
-                <span @click="delUser(scope.row.id)">删除账号</span>
-              </el-dropdown-item>
-              <el-dropdown-item>不可用</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <!-- <span>https://cl.2718x.xyz/index.php?u=627416&ext=37b37</span> -->
         </template>
       </el-table-column>
     </el-table>
@@ -243,9 +268,9 @@
     </div>
     <!-- 添加用户 -->
     <el-dialog
-      title="添加用户"
+      title="添加升级任务"
       :visible.sync="addDialog"
-      width="30%"
+      width="40%"
       top="9vh"
     >
       <el-form
@@ -264,7 +289,7 @@
           <el-input
             v-model="updateForm.username"
             autocomplete="off"
-            style="width: 85%"
+            style="width: 94%"
             placeholder="请输入用户名"
           ></el-input>
         </el-form-item>
@@ -275,7 +300,7 @@
           <el-input
             v-model="updateForm.password"
             autocomplete="off"
-            style="width: 85%"
+            style="width: 94%"
             placeholder="请输入密码"
           ></el-input>
         </el-form-item>
@@ -286,11 +311,11 @@
           <el-input
             v-model="updateForm.cookie"
             autocomplete="off"
-            style="width: 85%"
+            style="width: 94%"
             placeholder="请输入Cookie"
             type="textarea"
             @input="getUserInfo"
-            :rows="7"
+            :rows="4"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -300,10 +325,18 @@
           <el-input
             v-model="updateForm.userAgent"
             autocomplete="off"
-            style="width: 85%"
+            style="width: 94%"
             placeholder="请输入UserAgent"
             type="textarea"
-            :rows="4"
+            :rows="2"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="描述信息">
+          <el-input
+            v-model="updateForm.desc"
+            autocomplete="off"
+            style="width: 94%"
+            placeholder="请输入描述信息"
           ></el-input>
         </el-form-item>
         <div class="tip-info">提示：账号密码 / Cookie</div>
@@ -313,12 +346,13 @@
         class="dialog-footer"
       >
         <el-button
-          @click="addDialog = false"
+          @click="cancelAdd"
           size="medium"
         >取 消</el-button>
         <el-button
           type="primary"
           size="medium"
+          :loading="submitLoading"
           @click="addUser('updateForm')"
         >添 加</el-button>
       </span>
@@ -333,9 +367,10 @@ export default {
   name: 'Table',
   data() {
     return {
-      list: null,
+      list: [],
       pageTotal: 0,
       listLoading: true,
+      submitLoading: false,
       addDialog: false,
       formInline: {
         user: '',
@@ -348,7 +383,8 @@ export default {
         username: '',
         password: '',
         cookie: '',
-        userAgent: ''
+        userAgent: '',
+        desc: ''
       },
       rules: {
         username: [
@@ -368,11 +404,24 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      tableApi.getList().then((response) => {
-        // this.list = response.data.items
-        // this.pageTotal = response.data.total
+      tableApi.getUpdateList().then((response) => {
+        this.list = response.data.items
+        // Object.assign(this.list, response.data.items)
+        this.pageTotal = response.data.total
         this.listLoading = false
       })
+    },
+    cancelAdd() {
+      this.addDialog = false
+      this.updateForm = {
+        username: '',
+        password: '',
+        cookie: '',
+        userAgent: navigator.userAgent,
+        desc: ''
+      }
+      this.$refs.updateForm.resetFields()
+      console.log('清空表单了')
     },
     onSubmit() {
       console.log('submit!')
@@ -391,11 +440,16 @@ export default {
       console.log('val-------', val)
       if (val.indexOf('winduser') !== -1) {
         console.log('cookie正确，开始发送请求')
+        this.$message({
+          message: 'cookie正确，开始获取用户信息...',
+          type: 'success'
+        })
         const res = await tableApi.getUserInfoByCookie(this.updateForm)
         console.log('res---', res)
         if (res.code === 200) {
-          const userName = res.data.userName
+          const userName = res.data.user_name
           this.updateForm.username = userName
+          this.updateForm.desc = userName
         } else {
           this.$message({
             message: '查询用户名失败...cookie不可用',
@@ -404,34 +458,52 @@ export default {
         }
       } else {
         console.log('cookie错误，不包含winduser')
+        this.$message({
+          message: 'cookie错误，不包含winduser',
+          type: 'warning'
+        })
       }
     },
     detailBtn(id) {
       console.log('actionBtn---', id)
       this.$router.push(`/xiaoshen/detail/${id}`)
     },
+    goWorkflows(url) {
+      console.log('actionBtn---', url)
+      window.open(url, '_blank')
+    },
     async addUser() {
       console.log('添加自动升级用户-')
-      this.addDialog = false
-      const res = await tableApi.addUpdateUser(this.updateForm)
-      console.log('res---', res)
-      if (res.code === 200) {
-        this.$message({
-          message: '恭喜你，创建自动升级成功',
-          type: 'success'
-        })
-        let routeUrl = this.$router.resolve({
-          path: 'https://github.com/Sjj1024/Sjj1024/actions' // 这里的路径就可以正常的写，不需要添加_blank: true
-        })
-        window.open(routeUrl.href, '_blank')
-      } else {
-        this.$message.error('创建自动升级失败:' + res.message)
+      this.submitLoading = true
+      try {
+        const res = await tableApi.addUpdateUser(this.updateForm)
+        console.log('res---', res)
+        if (res.code === 200) {
+          this.$message({
+            message: '恭喜你，创建自动升级成功',
+            type: 'success'
+          })
+          this.submitLoading = false
+          this.cancelAdd()
+          this.fetchData()
+        } else {
+          this.$message.error('创建自动升级失败:' + res.message)
+          this.submitLoading = false
+        }
+      } catch (error) {
+        this.submitLoading = false
       }
     },
-    async delUser(id) {
+    async delTask(id) {
       console.log('删除用户-', id)
-      const res = await tableApi.delUser({ id })
-      console.log('res---', res)
+      try {
+        const res = await tableApi.delUpdateUser({ id })
+        console.log('res---', res)
+        this.$message({ message: '删除成功', type: 'success' })
+        this.fetchData()
+      } catch (error) {
+        this.$message.error('删除失败')
+      }
     },
     async handelCopyUser(val) {
       console.log('val----', val)
