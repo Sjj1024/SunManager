@@ -145,10 +145,10 @@
         label="用户名"
       >
         <template slot-scope="scope">
-          <el-button
-            type="text"
+          <span
+            class="username"
             @click="detailBtn(scope.row.id)"
-          >{{ scope.row.username }}</el-button>
+          >{{ scope.row.user_name }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -156,7 +156,7 @@
         label="等级"
       >
         <template slot-scope="scope">
-          <span>新手上路</span>
+          <span>{{ scope.row.grade }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -164,7 +164,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>180000 點</span>
+          <span>{{ scope.row.weiwang }} 點</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -172,7 +172,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>2394727 點</span>
+          <span>{{ scope.row.contribute }} 點</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -180,27 +180,29 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>2137684179 USD</span>
+          <span>{{ scope.row.money }} USD</span>
         </template>
       </el-table-column>
       <el-table-column
         align="center"
         label="发帖"
       >
-        <template slot-scope="scope">23</template>
+        <template slot-scope="scope">
+          <span>{{ scope.row.article_number }}</span>
+        </template>
       </el-table-column>
       <el-table-column
         align="center"
         label="可产邀请码"
       >
-        <template slot-scope="scope"> 是/否(禁言23天) </template>
+        <template slot-scope="scope"> {{ scope.row.able_invate }} </template>
       </el-table-column>
       <el-table-column
         align="center"
         label="状态"
       >
         <template slot-scope="scope">
-          <span>正常</span>
+          <span>{{ scope.row.able_invate }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -208,14 +210,14 @@
         width="230"
         label="邮箱"
       >
-        <template slot-scope="scope"> 1024sssssxiaoshen@gmail.com </template>
+        <template slot-scope="scope"> {{ scope.row.email }} </template>
       </el-table-column>
       <el-table-column
         label="描述信息"
         align="center"
       >
         <template slot-scope="scope">
-          <span>这是我自己的账号</span>
+          <span>{{ scope.row.desc }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -370,6 +372,7 @@
           type="primary"
           size="medium"
           @click="addUser('addForm')"
+          :loading="submitLoading"
         >添 加</el-button>
       </span>
     </el-dialog>
@@ -387,6 +390,8 @@ export default {
       pageTotal: 0,
       listLoading: true,
       addDialog: false,
+      submitLoading: false,
+      timeout: null,
       formInline: {
         user: '',
         weiwang: '',
@@ -404,9 +409,7 @@ export default {
         desc: ''
       },
       rules: {
-        username: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
-        ],
+        username: [{ validator: this.checkUsername, trigger: 'change' }],
         password: [
           { required: true, message: '请选择活动区域', trigger: 'change' }
         ]
@@ -444,6 +447,28 @@ export default {
       console.log('actionBtn---', id)
       this.$router.push(`/xiaoshen/detail/${id}`)
     },
+    checkUsername(rule, value, callback) {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+      }
+      this.timeout = setTimeout(async () => {
+        if (value) {
+          try {
+            const res = await tableApi.queryUsername({ username: value })
+            console.log('res----', res)
+            if (res.code === 200) {
+              this.$message({ message: '这个用户名很Good!', type: 'success' })
+              this.addForm.desc = this.addForm.username
+              callback()
+            } else {
+              callback(new Error(res.message.info))
+            }
+          } catch (error) {
+            console.log('checkUsername:error')
+          }
+        }
+      }, 800)
+    },
     async getUserInfo(val) {
       console.log('val-------', val)
       if (val.indexOf('winduser') !== -1) {
@@ -467,11 +492,40 @@ export default {
         })
       }
     },
+    cancelAdd() {
+      this.addDialog = false
+      this.addForm = {
+        username: '',
+        password: '1024xiaoshen@gmail.com',
+        email: '1024xiaoshen@gmail.com',
+        invcode: '',
+        cookie: '',
+        userAgent: '',
+        desc: ''
+      }
+      this.$refs.addForm.resetFields()
+      console.log('清空表单了')
+    },
     async addUser() {
       console.log('添加用户-')
-      this.addDialog = false
-      const res = await tableApi.addUser(this.addForm)
-      console.log('res---', res)
+      this.submitLoading = true
+      try {
+        const res = await tableApi.addUser(this.addForm)
+        console.log('res---', res)
+        if (res.code === 200) {
+          this.$message({
+            message: '恭喜你，添加用户成功',
+            type: 'success'
+          })
+          this.cancelAdd()
+          this.fetchData()
+        } else {
+          this.$message.error('创建用户失败:' + res.message)
+          this.submitLoading = false
+        }
+      } catch (error) {
+        this.submitLoading = false
+      }
     },
     async delUser(id) {
       console.log('删除用户-', id)
@@ -521,6 +575,10 @@ export default {
   .select-u {
     width: 150px;
   }
+}
+
+.username {
+  color: #409eff;
 }
 
 .el-dropdown-link {

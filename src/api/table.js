@@ -57,6 +57,15 @@ function getUserInfoByCookie(data) {
   })
 }
 
+
+function queryUsername(data) {
+  return request({
+    url: '/api1/table/queryUsername',
+    method: 'POST',
+    data
+  })
+}
+
 export default {
   getList,
   addUser,
@@ -64,5 +73,6 @@ export default {
   addUpdateUser,
   getUserInfoByCookie,
   getUpdateList,
-  delUpdateUser
+  delUpdateUser,
+  queryUsername
 }
