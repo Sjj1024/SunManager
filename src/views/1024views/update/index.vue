@@ -127,10 +127,10 @@
         width="110"
       >
         <template slot-scope="scope">
-          <el-button
-            type="text"
+          <span
             @click="detailBtn(scope.row.id)"
-          >{{ scope.row.user_name }}</el-button>
+            class="username"
+          >{{ scope.row.user_name }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -150,14 +150,14 @@
           <span>{{scope.row.weiwang}} / {{scope.row.target_weiwang}}點</span>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         label="当前金钱"
         align="center"
       >
         <template slot-scope="scope">
           <span>{{scope.row.money}} USD</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         align="center"
         label="发帖"
@@ -207,16 +207,17 @@
         label="任务链接"
       >
         <template slot-scope="scope">
-          <el-button
-            type="text"
+          <span
+            class="username"
             @click="goWorkflows(scope.row.task_link)"
           >**/workflows/{{ scope.row.user_name }}.yml
-          </el-button>
+          </span>
         </template>
       </el-table-column>
       <el-table-column
         label="创建时间"
         align="center"
+        width="180"
       >
         <template slot-scope="scope">
           <span>{{ scope.row.creat_time }}</span>
@@ -549,6 +550,10 @@ export default {
   .select-u {
     width: 150px;
   }
+}
+
+.username {
+  color: #409eff;
 }
 
 .el-dropdown-link {

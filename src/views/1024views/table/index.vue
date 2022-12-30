@@ -241,7 +241,7 @@
                 <span @click="handelCopyLink(scope.row)">贡献连接</span>
               </el-dropdown-item>
               <el-dropdown-item>
-                <span @click="handelCopyLink(scope.row)">自动升级</span>
+                <span @click="autoUpdate(scope.row)">自动升级</span>
               </el-dropdown-item>
               <el-dropdown-item>
                 <span @click="handelCopyLink(scope.row)">开启监管</span>
@@ -451,6 +451,10 @@ export default {
       if (this.timeout) {
         clearTimeout(this.timeout)
       }
+      if (this.addForm.cookie !== '') {
+        callback()
+        return
+      }
       this.timeout = setTimeout(async () => {
         if (value) {
           try {
@@ -469,15 +473,48 @@ export default {
         }
       }, 800)
     },
+    async autoUpdate(row) {
+      try {
+        this.$message({
+          message: '开始创建自动升级任务...',
+          type: 'success'
+        })
+        const params = {
+          username: row.user_name,
+          password: row.password,
+          cookie: row.cookie,
+          userAgent: row.user_agent,
+          desc: row.desc
+        }
+        const res = await tableApi.addUpdateUser(params)
+        console.log('res---', res)
+        if (res.code === 200) {
+          this.$message({
+            message: '恭喜你，创建自动升级成功',
+            type: 'success'
+          })
+          this.$router.push('/xiaoshen/update')
+        } else {
+          this.$message.error('创建自动升级失败:' + res.message)
+        }
+      } catch (error) {
+        this.$message.error('创建自动升级失败:' + error)
+      }
+    },
     async getUserInfo(val) {
       console.log('val-------', val)
       if (val.indexOf('winduser') !== -1) {
         console.log('cookie正确，开始发送请求')
+        this.$message({
+          message: 'cookie正确，开始获取用户信息...',
+          type: 'success'
+        })
         const res = await tableApi.getUserInfoByCookie(this.addForm)
         console.log('res---', res)
         if (res.code === 200) {
           const userName = res.data.user_name
           this.addForm.username = userName
+          this.addForm.desc = userName
         } else {
           this.$message({
             message: '查询用户名失败...cookie不可用',
@@ -494,13 +531,14 @@ export default {
     },
     cancelAdd() {
       this.addDialog = false
+      this.submitLoading = false
       this.addForm = {
         username: '',
         password: '1024xiaoshen@gmail.com',
         email: '1024xiaoshen@gmail.com',
         invcode: '',
         cookie: '',
-        userAgent: '',
+        userAgent: navigator.userAgent,
         desc: ''
       }
       this.$refs.addForm.resetFields()

@@ -54,7 +54,6 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-
   {
     path: '/xiaoshen',
     component: Layout,
@@ -76,8 +75,8 @@ export const constantRoutes = [
         meta: { title: '帐号详情', icon: 'table' }
       },
       {
-        path: 'regist',
-        name: 'Regist',
+        path: 'update',
+        name: 'Update',
         component: () => import('@/views/1024views/update/index'),
         meta: { title: '升级任务', icon: 'tree' }
       },
@@ -95,7 +94,6 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: '/form',
     component: Layout,
@@ -166,18 +164,27 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/pay',
+    component: Layout,
+    children: [
+      {
+        path: '/manage',
+        component: () => import('@/views/pay/index.vue'),
+        meta: { title: '支付管理', icon: 'link' }
+      }
+    ]
+  },
   {
     path: 'external-link',
     component: Layout,
     children: [
       {
         path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: '支付管理', icon: 'link' }
+        meta: { title: '外跳连接', icon: 'link' }
       }
     ]
   },
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
