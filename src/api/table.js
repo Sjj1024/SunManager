@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-function getList(params) {
+function getList(data) {
   return request({
     url: '/api1/table/list',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 
@@ -41,6 +41,33 @@ function addUpdateUser(data) {
 }
 
 
+function addCheckUser(data) {
+  return request({
+    url: '/api1/table/addCheckUser',
+    method: 'POST',
+    data
+  })
+}
+
+
+function updateUserInfo(data) {
+  return request({
+    url: '/api1/table/newUserInfo',
+    method: 'POST',
+    data
+  })
+}
+
+
+function getUserById(data) {
+  return request({
+    url: '/api1/table/getUserById',
+    method: 'POST',
+    data
+  })
+}
+
+
 function delUpdateUser(data) {
   return request({
     url: '/api1/table/delUpdateUser',
@@ -48,6 +75,17 @@ function delUpdateUser(data) {
     data
   })
 }
+
+
+function delCheckUser(data) {
+  return request({
+    url: '/api1/table/delCheckUser',
+    method: 'DELETE',
+    data
+  })
+}
+
+
 
 function getUserInfoByCookie(data) {
   return request({
@@ -74,5 +112,9 @@ export default {
   getUserInfoByCookie,
   getUpdateList,
   delUpdateUser,
-  queryUsername
+  queryUsername,
+  addCheckUser,
+  delCheckUser,
+  updateUserInfo,
+  getUserById
 }

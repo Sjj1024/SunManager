@@ -4,7 +4,7 @@
       :inline="true"
       :model="formInline"
       size="medium"
-      ref="addForm"
+      ref="searchForm"
       class="demo-form-inline"
     >
       <el-form-item
@@ -72,7 +72,7 @@
       </el-form-item>
       <el-form-item
         label="状态"
-        prop="yaoqing"
+        prop="status"
       >
         <el-select
           class="select-w"
@@ -175,22 +175,22 @@
           <span>{{ scope.row.contribute }} 點</span>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         label="金钱"
         align="center"
       >
         <template slot-scope="scope">
           <span>{{ scope.row.money }} USD</span>
         </template>
-      </el-table-column>
-      <el-table-column
+      </el-table-column> -->
+      <!-- <el-table-column
         align="center"
         label="发帖"
       >
         <template slot-scope="scope">
           <span>{{ scope.row.article_number }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         align="center"
         label="可产邀请码"
@@ -199,19 +199,37 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="状态"
+        label="升级状态"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.able_invate }}</span>
+          <span
+            :class="{'active':scope.row.task_status === '已开启'}"
+            @click="goWorkflows(scope.row.task_link)"
+          >
+            {{ scope.row.task_status }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column
+        align="center"
+        label="监控状态"
+      >
+        <template slot-scope="scope">
+          <span
+            :class="{'active':scope.row.check_status === '已开启'}"
+            @click="goWorkflows(scope.row.check_link)"
+          >
+            {{ scope.row.check_status }}
+          </span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column
         align="center"
         width="230"
         label="邮箱"
       >
         <template slot-scope="scope"> {{ scope.row.email }} </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         label="描述信息"
         align="center"
@@ -235,16 +253,25 @@
                 <span @click="detailBtn(scope.row.id)">详细资料</span>
               </el-dropdown-item>
               <el-dropdown-item>
-                <span @click="handelCopyUser(scope.row)">复制账号</span>
+                <span @click="getInfoBtn(scope.row)">更新资料</span>
               </el-dropdown-item>
               <el-dropdown-item>
-                <span @click="handelCopyLink(scope.row)">贡献连接</span>
+                <span @click="handelCopyUser(scope.row)">复制账号</span>
               </el-dropdown-item>
               <el-dropdown-item>
                 <span @click="autoUpdate(scope.row)">自动升级</span>
               </el-dropdown-item>
               <el-dropdown-item>
-                <span @click="handelCopyLink(scope.row)">开启监管</span>
+                <span @click="autoCheckout(scope.row)">开启监控</span>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <span @click="handelCopyLink(scope.row)">贡献连接</span>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <span @click="delTask(scope.row.id)">删除升级</span>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <span @click="delCheckUser(scope.row.id)">删除监控</span>
               </el-dropdown-item>
               <el-dropdown-item>
                 <span @click="delUser(scope.row.id)">删除账号</span>
@@ -288,7 +315,7 @@
           prop="username"
         >
           <el-input
-            v-model="addForm.username"
+            v-model.trim="addForm.username"
             autocomplete="off"
             style="width: 94%"
           ></el-input>
@@ -298,7 +325,7 @@
           prop="password"
         >
           <el-input
-            v-model="addForm.password"
+            v-model.trim="addForm.password"
             autocomplete="off"
             style="width: 94%"
           ></el-input>
@@ -308,7 +335,7 @@
           prop="email"
         >
           <el-input
-            v-model="addForm.email"
+            v-model.trim="addForm.email"
             autocomplete="off"
             style="width: 94%"
           ></el-input>
@@ -318,7 +345,7 @@
           prop="invcode"
         >
           <el-input
-            v-model="addForm.invcode"
+            v-model.trim="addForm.invcode"
             autocomplete="off"
             style="width: 94%"
           ></el-input>
@@ -328,7 +355,7 @@
           prop="email"
         >
           <el-input
-            v-model="addForm.cookie"
+            v-model.trim="addForm.cookie"
             autocomplete="off"
             style="width: 94%"
             placeholder="请输入Cookie"
@@ -342,7 +369,7 @@
           prop="invcode"
         >
           <el-input
-            v-model="addForm.userAgent"
+            v-model.trim="addForm.userAgent"
             autocomplete="off"
             style="width: 94%"
             placeholder="请输入UserAgent"
@@ -352,7 +379,7 @@
         </el-form-item>
         <el-form-item label="描述信息">
           <el-input
-            v-model="addForm.desc"
+            v-model.trim="addForm.desc"
             autocomplete="off"
             style="width: 94%"
             placeholder="请输入描述信息"
@@ -388,6 +415,8 @@ export default {
     return {
       list: null,
       pageTotal: 0,
+      pageNum: 1,
+      pageSize: 10,
       listLoading: true,
       addDialog: false,
       submitLoading: false,
@@ -422,30 +451,62 @@ export default {
     this.addForm.userAgent = navigator.userAgent
   },
   methods: {
-    fetchData() {
+    fetchData(dataPage) {
       this.listLoading = true
-      tableApi.getList().then((response) => {
+      const data = dataPage
+        ? dataPage
+        : { pageNum: this.pageNum, pageSize: this.pageSize }
+      tableApi.getList(data).then((response) => {
         this.list = response.data.items
         this.pageTotal = response.data.total
         this.listLoading = false
       })
     },
     onSubmit() {
-      console.log('submit!')
+      console.log('重新获取内容!')
+      this.fetchData()
+    },
+    goWorkflows(url) {
+      console.log('actionBtn---', url)
+      if (url) {
+        window.open(url, '_blank')
+      }
     },
     resetForm(formName) {
-      this.$refs.addForm.resetFields()
+      this.$refs.searchForm.resetFields()
       console.log('重制查询内容')
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
+      this.pageSize = val
+      this.fetchData()
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
+      this.pageNum = val
+      this.fetchData()
     },
     detailBtn(id) {
       console.log('actionBtn---', id)
       this.$router.push(`/xiaoshen/detail/${id}`)
+    },
+    async getInfoBtn(userInfo) {
+      console.log('actionBtn---', userInfo)
+      try {
+        const res = await tableApi.updateUserInfo(userInfo)
+        console.log('res---', res)
+        if (res.code === 200) {
+          this.$message({
+            message: '恭喜你，更新用户信息成功',
+            type: 'success'
+          })
+          this.fetchData()
+        } else {
+          this.$message.error('更新失败:' + res.message)
+        }
+      } catch (error) {
+        this.$message.error('更新失败:' + error)
+      }
     },
     checkUsername(rule, value, callback) {
       if (this.timeout) {
@@ -465,10 +526,15 @@ export default {
               this.addForm.desc = this.addForm.username
               callback()
             } else {
-              callback(new Error(res.message.info))
+              this.$message({
+                message: '这个用户名已经被注册',
+                type: 'warning'
+              })
+              callback()
             }
           } catch (error) {
             console.log('checkUsername:error')
+            callback()
           }
         }
       }, 800)
@@ -493,7 +559,7 @@ export default {
             message: '恭喜你，创建自动升级成功',
             type: 'success'
           })
-          this.$router.push('/xiaoshen/update')
+          this.fetchData()
         } else {
           this.$message.error('创建自动升级失败:' + res.message)
         }
@@ -567,13 +633,42 @@ export default {
     },
     async delUser(id) {
       console.log('删除用户-', id)
-      const res = await tableApi.delUser({ id })
+      try {
+        const res = await tableApi.delUser({ id })
+        console.log('res---', res)
+        this.$message({ message: '删除用户成功', type: 'success' })
+        this.fetchData()
+      } catch (error) {
+        this.$message.error('删除用户失败')
+      }
+    },
+    async delTask(id) {
+      console.log('删除用户升级任务-', id)
+      try {
+        const res = await tableApi.delUpdateUser({ id })
+        console.log('res---', res)
+        this.$message({ message: '删除任务成功', type: 'success' })
+        this.fetchData()
+      } catch (error) {
+        this.$message.error('删除失败')
+      }
+    },
+    async delCheckUser(id) {
+      console.log('删除监控用户文件-', id)
+      const res = await tableApi.delCheckUser({ id })
       console.log('res---', res)
+      if (res.code === 200) {
+        this.$message({ message: '删除成功', type: 'success' })
+        this.fetchData()
+      } else {
+        this.$message.error('删除失败:' + res.message)
+      }
     },
     async handelCopyUser(val) {
       console.log('val----', val)
       try {
-        const res = await this.$copyText(JSON.stringify(val))
+        const user_info = `用户名: ${val.user_name}, \n密码: ${val.password}, \n提示: 严禁任何形式的留联系方式和广告内容，不但浪费你账号还害我账号也会被永久禁言！损人不利己！实时监控留言内容，一经发现封号处理并拉黑你的联系方式永不合作!`
+        const res = await this.$copyText(user_info)
         this.$message({ message: '复制成功', type: 'success' })
       } catch (error) {
         this.$message.error('复制失败')
@@ -586,6 +681,34 @@ export default {
         this.$message({ message: '复制成功', type: 'success' })
       } catch (error) {
         this.$message.error('复制失败')
+      }
+    },
+    async autoCheckout(row) {
+      try {
+        this.$message({
+          message: '开始创建账号监控任务...',
+          type: 'success'
+        })
+        const params = {
+          user_name: row.user_name,
+          password: row.password,
+          new_password: '1024xiaoshen@gmail.com',
+          cookie: row.cookie,
+          userAgent: row.user_agent
+        }
+        const res = await tableApi.addCheckUser(params)
+        console.log('res---', res)
+        if (res.code === 200) {
+          this.$message({
+            message: '恭喜你，自动监控创建成功',
+            type: 'success'
+          })
+          this.fetchData()
+        } else {
+          this.$message.error('创建监控失败:' + res.message)
+        }
+      } catch (error) {
+        this.$message.error('创建监控失败:' + error)
       }
     }
   }
@@ -617,6 +740,12 @@ export default {
 
 .username {
   color: #409eff;
+  cursor: pointer;
+}
+
+.active {
+  color: #409eff;
+  cursor: pointer;
 }
 
 .el-dropdown-link {

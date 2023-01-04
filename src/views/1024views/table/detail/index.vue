@@ -59,7 +59,7 @@ export default {
       },
       created() {
         const id = this.$route.params.id
-        console.log('detail-id---', id)
+        console.log('detail---', id)
       }
     }
   },
