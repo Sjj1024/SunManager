@@ -52,7 +52,7 @@ function addCheckUser(data) {
 
 function updateUserInfo(data) {
   return request({
-    url: '/api1/table/newUserInfo',
+    url: '/api1/table/updateUserInfo',
     method: 'POST',
     data
   })

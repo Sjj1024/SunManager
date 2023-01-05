@@ -235,7 +235,16 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.desc }}</span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="scope.row.desc"
+            placement="right"
+          >
+            <el-button class="desc-btn">
+              <span class="desc-box">{{ scope.row.desc }}</span>
+            </el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column
@@ -759,5 +768,18 @@ export default {
 .page-box {
   margin-top: 15px;
   height: 80px;
+}
+
+.desc-btn {
+  border: none;
+  padding: 0;
+}
+
+.desc-box {
+  display: block;
+  width: 70px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>
