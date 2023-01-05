@@ -113,6 +113,15 @@ function queryUsername(data) {
   })
 }
 
+
+function updateAllUser(data) {
+  return request({
+    url: '/api1/task/updateCaoliu',
+    method: 'get',
+    data
+  })
+}
+
 export default {
   getList,
   addUser,
@@ -126,5 +135,6 @@ export default {
   delCheckUser,
   updateUserInfo,
   getUserById,
-  saveUserInfo
+  saveUserInfo,
+  updateAllUser
 }

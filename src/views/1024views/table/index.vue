@@ -127,6 +127,11 @@
           size="medium"
           @click="resetForm"
         >重置</el-button>
+        <el-button
+          type="primary"
+          :icon="loadingIcon"
+          @click="updateAllUserinfo"
+        ></el-button>
       </el-form-item>
       <el-form-item class="add-btn">
         <el-button
@@ -444,6 +449,7 @@ export default {
       addDialog: false,
       submitLoading: false,
       timeout: null,
+      loadingIcon: 'el-icon-video-play',
       formInline: {
         username: '',
         weiwang: '',
@@ -498,6 +504,28 @@ export default {
     resetForm(formName) {
       this.$refs.searchForm.resetFields()
       console.log('重制查询内容')
+    },
+    async updateAllUserinfo() {
+      console.log('更新所有用户资料')
+      this.loadingIcon = 'el-icon-loading'
+      try {
+        const res = await tableApi.updateAllUser()
+        console.log('res---', res)
+        if (res.code === 200) {
+          this.$message({
+            message: '更新用户信息成功',
+            type: 'success'
+          })
+          this.fetchData()
+          this.loadingIcon = 'el-icon-video-play'
+        } else {
+          this.$message.error('更新失败:' + res.message)
+          this.loadingIcon = 'el-icon-video-play'
+        }
+      } catch (error) {
+        this.$message.error('更新失败:' + error)
+        this.loadingIcon = 'el-icon-video-play'
+      }
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
