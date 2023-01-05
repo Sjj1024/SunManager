@@ -65,7 +65,7 @@ export const constantRoutes = [
         path: 'table',
         name: 'Table',
         component: () => import('@/views/1024views/table/index'),
-        meta: { title: '账号信息', icon: 'table' }
+        meta: { title: '1024账号', icon: 'table' }
       },
       {
         path: "detail/:id",
@@ -78,19 +78,19 @@ export const constantRoutes = [
         path: 'update',
         name: 'Update',
         component: () => import('@/views/1024views/update/index'),
-        meta: { title: '升级任务', icon: 'tree' }
+        meta: { title: '98堂账号', icon: 'tree' }
       },
       {
         path: 'check',
         name: 'Check',
         component: () => import('@/views/1024views/watch/index'),
-        meta: { title: '账号监管', icon: 'tree' }
+        meta: { title: '91Porn号', icon: 'tree' }
       },
       {
         path: 'manage',
         name: 'Manage',
         component: () => import('@/views/tree/index'),
-        meta: { title: '邀请码管理', icon: 'tree' }
+        meta: { title: '91视频号', icon: 'tree' }
       }
     ]
   },

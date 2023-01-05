@@ -59,6 +59,15 @@ function updateUserInfo(data) {
 }
 
 
+function saveUserInfo(data) {
+  return request({
+    url: '/api1/table/saveUserInfo',
+    method: 'POST',
+    data
+  })
+}
+
+
 function getUserById(data) {
   return request({
     url: '/api1/table/getUserById',
@@ -116,5 +125,6 @@ export default {
   addCheckUser,
   delCheckUser,
   updateUserInfo,
-  getUserById
+  getUserById,
+  saveUserInfo
 }

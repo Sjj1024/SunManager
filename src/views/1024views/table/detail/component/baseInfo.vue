@@ -2,12 +2,48 @@
   <div class="base-box">
     <div class="inline">
       <div class="left">
+        <span class="lable">ID:</span>
+        <span>{{ base.id }}</span>
+      </div>
+      <div class="right">
         <span class="lable">用户名:</span>
         <span>{{ base.user_name }}</span>
       </div>
+    </div>
+    <div class="inline">
+      <div class="left">
+        <span class="lable">旧密码:</span>
+        <input
+          type="text"
+          class="input-box"
+          v-model="base.password"
+        >
+      </div>
       <div class="right">
-        <span class="lable">ID:</span>
-        <span>{{ base.id }}</span>
+        <span class="lable">新密码:</span>
+        <input
+          type="text"
+          class="input-box"
+          v-model="base.new_passwd"
+        >
+      </div>
+    </div>
+    <div class="inline">
+      <div class="left">
+        <span class="lable">描述信息:</span>
+        <input
+          type="text"
+          class="input-box"
+          v-model="base.desc"
+        >
+      </div>
+      <div class="right">
+        <span class="lable">租售信息:</span>
+        <input
+          type="text"
+          class="input-box"
+          v-model="base.lease"
+        >
       </div>
     </div>
     <div class="inline">
@@ -60,30 +96,20 @@
         <span>{{ base.money }}</span>
       </div>
     </div>
-    <div class="inline">
+    <div class="inline more-height">
       <div class="left">
         <span class="lable">可邀请否:</span>
         <span>{{ base.able_invate }}</span>
-      </div>
-      <div class="right">
-        <span class="lable">是否租借:</span>
-        <span>{{ base.lease }}</span>
-      </div>
-    </div>
-    <div class="inline">
-      <div class="left">
-        <span class="lable">描述信息:</span>
-        <span>{{ base.desc }}</span>
       </div>
       <div class="right">
         <span class="lable">Cookie:</span>
         <span class="more-text">{{ base.cookie }}</span>
       </div>
     </div>
-    <div class="inline">
+    <div class="inline more-height">
       <div class="left">
         <span class="lable">贡献连接:</span>
-        <span >{{ base.contribute_link }}</span>
+        <span>{{ base.contribute_link }}</span>
       </div>
       <div class="right">
         <span class="lable">UserAgent:</span>
@@ -95,6 +121,12 @@
         <span class="lable">作品展示:</span>
         <span>{{ base.username }}</span>
       </div>
+    </div>
+    <div class="inline">
+      <el-button
+        type="primary"
+        @click="save"
+      >保存信息</el-button>
     </div>
   </div>
 </template>
@@ -116,7 +148,8 @@ export default {
         check_status: null,
         contribute: 0,
         contribute_link: '',
-        cookie: '227c9_ck_info=%2F%09;227c9_groupid=8;227c9_lastvisit=0%091672815665%09%2Flogin.php%3F;227c9_winduser=VAsDUlJUMAcBV1dZUwUDBwACWgFUWQdSXFEGVQAJCFYABFYJUQpTaA%3D%3D;',
+        cookie:
+          '227c9_ck_info=%2F%09;227c9_groupid=8;227c9_lastvisit=0%091672815665%09%2Flogin.php%3F;227c9_winduser=VAsDUlJUMAcBV1dZUwUDBwACWgFUWQdSXFEGVQAJCFYABFYJUQpTaA%3D%3D;',
         creat_time: '2022-12-29 19:50',
         current_money: null,
         desc: '\u6211\u60f3\u53bb\u56fd\u5916',
@@ -157,34 +190,64 @@ export default {
     } catch (error) {
       this.$message.error('获取失败:' + error)
     }
+  },
+  methods: {
+    async save() {
+      try {
+        const res = await tableApi.saveUserInfo(this.base)
+        console.log('res---', res)
+        if (res.code === 200) {
+          this.$message({
+            message: '保存用户信息成功！',
+            type: 'success'
+          })
+        } else {
+          this.$message.error('获取失败:' + res.message)
+        }
+      } catch (error) {
+        this.$message.error('获取失败:' + error)
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .base-box {
-  padding-top: 20px;
   .inline {
     display: flex;
     flex-direction: row;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     .left {
       width: 40%;
+      height: 32px;
+      line-height: 32px;
     }
     .right {
       width: 60%;
+      height: 32px;
+      line-height: 32px;
       display: flex;
     }
     .lable {
       display: inline-block;
       min-width: 70px;
       text-align: right;
-      // font-weight: 700;
+      height: 32px;
+      line-height: 32px;
       margin-right: 10px;
     }
-    .more-text{
-      overflow-wrap: break-word;
+    .more-text {
+      overflow-wrap: anywhere;
+      line-height: normal;
     }
+    .input-box {
+      width: 300px;
+      padding: 5px;
+    }
+  }
+  .more-height{
+    height: 55px;
   }
 }
 </style>

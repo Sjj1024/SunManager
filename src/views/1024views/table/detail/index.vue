@@ -11,7 +11,7 @@
         <BaseInfo></BaseInfo>
       </el-tab-pane>
       <el-tab-pane
-        label="编辑资料"
+        label="发布文章"
         name="second"
       >
         <EditInfo></EditInfo>
@@ -23,8 +23,8 @@
         <MyArticle></MyArticle>
       </el-tab-pane>
       <el-tab-pane
-        label="租借信息"
-        name="fourth"
+        label="邀请管理"
+        name="fore"
       >
         <LeaseInfo></LeaseInfo>
       </el-tab-pane>

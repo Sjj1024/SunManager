@@ -9,12 +9,13 @@
     >
       <el-form-item
         label="用户名"
-        prop="user"
+        prop="username"
       >
         <el-input
           class="select-u"
-          v-model="formInline.user"
+          v-model="formInline.username"
           placeholder="用户名"
+          clearable
         />
       </el-form-item>
       <el-form-item
@@ -25,38 +26,39 @@
           v-model="formInline.level"
           placeholder="等级"
           class="select-w"
+          clearable
         >
           <el-option
             label="新手上路"
-            value="xinshou"
+            value="新手上路"
           />
           <el-option
-            label="侠客"
-            value="xiake"
+            label="俠客"
+            value="俠客"
           />
           <el-option
             label="騎士"
-            value="qishi"
+            value="騎士"
           />
           <el-option
             label="圣騎士"
-            value="shengqishi"
+            value="圣騎士"
           />
           <el-option
             label="精靈王"
-            value="jinglingwang"
+            value="精靈王"
           />
           <el-option
             label="風云使者"
-            value="fengyun"
+            value="風云使者"
           />
           <el-option
             label="光明使者"
-            value="guangming"
+            value="光明使者"
           />
           <el-option
             label="天使"
-            value="tianshi"
+            value="天使"
           />
         </el-select>
       </el-form-item>
@@ -66,8 +68,9 @@
       >
         <el-input
           class="select-w"
-          v-model="formInline.weiwang"
+          v-model.number="formInline.weiwang"
           placeholder="威望"
+          clearable
         />
       </el-form-item>
       <el-form-item
@@ -78,6 +81,7 @@
           class="select-w"
           v-model="formInline.status"
           placeholder="状态"
+          clearable
         >
           <el-option
             label="正常"
@@ -101,6 +105,7 @@
           class="select-w"
           v-model="formInline.yaoqing"
           placeholder="可产"
+          clearable
         >
           <el-option
             label="是"
@@ -183,19 +188,28 @@
           <span>{{ scope.row.money }} USD</span>
         </template>
       </el-table-column> -->
-      <!-- <el-table-column
-        align="center"
-        label="发帖"
-      >
-        <template slot-scope="scope">
-          <span>{{ scope.row.article_number }}</span>
-        </template>
-      </el-table-column> -->
       <el-table-column
         align="center"
         label="可产邀请码"
       >
         <template slot-scope="scope"> {{ scope.row.able_invate }} </template>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="租售状态"
+      >
+        <template slot-scope="scope">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="scope.row.lease"
+            placement="right"
+          >
+            <el-button class="desc-btn">
+              <span class="desc-box">{{ scope.row.lease }}</span>
+            </el-button>
+          </el-tooltip>
+        </template>
       </el-table-column>
       <el-table-column
         align="center"
@@ -431,7 +445,7 @@ export default {
       submitLoading: false,
       timeout: null,
       formInline: {
-        user: '',
+        username: '',
         weiwang: '',
         level: '',
         status: '',
@@ -464,7 +478,7 @@ export default {
       this.listLoading = true
       const data = dataPage
         ? dataPage
-        : { pageNum: this.pageNum, pageSize: this.pageSize }
+        : { pageNum: this.pageNum, pageSize: this.pageSize, ...this.formInline }
       tableApi.getList(data).then((response) => {
         this.list = response.data.items
         this.pageTotal = response.data.total
