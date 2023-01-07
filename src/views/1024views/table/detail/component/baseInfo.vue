@@ -13,37 +13,47 @@
     <div class="inline">
       <div class="left">
         <span class="lable">旧密码:</span>
-        <input
+        <!-- <input
           type="text"
           class="input-box"
           v-model="base.password"
-        >
+        > -->
+        <el-input
+          class="input-box"
+          v-model="base.password"
+          placeholder="请输入内容"
+        ></el-input>
       </div>
       <div class="right">
         <span class="lable">新密码:</span>
-        <input
+        <!-- <input
           type="text"
           class="input-box"
           v-model="base.new_passwd"
-        >
+        > -->
+        <el-input
+          class="input-box"
+          v-model="base.new_passwd"
+          placeholder="请输入内容"
+        ></el-input>
       </div>
     </div>
     <div class="inline">
       <div class="left">
+        <span class="lable">租售信息:</span>
+        <el-input
+          class="input-box"
+          v-model="base.lease"
+          placeholder="请输入内容"
+        ></el-input>
+      </div>
+      <div class="right">
         <span class="lable">描述信息:</span>
-        <input
-          type="text"
+        <el-input
           class="input-box"
           v-model="base.desc"
         >
-      </div>
-      <div class="right">
-        <span class="lable">租售信息:</span>
-        <input
-          type="text"
-          class="input-box"
-          v-model="base.lease"
-        >
+        </el-input>
       </div>
     </div>
     <div class="inline">
@@ -103,7 +113,13 @@
       </div>
       <div class="right">
         <span class="lable">Cookie:</span>
-        <span class="more-text">{{ base.cookie }}</span>
+        <el-input
+          type="textarea"
+          :rows="2"
+          v-model="base.cookie"
+          class="more-box"
+        >
+        </el-input>
       </div>
     </div>
     <div class="inline more-height">
@@ -113,7 +129,13 @@
       </div>
       <div class="right">
         <span class="lable">UserAgent:</span>
-        <span class="more-text">{{ base.user_agent }}</span>
+        <el-input
+          type="textarea"
+          :rows="2"
+          v-model="base.user_agent"
+          class="more-box"
+        >
+        </el-input>
       </div>
     </div>
     <div class="inline">
@@ -156,7 +178,7 @@ export default {
         email: '1024xiaoshen@gmail.com',
         grade: '\u65b0\u624b\u4e0a\u8def',
         id: 49,
-        lease: false,
+        lease: '',
         money: 60,
         new_passwd: null,
         password: '1024xiaoshen@gmail.com',
@@ -213,6 +235,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~@/styles/variables.scss';
+
 .base-box {
   .inline {
     display: flex;
@@ -241,12 +265,19 @@ export default {
       overflow-wrap: anywhere;
       line-height: normal;
     }
+    .more-box {
+      font-size: 12px;
+    }
     .input-box {
-      width: 300px;
+      width: 400px;
       padding: 5px;
+      ::v-deep .el-input__inner {
+        height: $inputBox;
+        line-height: $inputBox;
+      }
     }
   }
-  .more-height{
+  .more-height {
     height: 55px;
   }
 }

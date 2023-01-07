@@ -49,6 +49,10 @@
             value="精靈王"
           />
           <el-option
+            label="禁止發言"
+            value="禁止發言"
+          />
+          <el-option
             label="風云使者"
             value="風云使者"
           />
@@ -85,15 +89,15 @@
         >
           <el-option
             label="正常"
-            value="zhengchang"
+            value="正常"
           />
           <el-option
             label="临时禁言"
-            value="linshi"
+            value="临时禁言"
           />
           <el-option
             label="永久禁言"
-            value="yongjiu"
+            value="永久禁言"
           />
         </el-select>
       </el-form-item>
@@ -166,7 +170,7 @@
         label="等级"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.grade }}</span>
+          <span :class="{'waring': scope.row.grade === '禁止發言'}">{{ scope.row.grade }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -201,23 +205,6 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="租售状态"
-      >
-        <template slot-scope="scope">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="scope.row.lease"
-            placement="right"
-          >
-            <el-button class="desc-btn">
-              <span class="desc-box">{{ scope.row.lease }}</span>
-            </el-button>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
         label="升级状态"
       >
         <template slot-scope="scope">
@@ -235,20 +222,30 @@
       >
         <template slot-scope="scope">
           <span
-            :class="{'active':scope.row.check_status === '已开启'}"
+            :class="{'active':scope.row.check_status === '已开启', 'waring': scope.row.desc.indexOf('广告') !== -1}"
             @click="goWorkflows(scope.row.check_link)"
           >
             {{ scope.row.check_status }}
           </span>
         </template>
       </el-table-column>
-      <!-- <el-table-column
+      <el-table-column
         align="center"
-        width="230"
-        label="邮箱"
+        label="租售状态"
       >
-        <template slot-scope="scope"> {{ scope.row.email }} </template>
-      </el-table-column> -->
+        <template slot-scope="scope">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="scope.row.lease"
+            placement="right"
+          >
+            <el-button class="desc-btn">
+              <span class="desc-box">{{ scope.row.lease }}</span>
+            </el-button>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <el-table-column
         label="描述信息"
         align="center"
@@ -261,7 +258,11 @@
             placement="right"
           >
             <el-button class="desc-btn">
-              <span class="desc-box">{{ scope.row.desc }}</span>
+              <span :class="{'desc-box':true, 
+              'waring': scope.row.desc.indexOf('永久禁言') !== -1
+              }">
+                {{ scope.row.desc }}
+              </span>
             </el-button>
           </el-tooltip>
         </template>
@@ -797,6 +798,10 @@ export default {
 .active {
   color: #409eff;
   cursor: pointer;
+}
+
+.waring {
+  color: red;
 }
 
 .el-dropdown-link {

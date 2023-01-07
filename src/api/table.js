@@ -114,6 +114,15 @@ function queryUsername(data) {
 }
 
 
+function getInvcodeList(data) {
+  return request({
+    url: '/api1/table/getInvcodeList',
+    method: 'POST',
+    data
+  })
+}
+
+
 function updateAllUser(data) {
   return request({
     url: '/api1/task/updateCaoliu',
@@ -136,5 +145,6 @@ export default {
   updateUserInfo,
   getUserById,
   saveUserInfo,
-  updateAllUser
+  updateAllUser,
+  getInvcodeList
 }
