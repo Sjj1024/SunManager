@@ -123,6 +123,15 @@ function getInvcodeList(data) {
 }
 
 
+function payInvcodeSome(data) {
+  return request({
+    url: '/api1/table/payInvcode',
+    method: 'POST',
+    data
+  })
+}
+
+
 function updateAllUser(data) {
   return request({
     url: '/api1/task/updateCaoliu',
@@ -146,5 +155,6 @@ export default {
   getUserById,
   saveUserInfo,
   updateAllUser,
-  getInvcodeList
+  getInvcodeList,
+  payInvcodeSome
 }

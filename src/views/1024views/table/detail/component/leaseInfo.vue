@@ -87,6 +87,7 @@
     </div> -->
     <div class="invcode-box">
       <el-table
+        v-loading="listLoading"
         :data="tableData"
         style="width: 100%"
       >
@@ -346,8 +347,10 @@ export default {
     delInvcode() {
       console.log('删除邀请码')
     },
-    handleCurrentChange() {
-      console.log('页数变化')
+    handleCurrentChange(val) {
+      console.log('页数变化：' + val)
+      this.pageNum = val
+      this.fetchData()
     },
     handleSizeChange() {
       console.log('每页大小变化')

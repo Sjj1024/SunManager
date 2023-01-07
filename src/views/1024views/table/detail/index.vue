@@ -8,7 +8,7 @@
         label="基本信息"
         name="first"
       >
-        <BaseInfo></BaseInfo>
+        <BaseInfo @paySuccess="goToInvcode"></BaseInfo>
       </el-tab-pane>
       <el-tab-pane
         label="发布文章"
@@ -26,7 +26,7 @@
         label="邀请管理"
         name="fore"
       >
-        <LeaseInfo></LeaseInfo>
+        <LeaseInfo ref="invcodePanel"></LeaseInfo>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -72,6 +72,11 @@ export default {
   methods: {
     handleClick(tab, event) {
       console.log(tab, event)
+    },
+    goToInvcode(){
+      console.log('跳转到邀请码列表页');
+      this.activeName = "fore"
+      this.$refs.invcodePanel.fetchData()
     }
   }
 }

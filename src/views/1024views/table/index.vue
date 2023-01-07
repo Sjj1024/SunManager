@@ -510,6 +510,7 @@ export default {
       console.log('更新所有用户资料')
       this.loadingIcon = 'el-icon-loading'
       try {
+        this.$message({ message: '更新所有用户信息...', type: 'success' })
         const res = await tableApi.updateAllUser()
         console.log('res---', res)
         if (res.code === 200) {
@@ -545,6 +546,7 @@ export default {
     async getInfoBtn(userInfo) {
       console.log('actionBtn---', userInfo)
       try {
+        this.$message({ message: '更新用户资料...', type: 'success' })
         const res = await tableApi.updateUserInfo(userInfo)
         console.log('res---', res)
         if (res.code === 200) {

@@ -2,22 +2,17 @@
   <div class="base-box">
     <div class="inline">
       <div class="left">
-        <span class="lable">ID:</span>
-        <span>{{ base.id }}</span>
-      </div>
-      <div class="right">
         <span class="lable">用户名:</span>
         <span>{{ base.user_name }}</span>
+      </div>
+      <div class="right">
+        <span class="lable">ID:</span>
+        <span>{{ base.id }}</span>
       </div>
     </div>
     <div class="inline">
       <div class="left">
         <span class="lable">旧密码:</span>
-        <!-- <input
-          type="text"
-          class="input-box"
-          v-model="base.password"
-        > -->
         <el-input
           class="input-box"
           v-model="base.password"
@@ -26,11 +21,6 @@
       </div>
       <div class="right">
         <span class="lable">新密码:</span>
-        <!-- <input
-          type="text"
-          class="input-box"
-          v-model="base.new_passwd"
-        > -->
         <el-input
           class="input-box"
           v-model="base.new_passwd"
@@ -58,18 +48,28 @@
     </div>
     <div class="inline">
       <div class="left">
-        <span class="lable">等级:</span>
-        <span>{{ base.grade }}</span>
+        <span class="lable">可否邀请:</span>
+        <span style="margin-right:10px;">{{ base.able_invate }}</span>
+        <el-button
+          v-if="base.able_invate === '可以购买'"
+          type="primary"
+          size="small"
+          @click="payInvcode"
+        >购买邀请码</el-button>
       </div>
       <div class="right">
-        <span class="lable">邮箱:</span>
-        <span>{{ base.email }}</span>
+        <span class="lable">两步认证:</span>
+        <el-input
+          class="input-box"
+          v-model="base.authentication"
+          placeholder="请输入内容"
+        ></el-input>
       </div>
     </div>
     <div class="inline">
       <div class="left">
-        <span class="lable">威望:</span>
-        <span>{{ base.weiwang }}</span>
+        <span class="lable">等级:</span>
+        <span>{{ base.grade }}</span>
       </div>
       <div class="right">
         <span class="lable">发帖数量:</span>
@@ -78,8 +78,8 @@
     </div>
     <div class="inline">
       <div class="left">
-        <span class="lable">贡献:</span>
-        <span>{{ base.contribute }}</span>
+        <span class="lable">威望:</span>
+        <span>{{ base.weiwang }}</span>
       </div>
       <div class="right">
         <span class="lable">注册时间:</span>
@@ -88,17 +88,17 @@
     </div>
     <div class="inline">
       <div class="left">
-        <span class="lable">金钱:</span>
-        <span>{{ base.money }}</span>
+        <span class="lable">贡献:</span>
+        <span>{{ base.contribute }}</span>
       </div>
       <div class="right">
-        <span class="lable">两步认证:</span>
-        <span>{{ base.authentication }}</span>
+        <span class="lable">邮箱:</span>
+        <span>{{ base.email }}</span>
       </div>
     </div>
     <div class="inline">
       <div class="left">
-        <span class="lable">活期存款:</span>
+        <span class="lable">金钱:</span>
         <span>{{ base.money }}</span>
       </div>
       <div class="right">
@@ -108,8 +108,8 @@
     </div>
     <div class="inline more-height">
       <div class="left">
-        <span class="lable">可邀请否:</span>
-        <span>{{ base.able_invate }}</span>
+        <span class="lable">活期存款:</span>
+        <span>{{ base.money }}</span>
       </div>
       <div class="right">
         <span class="lable">Cookie:</span>
@@ -163,33 +163,31 @@ export default {
       id: '',
       base: {
         able_invate: false,
-        article_number: 60,
+        article_number: 0,
         authentication: '',
         check_file_sha: null,
         check_link: null,
         check_status: null,
         contribute: 0,
         contribute_link: '',
-        cookie:
-          '227c9_ck_info=%2F%09;227c9_groupid=8;227c9_lastvisit=0%091672815665%09%2Flogin.php%3F;227c9_winduser=VAsDUlJUMAcBV1dZUwUDBwACWgFUWQdSXFEGVQAJCFYABFYJUQpTaA%3D%3D;',
-        creat_time: '2022-12-29 19:50',
+        cookie: '',
+        creat_time: '',
         current_money: null,
-        desc: '\u6211\u60f3\u53bb\u56fd\u5916',
-        email: '1024xiaoshen@gmail.com',
-        grade: '\u65b0\u624b\u4e0a\u8def',
+        desc: '',
+        email: '',
+        grade: '',
         id: 49,
         lease: '',
         money: 60,
         new_passwd: null,
-        password: '1024xiaoshen@gmail.com',
+        password: '',
         regular_money: null,
         task_file_sha: null,
         task_link: null,
         task_status: null,
-        user_agent:
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
-        user_id: 632316,
-        user_name: '\u6211\u60f3\u53bb\u56fd\u5916',
+        user_agent: '',
+        user_id: 0,
+        user_name: '',
         weiwang: 7
       }
     }
@@ -229,6 +227,37 @@ export default {
       } catch (error) {
         this.$message.error('获取失败:' + error)
       }
+    },
+    payInvcode() {
+      this.$prompt('请输入购买数量', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputErrorMessage: '邮箱格式不正确'
+      })
+        .then(({ value }) => {
+          tableApi
+            .payInvcodeSome({ id: this.$route.params.id, invnum: value })
+            .then((response) => {
+              if (response.code === 200) {
+                this.$message({
+                  type: 'success',
+                  message: `恭喜你购买成功${value}个邀请码`
+                })
+                this.$emit('paySuccess')
+              } else {
+                this.$message.error(`错了哦，错误原因:${response.message}`)
+              }
+            })
+            .catch((e) => {
+              this.$message.error(`错了哦，错误原因:${e}`)
+            })
+        })
+        .catch(() => {
+          // this.$message({
+          //   type: 'info',
+          //   message: '取消输入'
+          // })
+        })
     }
   }
 }
