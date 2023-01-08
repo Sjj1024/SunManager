@@ -82,7 +82,7 @@
         <span>{{ base.weiwang }}</span>
       </div>
       <div class="right">
-        <span class="lable">注册时间:</span>
+        <span class="lable">登记时间:</span>
         <span>{{ base.creat_time }}</span>
       </div>
     </div>
@@ -151,10 +151,28 @@
       </div>
       <div class="right">
         <span class="lable">作品展示:</span>
-        <span>{{ base.username }}</span>
+        <span @click="openMyLink">https://cl.2059x.xyz/user/{{ base.user_name }}</span>
       </div>
     </div>
     <div class="inline">
+      <div class="left">
+        <span class="lable">更新时间:</span>
+        <span>{{ base.update_time }}</span>
+      </div>
+      <div class="right">
+        <span class="lable">注册时间:</span>
+        <span>{{ base.regist_time }}</span>
+      </div>
+    </div>
+    <div class="inline">
+      <el-button
+        type="primary"
+        @click="getInfoBtn"
+      >刷新信息</el-button>
+      <el-button
+        type="primary"
+        @click="openIndex"
+      >跳到主页</el-button>
       <el-button
         type="primary"
         @click="save"
@@ -203,25 +221,44 @@ export default {
     }
   },
   async created() {
-    const id = this.$route.params.id
-    console.log('detail-id---', id)
-    try {
-      const res = await tableApi.getUserById({ id })
-      console.log('res---', res)
-      if (res.code === 200) {
-        // this.$message({
-        //   message: '获取用户信息成功！',
-        //   type: 'success'
-        // })
-        this.base = res.data
-      } else {
-        this.$message.error('获取失败:' + res.message)
-      }
-    } catch (error) {
-      this.$message.error('获取失败:' + error)
-    }
+    this.fetchData()
   },
   methods: {
+    async fetchData() {
+      const id = this.$route.params.id
+      console.log('detail-id---', id)
+      try {
+        const res = await tableApi.getUserById({ id })
+        console.log('res---', res)
+        if (res.code === 200) {
+          // this.$message({
+          //   message: '获取用户信息成功！',
+          //   type: 'success'
+          // })
+          this.base = res.data
+        } else {
+          this.$message.error('获取失败:' + res.message)
+        }
+      } catch (error) {
+        this.$message.error('获取失败:' + error)
+      }
+    },
+    openIndex() {
+      const url = this.base.contribute_link
+        ? this.base.contribute_link.split('?')[0]
+        : ''
+      if (url) {
+        console.log('跳转到曹刘主页:' + url)
+        window.open(url, '_blank')
+      }
+    },
+    openMyLink() {
+      const url = `https://cl.2059x.xyz/user/${this.base.user_name}`
+      if (url) {
+        console.log('跳转到曹刘主页:' + url)
+        window.open(url, '_blank')
+      }
+    },
     async save() {
       try {
         const res = await tableApi.saveUserInfo(this.base)
@@ -236,6 +273,25 @@ export default {
         }
       } catch (error) {
         this.$message.error('获取失败:' + error)
+      }
+    },
+    async getInfoBtn(userInfo) {
+      console.log('actionBtn---', userInfo)
+      try {
+        this.$message({ message: '刷新用户资料...', type: 'success' })
+        const res = await tableApi.updateUserInfo(this.base)
+        console.log('res---', res)
+        if (res.code === 200) {
+          this.$message({
+            message: '恭喜你，更新用户信息成功',
+            type: 'success'
+          })
+          this.fetchData()
+        } else {
+          this.$message.error('更新失败:' + res.message)
+        }
+      } catch (error) {
+        this.$message.error('更新失败:' + error)
       }
     },
     payInvcode() {

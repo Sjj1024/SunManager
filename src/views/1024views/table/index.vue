@@ -85,6 +85,7 @@
           class="select-w"
           v-model="formInline.status"
           placeholder="状态"
+          @change=""
           clearable
         >
           <el-option
@@ -328,7 +329,10 @@
       </el-pagination>
     </div>
     <!-- 添加用户 -->
-    <RegistCaoliu ref="regist" @reFetchDate="fetchData"></RegistCaoliu>
+    <RegistCaoliu
+      ref="regist"
+      @reFetchDate="fetchData"
+    ></RegistCaoliu>
   </div>
 </template>
 
@@ -357,14 +361,14 @@ export default {
       }
     }
   },
-  created(){
+  created() {
     this.fetchData()
   },
   methods: {
     fetchData(dataPage) {
       this.listLoading = true
       const data = dataPage
-        ? dataPage
+        ? {...dataPage, ...this.formInline}
         : { pageNum: this.pageNum, pageSize: this.pageSize, ...this.formInline }
       tableApi.getList(data).then((response) => {
         this.list = response.data.items
@@ -374,7 +378,7 @@ export default {
     },
     onSubmit() {
       console.log('重新获取内容!')
-      this.fetchData()
+      this.fetchData({ pageNum: 1, pageSize: 10 })
     },
     goWorkflows(url) {
       console.log('actionBtn---', url)
