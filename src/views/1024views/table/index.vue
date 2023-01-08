@@ -157,6 +157,7 @@
     <el-table
       v-loading="listLoading"
       :data="list"
+      class="table-box"
       element-loading-text="Loading"
     >
       <el-table-column
@@ -321,9 +322,10 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
+        :page-sizes="[12, 24, 36, 48, 60, 72]"
         background
         layout="total, sizes, prev, pager, next, jumper"
-        :pager-count="11"
+        :pager-count="13"
         :total="pageTotal"
       >
       </el-pagination>
@@ -348,7 +350,7 @@ export default {
       list: null,
       pageTotal: 0,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 12,
       listLoading: true,
       timeout: null,
       loadingIcon: 'el-icon-video-play',
@@ -368,7 +370,7 @@ export default {
     fetchData(dataPage) {
       this.listLoading = true
       const data = dataPage
-        ? {...dataPage, ...this.formInline}
+        ? { ...dataPage, ...this.formInline }
         : { pageNum: this.pageNum, pageSize: this.pageSize, ...this.formInline }
       tableApi.getList(data).then((response) => {
         this.list = response.data.items
