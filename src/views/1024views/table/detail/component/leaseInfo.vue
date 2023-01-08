@@ -117,6 +117,14 @@
           prop="status"
           label="状态"
         >
+          <template slot-scope="scope">
+            <span
+              :class="{'active':scope.row.status === '未使用'}"
+              @click="registUser(scope.row)"
+            >
+              {{ scope.row.status }}
+            </span>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -130,7 +138,7 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
-                  <span @click="registUser(scope.row.id)">注册账号</span>
+                  <span @click="registUser(scope.row)">注册账号</span>
                 </el-dropdown-item>
                 <el-dropdown-item>
                   <span @click="delInvcode(scope.row)">删除这个</span>
@@ -155,123 +163,18 @@
     </div>
     <div>
       <!-- 添加用户 -->
-      <el-dialog
-        title="添加用户"
-        :visible.sync="addDialog"
-        width="40%"
-        top="5vh"
-      >
-        <el-form
-          :model="addForm"
-          status-icon
-          :rules="rules"
-          ref="addForm"
-          size="medium"
-          label-width="100px"
-          class="add-Form"
-        >
-          <el-form-item
-            label="账号"
-            prop="username"
-          >
-            <el-input
-              v-model.trim="addForm.username"
-              autocomplete="off"
-              style="width: 94%"
-            ></el-input>
-          </el-form-item>
-          <el-form-item
-            label="密码"
-            prop="password"
-          >
-            <el-input
-              v-model.trim="addForm.password"
-              autocomplete="off"
-              style="width: 94%"
-            ></el-input>
-          </el-form-item>
-          <el-form-item
-            label="邮箱"
-            prop="email"
-          >
-            <el-input
-              v-model.trim="addForm.email"
-              autocomplete="off"
-              style="width: 94%"
-            ></el-input>
-          </el-form-item>
-          <el-form-item
-            label="邀请码"
-            prop="invcode"
-          >
-            <el-input
-              v-model.trim="addForm.invcode"
-              autocomplete="off"
-              style="width: 94%"
-            ></el-input>
-          </el-form-item>
-          <el-form-item
-            label="Cookie"
-            prop="email"
-          >
-            <el-input
-              v-model.trim="addForm.cookie"
-              autocomplete="off"
-              style="width: 94%"
-              placeholder="请输入Cookie"
-              type="textarea"
-              @input="getUserInfo"
-              :rows="4"
-            ></el-input>
-          </el-form-item>
-          <el-form-item
-            label="UserAgent"
-            prop="invcode"
-          >
-            <el-input
-              v-model.trim="addForm.userAgent"
-              autocomplete="off"
-              style="width: 94%"
-              placeholder="请输入UserAgent"
-              type="textarea"
-              :rows="2"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="描述信息">
-            <el-input
-              v-model.trim="addForm.desc"
-              autocomplete="off"
-              style="width: 94%"
-              placeholder="请输入描述信息"
-            ></el-input>
-          </el-form-item>
-          <div class="tip-info">提示：账号密码 / 账号密码邮箱邀请码 / Token</div>
-        </el-form>
-        <span
-          slot="footer"
-          class="dialog-footer"
-        >
-          <el-button
-            @click="addDialog = false"
-            size="medium"
-          >取 消</el-button>
-          <el-button
-            type="primary"
-            size="medium"
-            @click="addUser('addForm')"
-            :loading="submitLoading"
-          >添 加</el-button>
-        </span>
-      </el-dialog>
+      <RegistCaoliu ref="regist" @reFetchDate="fetchData"></RegistCaoliu>
     </div>
   </div>
 </template>
 
 <script>
 import tableApi from '@/api/table'
+import RegistCaoliu from '@/components/RegistCl/index.vue'
 
 export default {
   name: 'BaseInfo',
+  components: { RegistCaoliu },
   data() {
     return {
       formInline: {
@@ -341,8 +244,9 @@ export default {
       this.$refs.searchForm.resetFields()
       console.log('重制查询内容')
     },
-    registUser() {
-      console.log('注册账号')
+    registUser(row) {
+      console.log('注册账号-' + row.invcode)
+      this.$refs.regist.showRegist(row.invcode)
     },
     delInvcode() {
       console.log('删除邀请码')
@@ -368,6 +272,11 @@ export default {
 .el-dropdown-link {
   cursor: pointer;
   color: #409eff;
+}
+
+.active {
+  color: #409eff;
+  cursor: pointer;
 }
 
 .page-box {

@@ -99,6 +99,10 @@
             label="永久禁言"
             value="永久禁言"
           />
+          <el-option
+            label="已被删除"
+            value="已被删除"
+          />
         </el-select>
       </el-form-item>
       <el-form-item
@@ -143,7 +147,7 @@
           size="medium"
           icon="el-icon-plus"
           type="primary"
-          @click="addDialog = true"
+          @click="addUser"
         >
           添加用户
         </el-button>
@@ -324,122 +328,17 @@
       </el-pagination>
     </div>
     <!-- 添加用户 -->
-    <el-dialog
-      title="添加用户"
-      :visible.sync="addDialog"
-      width="40%"
-      top="5vh"
-    >
-      <el-form
-        :model="addForm"
-        status-icon
-        :rules="rules"
-        ref="addForm"
-        size="medium"
-        label-width="100px"
-        class="add-Form"
-      >
-        <el-form-item
-          label="账号"
-          prop="username"
-        >
-          <el-input
-            v-model.trim="addForm.username"
-            autocomplete="off"
-            style="width: 94%"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="密码"
-          prop="password"
-        >
-          <el-input
-            v-model.trim="addForm.password"
-            autocomplete="off"
-            style="width: 94%"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="邮箱"
-          prop="email"
-        >
-          <el-input
-            v-model.trim="addForm.email"
-            autocomplete="off"
-            style="width: 94%"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="邀请码"
-          prop="invcode"
-        >
-          <el-input
-            v-model.trim="addForm.invcode"
-            autocomplete="off"
-            style="width: 94%"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="Cookie"
-          prop="email"
-        >
-          <el-input
-            v-model.trim="addForm.cookie"
-            autocomplete="off"
-            style="width: 94%"
-            placeholder="请输入Cookie"
-            type="textarea"
-            @input="getUserInfo"
-            :rows="4"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="UserAgent"
-          prop="invcode"
-        >
-          <el-input
-            v-model.trim="addForm.userAgent"
-            autocomplete="off"
-            style="width: 94%"
-            placeholder="请输入UserAgent"
-            type="textarea"
-            :rows="2"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="描述信息">
-          <el-input
-            v-model.trim="addForm.desc"
-            autocomplete="off"
-            style="width: 94%"
-            placeholder="请输入描述信息"
-          ></el-input>
-        </el-form-item>
-        <div class="tip-info">提示：账号密码 / 账号密码邮箱邀请码 / Token</div>
-      </el-form>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button
-          @click="addDialog = false"
-          size="medium"
-        >取 消</el-button>
-        <el-button
-          type="primary"
-          size="medium"
-          @click="addUser('addForm')"
-          :loading="submitLoading"
-        >添 加</el-button>
-      </span>
-    </el-dialog>
+    <RegistCaoliu ref="regist" @reFetchDate="fetchData"></RegistCaoliu>
   </div>
 </template>
 
 <script>
 import tableApi from '@/api/table'
+import RegistCaoliu from '@/components/RegistCl/index.vue'
 
 export default {
   name: 'Table',
+  components: { RegistCaoliu },
   data() {
     return {
       list: null,
@@ -447,8 +346,6 @@ export default {
       pageNum: 1,
       pageSize: 10,
       listLoading: true,
-      addDialog: false,
-      submitLoading: false,
       timeout: null,
       loadingIcon: 'el-icon-video-play',
       formInline: {
@@ -457,28 +354,11 @@ export default {
         level: '',
         status: '',
         yaoqing: ''
-      },
-      addForm: {
-        username: '',
-        password: '1024xiaoshen@gmail.com',
-        email: '1024xiaoshen@gmail.com',
-        invcode: '',
-        cookie: '',
-        userAgent: '',
-        desc: ''
-      },
-      rules: {
-        username: [{ validator: this.checkUsername, trigger: 'change' }],
-        password: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
-        ]
       }
     }
   },
-  created() {
+  created(){
     this.fetchData()
-    // 设置浏览器userAgent
-    this.addForm.userAgent = navigator.userAgent
   },
   methods: {
     fetchData(dataPage) {
@@ -621,69 +501,9 @@ export default {
         this.$message.error('创建自动升级失败:' + error)
       }
     },
-    async getUserInfo(val) {
-      console.log('val-------', val)
-      if (val.indexOf('winduser') !== -1) {
-        console.log('cookie正确，开始发送请求')
-        this.$message({
-          message: 'cookie正确，开始获取用户信息...',
-          type: 'success'
-        })
-        const res = await tableApi.getUserInfoByCookie(this.addForm)
-        console.log('res---', res)
-        if (res.code === 200) {
-          const userName = res.data.user_name
-          this.addForm.username = userName
-          this.addForm.desc = userName
-        } else {
-          this.$message({
-            message: '查询用户名失败...cookie不可用',
-            type: 'warning'
-          })
-        }
-      } else {
-        console.log('cookie错误，不包含winduser')
-        this.$message({
-          message: 'cookie错误，不包含winduser',
-          type: 'warning'
-        })
-      }
-    },
-    cancelAdd() {
-      this.addDialog = false
-      this.submitLoading = false
-      this.addForm = {
-        username: '',
-        password: '1024xiaoshen@gmail.com',
-        email: '1024xiaoshen@gmail.com',
-        invcode: '',
-        cookie: '',
-        userAgent: navigator.userAgent,
-        desc: ''
-      }
-      this.$refs.addForm.resetFields()
-      console.log('清空表单了')
-    },
     async addUser() {
       console.log('添加用户-')
-      this.submitLoading = true
-      try {
-        const res = await tableApi.addUser(this.addForm)
-        console.log('res---', res)
-        if (res.code === 200) {
-          this.$message({
-            message: '恭喜你，添加用户成功',
-            type: 'success'
-          })
-          this.cancelAdd()
-          this.fetchData()
-        } else {
-          this.$message.error('创建用户失败:' + res.message)
-          this.submitLoading = false
-        }
-      } catch (error) {
-        this.submitLoading = false
-      }
+      this.$refs.regist.showRegist()
     },
     async delUser(id) {
       console.log('删除用户-', id)
@@ -779,10 +599,6 @@ export default {
   }
   ::v-deep .el-dialog__footer {
     text-align: center;
-  }
-  .tip-info {
-    margin-left: 60px;
-    color: #999;
   }
   .select-w {
     width: 110px;

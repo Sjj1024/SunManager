@@ -12,6 +12,8 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^1.0.2",
     "axios": "0.18.1",
     "core-js": "3.6.5",
     "element-ui": "2.13.2",

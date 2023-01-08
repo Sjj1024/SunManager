@@ -140,6 +140,16 @@
     </div>
     <div class="inline">
       <div class="left">
+        <span class="lable">已被删除:</span>
+        <!-- <span>{{ base.isDeleted }}</span> -->
+        <el-switch
+          v-model="base.isDeleted"
+          inactive-color="#13ce66"
+          active-color="#ff4949"
+        >
+        </el-switch>
+      </div>
+      <div class="right">
         <span class="lable">作品展示:</span>
         <span>{{ base.username }}</span>
       </div>
