@@ -49,10 +49,6 @@
             value="精靈王"
           />
           <el-option
-            label="禁止發言"
-            value="禁止發言"
-          />
-          <el-option
             label="風云使者"
             value="風云使者"
           />
@@ -63,6 +59,10 @@
           <el-option
             label="天使"
             value="天使"
+          />
+          <el-option
+            label="禁止發言"
+            value="禁止發言"
           />
         </el-select>
       </el-form-item>
@@ -89,8 +89,24 @@
           clearable
         >
           <el-option
-            label="正常"
-            value="正常"
+            label="1级账号"
+            value=1
+          />
+          <el-option
+            label="2级账号"
+            value=2
+          />
+          <el-option
+            label="3级账号"
+            value=3
+          />
+          <el-option
+            label="4级账号"
+            value=4
+          />
+          <el-option
+            label="5级账号"
+            value=5
           />
           <el-option
             label="临时禁言"
@@ -118,11 +134,11 @@
         >
           <el-option
             label="是"
-            value="yes"
+            value="可以购买"
           />
           <el-option
             label="否"
-            value="no"
+            value="不可以"
           />
         </el-select>
       </el-form-item>
@@ -173,10 +189,23 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="等级"
+        label="等级 / 量级"
       >
         <template slot-scope="scope">
-          <span :class="{'waring': scope.row.grade === '禁止發言'}">{{ scope.row.grade }}</span>
+          <span :class="{ 
+            waring: scope.row.grade === '禁止發言',
+           }">
+            {{ scope.row.grade }} /
+          </span>
+          <span :class="{ 
+            one: scope.row.important === 1,
+            two: scope.row.important === 2,
+            three: scope.row.important === 3,
+            fore: scope.row.important === 4,
+            five: scope.row.important === 5,
+           }">
+            {{ scope.row.important }}级
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -372,6 +401,7 @@ export default {
       const data = dataPage
         ? { ...dataPage, ...this.formInline }
         : { pageNum: this.pageNum, pageSize: this.pageSize, ...this.formInline }
+      console.log('发送的参数是', data)
       tableApi.getList(data).then((response) => {
         this.list = response.data.items
         this.pageTotal = response.data.total
@@ -380,7 +410,7 @@ export default {
     },
     onSubmit() {
       console.log('重新获取内容!')
-      this.fetchData({ pageNum: 1, pageSize: 10 })
+      this.fetchData({ pageNum: this.pageNum, pageSize: this.pageSize })
     },
     goWorkflows(url) {
       console.log('actionBtn---', url)
@@ -625,7 +655,27 @@ export default {
 }
 
 .waring {
+  color: rgb(238, 0, 0);
+}
+
+.one {
   color: red;
+}
+
+.two {
+  color: rgba(240, 13, 13, 0.715);
+}
+
+.three {
+  color: rgb(255, 128, 0);
+}
+
+.fore {
+  color: rgb(242, 187, 8);
+}
+
+.five {
+  color: #aaa;
 }
 
 .el-dropdown-link {

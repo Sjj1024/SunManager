@@ -12,6 +12,66 @@
     </div>
     <div class="inline">
       <div class="left">
+        <span class="lable">等级:</span>
+        <span>{{ base.grade }}</span>
+      </div>
+      <div class="right">
+        <span class="lable">邮箱:</span>
+        <span>{{ base.email }}</span>
+      </div>
+    </div>
+    <div class="inline">
+      <div class="left">
+        <span class="lable">威望:</span>
+        <span>{{ base.weiwang }}</span>
+      </div>
+      <div class="right">
+        <span class="lable">发帖数量:</span>
+        <span>{{ base.article_number }}</span>
+      </div>
+    </div>
+    <div class="inline">
+      <div class="left">
+        <span class="lable">贡献:</span>
+        <span>{{ base.contribute }}</span>
+      </div>
+      <div class="right">
+        <span class="lable">活期存款:</span>
+        <span>{{ base.money }}</span>
+      </div>
+    </div>
+    <div class="inline">
+      <div class="left">
+        <span class="lable">金钱:</span>
+        <span>{{ base.money }}</span>
+      </div>
+      <div class="right">
+        <span class="lable">定期存款:</span>
+        <span>{{ base.money }}</span>
+      </div>
+    </div>
+    <div class="inline">
+      <div class="left">
+        <span class="lable">贡献连接:</span>
+        <span>{{ base.contribute_link }}</span>
+      </div>
+      <div class="right">
+        <span class="lable">作品展示:</span>
+        <span @click="openMyLink">https://cl.2059x.xyz/user/{{ base.user_name }}</span>
+      </div>
+    </div>
+    <div class="inline">
+      <div class="left">
+        <span class="lable">更新时间:</span>
+        <span>{{ base.update_time }}</span>
+      </div>
+      <div class="right">
+        <span class="lable">注册时间:</span>
+        <span>{{ base.regist_time }}</span>
+      </div>
+    </div>
+    <div class="inline">
+      <div class="left">
         <span class="lable">旧密码:</span>
         <el-input
           class="input-box"
@@ -48,14 +108,20 @@
     </div>
     <div class="inline">
       <div class="left">
-        <span class="lable">可否邀请:</span>
-        <span style="margin-right:10px;">{{ base.able_invate }}</span>
-        <el-button
-          v-if="base.able_invate === '可以购买'"
-          type="primary"
-          size="small"
-          @click="payInvcode"
-        >购买邀请码</el-button>
+        <span class="lable">账号量级:</span>
+        <el-select
+          v-model="base.important"
+          placeholder="请选择"
+          class="input-box"
+        >
+          <el-option
+            v-for="item in important"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </div>
       <div class="right">
         <span class="lable">两步认证:</span>
@@ -66,50 +132,16 @@
         ></el-input>
       </div>
     </div>
-    <div class="inline">
-      <div class="left">
-        <span class="lable">等级:</span>
-        <span>{{ base.grade }}</span>
-      </div>
-      <div class="right">
-        <span class="lable">发帖数量:</span>
-        <span>{{ base.article_number }}</span>
-      </div>
-    </div>
-    <div class="inline">
-      <div class="left">
-        <span class="lable">威望:</span>
-        <span>{{ base.weiwang }}</span>
-      </div>
-      <div class="right">
-        <span class="lable">登记时间:</span>
-        <span>{{ base.creat_time }}</span>
-      </div>
-    </div>
-    <div class="inline">
-      <div class="left">
-        <span class="lable">贡献:</span>
-        <span>{{ base.contribute }}</span>
-      </div>
-      <div class="right">
-        <span class="lable">邮箱:</span>
-        <span>{{ base.email }}</span>
-      </div>
-    </div>
-    <div class="inline">
-      <div class="left">
-        <span class="lable">金钱:</span>
-        <span>{{ base.money }}</span>
-      </div>
-      <div class="right">
-        <span class="lable">定期存款:</span>
-        <span>{{ base.money }}</span>
-      </div>
-    </div>
     <div class="inline more-height">
       <div class="left">
-        <span class="lable">活期存款:</span>
-        <span>{{ base.money }}</span>
+        <span class="lable">可否邀请:</span>
+        <span style="margin-right:10px;">{{ base.able_invate }}</span>
+        <el-button
+          v-if="base.able_invate === '可以购买'"
+          type="primary"
+          size="small"
+          @click="payInvcode"
+        >购买邀请码</el-button>
       </div>
       <div class="right">
         <span class="lable">Cookie:</span>
@@ -124,8 +156,13 @@
     </div>
     <div class="inline more-height">
       <div class="left">
-        <span class="lable">贡献连接:</span>
-        <span>{{ base.contribute_link }}</span>
+        <span class="lable">已被删除:</span>
+        <el-switch
+          v-model="base.isDeleted"
+          inactive-color="#13ce66"
+          active-color="#ff4949"
+        >
+        </el-switch>
       </div>
       <div class="right">
         <span class="lable">UserAgent:</span>
@@ -136,32 +173,6 @@
           class="more-box"
         >
         </el-input>
-      </div>
-    </div>
-    <div class="inline">
-      <div class="left">
-        <span class="lable">已被删除:</span>
-        <!-- <span>{{ base.isDeleted }}</span> -->
-        <el-switch
-          v-model="base.isDeleted"
-          inactive-color="#13ce66"
-          active-color="#ff4949"
-        >
-        </el-switch>
-      </div>
-      <div class="right">
-        <span class="lable">作品展示:</span>
-        <span @click="openMyLink">https://cl.2059x.xyz/user/{{ base.user_name }}</span>
-      </div>
-    </div>
-    <div class="inline">
-      <div class="left">
-        <span class="lable">更新时间:</span>
-        <span>{{ base.update_time }}</span>
-      </div>
-      <div class="right">
-        <span class="lable">注册时间:</span>
-        <span>{{ base.regist_time }}</span>
       </div>
     </div>
     <div class="inline">
@@ -189,6 +200,28 @@ export default {
   data() {
     return {
       id: '',
+      important: [
+        {
+          value: 1,
+          label: '1级:非常重要禁止售卖，列表排名靠前'
+        },
+        {
+          value: 2,
+          label: '2级:比较重要，自己大号产出自己用'
+        },
+        {
+          value: 3,
+          label: '3级:自己的三级账号，可以出邀请码'
+        },
+        {
+          value: 4,
+          label: '4级:新手级别的账号，可自动升级'
+        },
+        {
+          value: 5,
+          label: '5级:已被删除或永久禁言的账号'
+        }
+      ],
       base: {
         able_invate: false,
         article_number: 0,
@@ -298,7 +331,7 @@ export default {
       this.$prompt('请输入购买数量', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        inputErrorMessage: '邮箱格式不正确'
+        inputValue: 1
       })
         .then(({ value }) => {
           tableApi
@@ -333,6 +366,8 @@ export default {
 @import '~@/styles/variables.scss';
 
 .base-box {
+  overflow-y: scroll;
+  height: 2000px;
   .inline {
     display: flex;
     flex-direction: row;

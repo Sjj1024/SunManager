@@ -1,35 +1,34 @@
 <template>
-  <div class="detail-box">
-    <el-tabs
-      v-model="activeName"
-      @tab-click="handleClick"
+  <el-tabs
+    v-model="activeName"
+    class="detail-box"
+    @tab-click="handleClick"
+  >
+    <el-tab-pane
+      label="基本信息"
+      name="first"
     >
-      <el-tab-pane
-        label="基本信息"
-        name="first"
-      >
-        <BaseInfo @paySuccess="goToInvcode"></BaseInfo>
-      </el-tab-pane>
-      <el-tab-pane
-        label="发布文章"
-        name="second"
-      >
-        <EditInfo></EditInfo>
-      </el-tab-pane>
-      <el-tab-pane
-        label="我的文章"
-        name="third"
-      >
-        <MyArticle></MyArticle>
-      </el-tab-pane>
-      <el-tab-pane
-        label="邀请管理"
-        name="fore"
-      >
-        <LeaseInfo ref="invcodePanel"></LeaseInfo>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+      <BaseInfo @paySuccess="goToInvcode"></BaseInfo>
+    </el-tab-pane>
+    <el-tab-pane
+      label="发布文章"
+      name="second"
+    >
+      <EditInfo></EditInfo>
+    </el-tab-pane>
+    <el-tab-pane
+      label="我的文章"
+      name="third"
+    >
+      <MyArticle></MyArticle>
+    </el-tab-pane>
+    <el-tab-pane
+      label="邀请管理"
+      name="fore"
+    >
+      <LeaseInfo ref="invcodePanel"></LeaseInfo>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
@@ -73,9 +72,9 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event)
     },
-    goToInvcode(){
-      console.log('跳转到邀请码列表页');
-      this.activeName = "fore"
+    goToInvcode() {
+      console.log('跳转到邀请码列表页')
+      this.activeName = 'fore'
       this.$refs.invcodePanel.fetchData()
     }
   }
@@ -85,5 +84,7 @@ export default {
 <style lang="scss" scoped>
 .detail-box {
   padding: 20px;
+  // overflow-y: scroll;
+  // height: 2000px;
 }
 </style>

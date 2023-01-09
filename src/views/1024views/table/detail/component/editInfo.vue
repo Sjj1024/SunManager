@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editinfo-box">
     <el-form
       :inline="true"
       :model="formInline"
@@ -7,11 +7,12 @@
     >
       <el-form-item label="文章标题">
         <el-input
-          v-model="formInline.user"
+          class="title"
+          v-model="formInline.title"
           placeholder="文章标题"
         ></el-input>
       </el-form-item>
-      <el-form-item label="分类">
+      <el-form-item label="文章分类">
         <el-select
           v-model="formInline.region"
           placeholder="分类"
@@ -29,15 +30,19 @@
       <el-form-item>
         <el-button
           type="primary"
-          @click="onSubmit"
+          @click="queryRepet"
         >查重</el-button>
         <el-button
           type="primary"
-          @click="onSubmit"
+          @click="queryRepet"
+        >转换</el-button>
+        <el-button
+          type="primary"
+          @click="reView"
         >预览</el-button>
         <el-button
           type="primary"
-          @click="onSubmit"
+          @click="onSave"
         >保存</el-button>
         <el-button
           type="primary"
@@ -46,6 +51,7 @@
       </el-form-item>
     </el-form>
     <Edit
+      ref="wangEdit"
       @change="getEditor"
       :height="100"
     ></Edit>
@@ -62,7 +68,7 @@ export default {
     return {
       content: '',
       formInline: {
-        user: '',
+        title: '',
         region: ''
       }
     }
@@ -71,12 +77,35 @@ export default {
     getEditor(val) {
       this.addForm.afficheContent = val
     },
-    onSubmit() {
+    queryRepet() {
+      console.log('queryRepet!')
+      const text = this.$refs.wangEdit.editor.getText()
+      console.log('queryRepet', text)
+    },
+    reView() {
+      console.log('reView!')
+      const text = this.$refs.wangEdit.editor.getText()
+      console.log('reView', text)
+    },
+    onSave() {
       console.log('submit!')
+      const text = this.$refs.wangEdit.editor.getText()
+      console.log('submit', text)
+    },
+    onSubmit() {
+      console.log('onSave!')
+      const text = this.$refs.wangEdit.editor.getText()
+      console.log('onSave', text)
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.editinfo-box {
+  // overflow-y: scroll;
+  .title {
+    width: 500px;
+  }
+}
 </style>
