@@ -93,29 +93,29 @@
       >
         <el-table-column
           prop="invcode"
-          label="邀请码"
+          label="文章名称"
           width="180"
         >
         </el-table-column>
         <el-table-column
           prop="paydate"
-          label="购买时间"
+          label="所在板块"
           width="180"
         >
         </el-table-column>
         <el-table-column
           prop="username"
-          label="注册用户"
+          label="回复"
         >
         </el-table-column>
         <el-table-column
           prop="registdate"
-          label="注册日期"
+          label="点赞"
         >
         </el-table-column>
         <el-table-column
           prop="status"
-          label="状态"
+          label="发帖时间"
         >
           <template slot-scope="scope">
             <span
@@ -125,6 +125,11 @@
               {{ scope.row.status }}
             </span>
           </template>
+        </el-table-column>
+        <el-table-column
+          prop="registdate"
+          label="查看"
+        >
         </el-table-column>
         <el-table-column
           align="center"
@@ -163,7 +168,10 @@
     </div>
     <div>
       <!-- 添加用户 -->
-      <RegistCaoliu ref="regist" @reFetchDate="fetchData"></RegistCaoliu>
+      <RegistCaoliu
+        ref="regist"
+        @reFetchDate="fetchData"
+      ></RegistCaoliu>
     </div>
   </div>
 </template>

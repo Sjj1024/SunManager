@@ -4,7 +4,7 @@
     title="添加用户"
     :visible.sync="addDialog"
     width="40%"
-    top="5vh"
+    top="3vh"
   >
     <el-form
       :model="addForm"
@@ -66,7 +66,7 @@
           placeholder="请输入Cookie"
           type="textarea"
           @input="getUserInfo"
-          :rows="4"
+          :rows="2"
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -81,6 +81,22 @@
           type="textarea"
           :rows="2"
         ></el-input>
+      </el-form-item>
+      <el-form-item label="账号量级">
+        <el-select
+          v-model="addForm.important"
+          placeholder="请选择"
+          class="input-box"
+          style="width: 94%"
+        >
+          <el-option
+            v-for="item in important"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="描述信息">
         <el-input
@@ -127,8 +143,31 @@ export default {
         invcode: '',
         cookie: '',
         userAgent: '',
-        desc: ''
+        desc: '',
+        important: 1
       },
+      important: [
+        {
+          value: 1,
+          label: '1级:非常重要禁止售卖，列表排名靠前'
+        },
+        {
+          value: 2,
+          label: '2级:比较重要，自己大号产出自己用'
+        },
+        {
+          value: 3,
+          label: '3级:自己的三级账号，可以出邀请码'
+        },
+        {
+          value: 4,
+          label: '4级:新手级别的账号，可自动升级'
+        },
+        {
+          value: 5,
+          label: '5级:已被删除或永久禁言的账号'
+        }
+      ],
       rules: {
         username: [{ validator: this.checkUsername, trigger: 'change' }],
         password: [
@@ -191,7 +230,7 @@ export default {
             type: 'success'
           })
           this.cancelAdd()
-          this.$emit("reFetchDate")
+          this.$emit('reFetchDate')
         } else {
           this.$message.error('创建用户失败:' + res.message)
           this.submitLoading = false

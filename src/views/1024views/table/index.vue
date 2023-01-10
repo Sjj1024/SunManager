@@ -410,7 +410,7 @@ export default {
     },
     onSubmit() {
       console.log('重新获取内容!')
-      this.fetchData({ pageNum: this.pageNum, pageSize: this.pageSize })
+      this.fetchData({ pageNum: 1, pageSize: 12 })
     },
     goWorkflows(url) {
       console.log('actionBtn---', url)
