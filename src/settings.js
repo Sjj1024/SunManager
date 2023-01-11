@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '1024帐号管理',
+  title: '1115帐号管理系统',
 
   /**
    * @type {boolean} true | false

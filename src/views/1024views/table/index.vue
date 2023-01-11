@@ -213,7 +213,11 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.weiwang }} 點</span>
+          <span>{{ scope.row.weiwang }} 點 </span>
+          <span v-if="scope.row.original" class="grow">
+            <span>{{ scope.row.weiwang - scope.row.original.weiwang }}</span>
+            <i class="el-icon-top"></i>
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -221,7 +225,11 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.contribute }} 點</span>
+          <span>{{ scope.row.contribute }} 點 </span>
+          <span v-if="scope.row.original" class="grow">
+            <span>{{ scope.row.contribute - scope.row.original.gongxian }}</span>
+            <i class="el-icon-top"></i>
+          </span>
         </template>
       </el-table-column>
       <!-- <el-table-column
@@ -338,7 +346,7 @@
                 <span @click="delCheckUser(scope.row.id)">删除监控</span>
               </el-dropdown-item>
               <el-dropdown-item>
-                <span @click="delUser(scope.row.id)">删除账号</span>
+                <span @click="delUser(scope.row)">删除账号</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -541,10 +549,10 @@ export default {
       console.log('添加用户-')
       this.$refs.regist.showRegist()
     },
-    async delUser(id) {
-      console.log('删除用户-', id)
+    async delUser(row) {
+      console.log('删除用户-', row)
       try {
-        const res = await tableApi.delUser({ id })
+        const res = await tableApi.delUser(row)
         console.log('res---', res)
         this.$message({ message: '删除用户成功', type: 'success' })
         this.fetchData()
@@ -642,6 +650,11 @@ export default {
   .select-u {
     width: 150px;
   }
+}
+
+.grow {
+  // margin-top: 5px;
+  color: red;
 }
 
 .username {

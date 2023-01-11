@@ -1,90 +1,5 @@
 <template>
   <div>
-    <!-- <div class="search-box">
-      <el-form
-        :inline="true"
-        :model="formInline"
-        size="medium"
-        ref="searchForm"
-        class="demo-form-inline"
-      >
-        <el-form-item
-          label="邀请码"
-          prop="username"
-        >
-          <el-input
-            v-model.trim="formInline.invcode"
-            autocomplete="off"
-            style="width: 94%"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="邀请码状态"
-          prop="username"
-        >
-          <el-select
-            v-model="formInline.isUsed"
-            placeholder="状态"
-            class="select-w"
-            clearable
-          >
-            <el-option
-              label="未使用"
-              value="未使用"
-            />
-            <el-option
-              label="已邀请"
-              value="已邀请"
-            />
-            <el-option
-              label="已过期"
-              value="已过期"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="">
-          <el-button
-            type="primary"
-            size="medium"
-            @click="onSubmit"
-          >查询</el-button>
-          <el-button
-            size="medium"
-            @click="resetForm"
-          >重置</el-button>
-        </el-form-item>
-        <el-form-item
-          label="购买数量"
-          prop="username"
-        >
-          <el-input-number
-            v-model="formInline.number"
-            :min="1"
-            :max="10"
-            class="pay-box"
-            label="描述文字"
-          ></el-input-number>
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            size="medium"
-            @click="onSubmit"
-          >购买</el-button>
-        </el-form-item>
-        <el-form-item class="add-btn">
-          <el-button
-            class="export-btn"
-            size="medium"
-            type="primary"
-            icon="el-icon-plus"
-            @click="addDialog = true"
-          >
-            破解
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </div> -->
     <div class="invcode-box">
       <el-table
         v-loading="listLoading"
@@ -92,43 +7,43 @@
         style="width: 100%"
       >
         <el-table-column
-          prop="invcode"
+          prop="title"
           label="文章名称"
-          width="180"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="paydate"
-          label="所在板块"
-          width="180"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="username"
-          label="回复"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="registdate"
-          label="点赞"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="发帖时间"
+          width="580"
         >
           <template slot-scope="scope">
-            <span
-              :class="{'active':scope.row.status === '未使用'}"
-              @click="registUser(scope.row)"
-            >
-              {{ scope.row.status }}
-            </span>
+            <span class="title-link" @click="goSee(scope.row)">{{scope.row.title}}</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="registdate"
-          label="查看"
+          prop="category"
+          label="所在板块"
+          width="120"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="replay"
+          label="回复"
+          align="center"
+          width="80"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="like"
+          align="center"
+          label="点赞"
+          width="80"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="pub_time"
+          label="发帖时间"
+          width="180"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="edit"
+          label="编辑"
         >
         </el-table-column>
         <el-table-column
@@ -229,16 +144,15 @@ export default {
             pageSize: this.pageSize,
             ...this.formInline
           }
-      tableApi.getInvcodeList(data).then((response) => {
+      tableApi.getArticleList(data).then((response) => {
         this.tableData = response.data.items
         this.pageTotal = response.data.total
         this.listLoading = false
       })
     },
-    onSubmit() {
-      this.$refs.searchForm.resetFields()
-      console.log('购买邀请码')
-      this.fetchData()
+    goSee(row) {
+      console.log('查看文章')
+      window.open("https://cl.2059x.xyz/read.php?tid=5453480", "_black")
     },
     resetForm() {
       this.$refs.searchForm.resetFields()
@@ -272,17 +186,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.search-box {
-  .pay-box {
-    width: 120px;
-  }
-}
-.el-dropdown-link {
-  cursor: pointer;
-  color: #409eff;
+.invcode-box {
+  height: 530px;
+  overflow-y: scroll;
 }
 
-.active {
+.title-link {
   color: #409eff;
   cursor: pointer;
 }

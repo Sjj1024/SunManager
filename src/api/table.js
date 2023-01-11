@@ -123,6 +123,15 @@ function getInvcodeList(data) {
 }
 
 
+function getArticleList(data) {
+  return request({
+    url: '/api1/table/getArticleList',
+    method: 'POST',
+    data
+  })
+}
+
+
 function payInvcodeSome(data) {
   return request({
     url: '/api1/table/payInvcode',
@@ -156,5 +165,6 @@ export default {
   saveUserInfo,
   updateAllUser,
   getInvcodeList,
-  payInvcodeSome
+  payInvcodeSome,
+  getArticleList
 }

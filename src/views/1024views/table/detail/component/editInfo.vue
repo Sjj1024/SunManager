@@ -103,7 +103,8 @@ export default {
 
 <style lang="scss" scoped>
 .editinfo-box {
-  // overflow-y: scroll;
+  height: 590px;
+  overflow-y: scroll;
   .title {
     width: 500px;
   }

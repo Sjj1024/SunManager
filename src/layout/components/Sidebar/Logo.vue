@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       title: '1115账号管理系统',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      logo: 'https://img-blog.csdnimg.cn/02a34ffe637e4d5a918f818620ee8169.png'
     }
   }
 }

@@ -249,7 +249,8 @@ export default {
         invcode: '',
         cookie: '',
         userAgent: navigator.userAgent,
-        desc: ''
+        desc: '',
+        important: 1
       }
       this.$refs.addForm.resetFields()
       console.log('清空表单了')

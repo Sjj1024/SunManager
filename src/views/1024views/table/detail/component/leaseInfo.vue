@@ -264,6 +264,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.invcode-box {
+  height: 530px;
+  overflow-y: scroll;
+}
+
 .search-box {
   .pay-box {
     width: 120px;

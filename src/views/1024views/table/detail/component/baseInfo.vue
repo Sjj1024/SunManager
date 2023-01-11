@@ -24,30 +24,72 @@
       <div class="left">
         <span class="lable">威望:</span>
         <span>{{ base.weiwang }}</span>
+        <span
+          v-if="base.original"
+          class="grow"
+        >
+          <span>{{ base.weiwang - base.original.weiwang }}</span>
+          <i class="el-icon-top"></i>
+        </span>
       </div>
       <div class="right">
         <span class="lable">发帖数量:</span>
         <span>{{ base.article_number }}</span>
+        <span
+          v-if="base.original"
+          class="grow"
+        >
+          <span>&nbsp;{{ base.article_number - base.original.fatie }}</span>
+          <i class="el-icon-top"></i>
+        </span>
       </div>
     </div>
     <div class="inline">
       <div class="left">
         <span class="lable">贡献:</span>
         <span>{{ base.contribute }}</span>
+        <span
+          v-if="base.original"
+          class="grow"
+        >
+          <span>{{ base.contribute - base.original.gongxian }}</span>
+          <i class="el-icon-top"></i>
+        </span>
       </div>
       <div class="right">
         <span class="lable">活期存款:</span>
         <span>{{ base.money }}</span>
+        <span
+          v-if="base.original"
+          class="grow"
+        >
+          <span> {{ base.money - base.original.money }}</span>
+          <i class="el-icon-top"></i>
+        </span>
       </div>
     </div>
     <div class="inline">
       <div class="left">
         <span class="lable">金钱:</span>
         <span>{{ base.money }}</span>
+        <span
+          v-if="base.original"
+          class="grow"
+        >
+          <span>{{ base.money - base.original.money }}</span>
+          <i class="el-icon-top"></i>
+        </span>
       </div>
       <div class="right">
         <span class="lable">定期存款:</span>
         <span>{{ base.money }}</span>
+        <span
+          v-if="base.original"
+          class="grow"
+        >
+          <span> {{ base.money - base.original.money }}</span>
+          <i class="el-icon-top"></i>
+        </span>
       </div>
     </div>
     <div class="inline">
@@ -269,10 +311,10 @@ export default {
           //   type: 'success'
           // })
           this.base = res.data
-        } else {
+        }else {
           this.$message.error('获取失败:' + res.message)
         }
-      } catch (error) {
+      }catch (error) {
         this.$message.error('获取失败:' + error)
       }
     },
@@ -301,10 +343,10 @@ export default {
             message: '保存用户信息成功！',
             type: 'success'
           })
-        } else {
+        }else {
           this.$message.error('获取失败:' + res.message)
         }
-      } catch (error) {
+      }catch (error) {
         this.$message.error('获取失败:' + error)
       }
     },
@@ -320,10 +362,10 @@ export default {
             type: 'success'
           })
           this.fetchData()
-        } else {
+        }else {
           this.$message.error('更新失败:' + res.message)
         }
-      } catch (error) {
+      }catch (error) {
         this.$message.error('更新失败:' + error)
       }
     },
@@ -343,7 +385,7 @@ export default {
                   message: `恭喜你购买成功${value}个邀请码`
                 })
                 this.$emit('paySuccess')
-              } else {
+              }else {
                 this.$message.error(`错了哦，错误原因:${response.message}`)
               }
             })
@@ -366,8 +408,11 @@ export default {
 @import '~@/styles/variables.scss';
 
 .base-box {
-  overflow-y: scroll;
-  height: 2000px;
+  // height: 2000px;
+  .grow {
+    margin-left: 5px;
+    color: red;
+  }
   .inline {
     display: flex;
     flex-direction: row;
