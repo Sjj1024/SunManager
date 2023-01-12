@@ -8,25 +8,59 @@
       label="基本信息"
       name="first"
     >
-      <BaseInfo @paySuccess="goToInvcode"></BaseInfo>
+      <keep-alive>
+        <BaseInfo
+          v-if="activeName == 'first'"
+          @paySuccess="goToInvcode"
+        ></BaseInfo>
+      </keep-alive>
     </el-tab-pane>
     <el-tab-pane
       label="发布文章"
       name="second"
     >
-      <EditInfo></EditInfo>
+      <EditInfo v-if="activeName == 'second'"></EditInfo>
     </el-tab-pane>
     <el-tab-pane
       label="我的文章"
       name="third"
     >
-      <MyArticle></MyArticle>
+      <keep-alive>
+        <MyArticle v-if="activeName == 'third'"></MyArticle>
+      </keep-alive>
+    </el-tab-pane>
+    <el-tab-pane
+      label="我的评论"
+      name="fore"
+    >
+      <keep-alive>
+        <Commits
+          v-if="activeName == 'fore'"
+          ref="invcodePanel"
+        ></Commits>
+      </keep-alive>
+    </el-tab-pane>
+    <el-tab-pane
+      label="我的点评"
+      name="five"
+    >
+      <keep-alive>
+        <Invcodes
+          v-if="activeName == 'five'"
+          ref="invcodePanel"
+        ></Invcodes>
+      </keep-alive>
     </el-tab-pane>
     <el-tab-pane
       label="邀请管理"
-      name="fore"
+      name="six"
     >
-      <LeaseInfo ref="invcodePanel"></LeaseInfo>
+      <keep-alive>
+        <Invcodes
+          v-if="activeName == 'six'"
+          ref="invcodePanel"
+        ></Invcodes>
+      </keep-alive>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -35,11 +69,12 @@
 import BaseInfo from '@/views/1024views/table/detail/component/baseInfo'
 import EditInfo from '@/views/1024views/table/detail/component/editInfo'
 import MyArticle from '@/views/1024views/table/detail/component/myArticle'
-import LeaseInfo from '@/views/1024views/table/detail/component/leaseInfo'
+import Invcodes from '@/views/1024views/table/detail/component/invcodes'
+import Commits from '@/views/1024views/table/detail/component/commit.vue'
 
 export default {
   name: 'Detail',
-  components: { BaseInfo, EditInfo, MyArticle, LeaseInfo },
+  components: { BaseInfo, EditInfo, MyArticle, Invcodes, Commits },
   props: {
     person: {
       type: Object,

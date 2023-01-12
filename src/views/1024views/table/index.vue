@@ -189,13 +189,20 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="等级 / 量级"
+        width="200"
+        label="等级 / 原级 / 量级"
       >
         <template slot-scope="scope">
           <span :class="{ 
             waring: scope.row.grade === '禁止發言',
            }">
             {{ scope.row.grade }} /
+          </span>
+          <span
+            v-if="scope.row.original"
+            class="original"
+          >
+            {{scope.row.original.dengji || scope.row.original.grade}}
           </span>
           <span :class="{ 
             one: scope.row.important === 1,
@@ -211,10 +218,14 @@
       <el-table-column
         label="威望"
         align="center"
+        width="100"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.weiwang }} 點 </span>
-          <span v-if="scope.row.original" class="grow">
+          <span>{{ scope.row.weiwang }}點</span>
+          <span
+            v-if="scope.row.original"
+            class="grow"
+          >
             <span>{{ scope.row.weiwang - scope.row.original.weiwang }}</span>
             <i class="el-icon-top"></i>
           </span>
@@ -223,11 +234,16 @@
       <el-table-column
         label="贡献"
         align="center"
+        width="120"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.contribute }} 點 </span>
-          <span v-if="scope.row.original" class="grow">
-            <span>{{ scope.row.contribute - scope.row.original.gongxian }}</span>
+          <span>{{ scope.row.contribute }}點</span>
+          <span
+            v-if="scope.row.original"
+            class="grow"
+          >
+            <span v-if="scope.row.original.gongxian">{{ scope.row.contribute - scope.row.original.gongxian }}</span>
+            <span v-if="scope.row.original.contribute">{{ scope.row.contribute - scope.row.original.contribute }}</span>
             <i class="el-icon-top"></i>
           </span>
         </template>
@@ -248,12 +264,22 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="升级状态"
+        label="自动升级"
+        width="120"
       >
         <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.task_status"
+            active-value="已开启"
+            inactive-value="未开启"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            @change="(val) => confirmLog(updateChange, val, scope.row)"
+          >
+          </el-switch>
           <span
             :class="{'active':scope.row.task_status === '已开启'}"
-            @click="goWorkflows(scope.row.task_link)"
+            @click="goWorkflows(scope.row)"
           >
             {{ scope.row.task_status }}
           </span>
@@ -261,9 +287,19 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="监控状态"
+        label="自动监控"
+        width="120"
       >
         <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.check_status"
+            active-value="已开启"
+            inactive-value="未开启"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            @change="(val) => confirmLog(checkChange, val, scope.row)"
+          >
+          </el-switch>
           <span
             :class="{'active':scope.row.check_status === '已开启', 'waring': scope.row.desc.indexOf('广告') !== -1}"
             @click="goWorkflows(scope.row.check_link)"
@@ -274,19 +310,14 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="租售状态"
+        label="更新信息"
       >
         <template slot-scope="scope">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="scope.row.lease"
-            placement="right"
-          >
-            <el-button class="desc-btn">
-              <span class="desc-box">{{ scope.row.lease }}</span>
-            </el-button>
-          </el-tooltip>
+          <i
+            :ref="'ref' + scope.row.user_id"
+            class="el-icon-refresh refresh-info"
+            @click="confirmLog(getInfoBtn, scope.row)"
+          ></i>
         </template>
       </el-table-column>
       <el-table-column
@@ -325,28 +356,22 @@
                 <span @click="detailBtn(scope.row.id)">详细资料</span>
               </el-dropdown-item>
               <el-dropdown-item>
-                <span @click="getInfoBtn(scope.row)">更新资料</span>
+                <span @click="confirmLog(getInfoBtn, scope.row)">更新资料</span>
               </el-dropdown-item>
               <el-dropdown-item>
                 <span @click="handelCopyUser(scope.row)">复制账号</span>
               </el-dropdown-item>
-              <el-dropdown-item>
+              <!-- <el-dropdown-item>
                 <span @click="autoUpdate(scope.row)">自动升级</span>
               </el-dropdown-item>
               <el-dropdown-item>
                 <span @click="autoCheckout(scope.row)">开启监控</span>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <el-dropdown-item>
                 <span @click="handelCopyLink(scope.row)">贡献连接</span>
               </el-dropdown-item>
               <el-dropdown-item>
-                <span @click="delTask(scope.row.id)">删除升级</span>
-              </el-dropdown-item>
-              <el-dropdown-item>
-                <span @click="delCheckUser(scope.row.id)">删除监控</span>
-              </el-dropdown-item>
-              <el-dropdown-item>
-                <span @click="delUser(scope.row)">删除账号</span>
+                <span @click="confirmLog(delUser, scope.row)">删除账号</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -391,6 +416,7 @@ export default {
       listLoading: true,
       timeout: null,
       loadingIcon: 'el-icon-video-play',
+      isRefsh: false,
       formInline: {
         username: '',
         weiwang: '',
@@ -420,10 +446,13 @@ export default {
       console.log('重新获取内容!')
       this.fetchData({ pageNum: 1, pageSize: 12 })
     },
-    goWorkflows(url) {
-      console.log('actionBtn---', url)
-      if (url) {
-        window.open(url, '_blank')
+    goWorkflows(row) {
+      console.log('actionBtn---', row)
+      if (row && row.task_status === '已开启') {
+        window.open(row.task_link, '_blank')
+      }
+      if (row && row.check_status === '已开启') {
+        window.open(row.check_link, '_blank')
       }
     },
     resetForm(formName) {
@@ -468,7 +497,11 @@ export default {
       this.$router.push(`/xiaoshen/detail/${id}`)
     },
     async getInfoBtn(userInfo) {
-      console.log('actionBtn---', userInfo)
+      console.log('actionBtn---', this.$refs[`ref${userInfo.user_id}`])
+      this.$refs[`ref${userInfo.user_id}`].setAttribute(
+        'class',
+        'el-icon-loading refresh-info'
+      )
       try {
         this.$message({ message: '更新用户资料...', type: 'success' })
         const res = await tableApi.updateUserInfo(userInfo)
@@ -485,6 +518,10 @@ export default {
       } catch (error) {
         this.$message.error('更新失败:' + error)
       }
+      this.$refs[`ref${userInfo.user_id}`].setAttribute(
+        'class',
+        'el-icon-refresh refresh-info'
+      )
     },
     checkUsername(rule, value, callback) {
       if (this.timeout) {
@@ -516,6 +553,34 @@ export default {
           }
         }
       }, 800)
+    },
+    async updateChange(val, row) {
+      console.log('升级状态改变--', val, row)
+      if (val === '已开启') {
+        this.autoUpdate(row)
+      } else {
+        this.delTask(row.id)
+      }
+    },
+    async checkChange(val, row) {
+      console.log('监控状态改变--', val, row)
+    },
+    confirmLog(fun, ...params) {
+      this.$confirm('确定执行此操作吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          fun(...params)
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      this.fetchData()
     },
     async autoUpdate(row) {
       try {
@@ -641,6 +706,19 @@ export default {
   .add-btn {
     float: right;
   }
+
+  .refresh-info {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin-left: 34px;
+    line-height: 20px;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: #409eff;
+  }
+
   ::v-deep .el-dialog__footer {
     text-align: center;
   }
@@ -653,8 +731,12 @@ export default {
 }
 
 .grow {
-  // margin-top: 5px;
+  margin-left: 5px;
   color: red;
+}
+
+.original {
+  color: #aaa;
 }
 
 .username {

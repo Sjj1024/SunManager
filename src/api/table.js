@@ -132,6 +132,15 @@ function getArticleList(data) {
 }
 
 
+function getCommitList(data) {
+  return request({
+    url: '/api1/table/getCommitList',
+    method: 'POST',
+    data
+  })
+}
+
+
 function payInvcodeSome(data) {
   return request({
     url: '/api1/table/payInvcode',
@@ -166,5 +175,6 @@ export default {
   updateAllUser,
   getInvcodeList,
   payInvcodeSome,
-  getArticleList
+  getArticleList,
+  getCommitList
 }

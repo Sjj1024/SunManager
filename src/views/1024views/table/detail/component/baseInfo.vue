@@ -14,6 +14,12 @@
       <div class="left">
         <span class="lable">等级:</span>
         <span>{{ base.grade }}</span>
+        <span
+          v-if="base.original"
+          class="original"
+        >
+          <span> / {{ base.original.dengji || base.original.grade }}</span>
+        </span>
       </div>
       <div class="right">
         <span class="lable">邮箱:</span>
@@ -33,13 +39,14 @@
         </span>
       </div>
       <div class="right">
-        <span class="lable">发帖数量:</span>
+        <span class="lable">发帖/评论:</span>
         <span>{{ base.article_number }}</span>
         <span
           v-if="base.original"
           class="grow"
         >
-          <span>&nbsp;{{ base.article_number - base.original.fatie }}</span>
+          <span v-if="base.original.fatie">&nbsp;{{ base.article_number - base.original.fatie }}</span>
+          <span v-if="base.original.article_number">&nbsp;{{ base.article_number - base.original.article_number }}</span>
           <i class="el-icon-top"></i>
         </span>
       </div>
@@ -52,7 +59,8 @@
           v-if="base.original"
           class="grow"
         >
-          <span>{{ base.contribute - base.original.gongxian }}</span>
+          <span v-if="base.original.gongxian">{{ base.contribute - base.original.gongxian }}</span>
+          <span v-if="base.original.contribute">{{ base.contribute - base.original.contribute }}</span>
           <i class="el-icon-top"></i>
         </span>
       </div>
@@ -279,9 +287,9 @@ export default {
         desc: '',
         email: '',
         grade: '',
-        id: 49,
+        id: 0,
         lease: '',
-        money: 60,
+        money: 0,
         new_passwd: null,
         password: '',
         regular_money: null,
@@ -291,7 +299,7 @@ export default {
         user_agent: '',
         user_id: 0,
         user_name: '',
-        weiwang: 7
+        weiwang: 0
       }
     }
   },
@@ -311,10 +319,10 @@ export default {
           //   type: 'success'
           // })
           this.base = res.data
-        }else {
+        } else {
           this.$message.error('获取失败:' + res.message)
         }
-      }catch (error) {
+      } catch (error) {
         this.$message.error('获取失败:' + error)
       }
     },
@@ -343,10 +351,10 @@ export default {
             message: '保存用户信息成功！',
             type: 'success'
           })
-        }else {
+        } else {
           this.$message.error('获取失败:' + res.message)
         }
-      }catch (error) {
+      } catch (error) {
         this.$message.error('获取失败:' + error)
       }
     },
@@ -362,10 +370,10 @@ export default {
             type: 'success'
           })
           this.fetchData()
-        }else {
+        } else {
           this.$message.error('更新失败:' + res.message)
         }
-      }catch (error) {
+      } catch (error) {
         this.$message.error('更新失败:' + error)
       }
     },
@@ -385,7 +393,7 @@ export default {
                   message: `恭喜你购买成功${value}个邀请码`
                 })
                 this.$emit('paySuccess')
-              }else {
+              } else {
                 this.$message.error(`错了哦，错误原因:${response.message}`)
               }
             })
@@ -413,6 +421,11 @@ export default {
     margin-left: 5px;
     color: red;
   }
+
+  .original {
+    color: #aaa;
+  }
+
   .inline {
     display: flex;
     flex-direction: row;

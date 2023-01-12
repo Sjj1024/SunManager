@@ -9,7 +9,6 @@
     <el-form
       :model="addForm"
       status-icon
-      :rules="rules"
       ref="addForm"
       size="medium"
       label-width="100px"
@@ -23,6 +22,7 @@
           v-model.trim="addForm.username"
           autocomplete="off"
           style="width: 94%"
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -33,6 +33,7 @@
           v-model.trim="addForm.password"
           autocomplete="off"
           style="width: 94%"
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -43,6 +44,7 @@
           v-model.trim="addForm.email"
           autocomplete="off"
           style="width: 94%"
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -53,6 +55,7 @@
           v-model.trim="addForm.invcode"
           autocomplete="off"
           style="width: 94%"
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -67,6 +70,7 @@
           type="textarea"
           @input="getUserInfo"
           :rows="2"
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -80,6 +84,7 @@
           placeholder="请输入UserAgent"
           type="textarea"
           :rows="2"
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item label="账号量级">
@@ -104,6 +109,7 @@
           autocomplete="off"
           style="width: 94%"
           placeholder="请输入描述信息"
+          clearable
         ></el-input>
       </el-form-item>
       <div class="tip-info">提示：账号密码 / 账号密码邮箱邀请码 / Token</div>
@@ -167,13 +173,7 @@ export default {
           value: 5,
           label: '5级:已被删除或永久禁言的账号'
         }
-      ],
-      rules: {
-        username: [{ validator: this.checkUsername, trigger: 'change' }],
-        password: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
-        ]
-      }
+      ]
     }
   },
   created() {
@@ -257,24 +257,25 @@ export default {
     },
     async getUserInfo(val) {
       console.log('val-------', val)
+      this.addForm.password = ""
       if (val.indexOf('winduser') !== -1) {
         console.log('cookie正确，开始发送请求')
         this.$message({
           message: 'cookie正确，开始获取用户信息...',
           type: 'success'
         })
-        const res = await tableApi.getUserInfoByCookie(this.addForm)
-        console.log('res---', res)
-        if (res.code === 200) {
-          const userName = res.data.user_name
-          this.addForm.username = userName
-          this.addForm.desc = userName
-        } else {
-          this.$message({
-            message: '查询用户名失败...cookie不可用',
-            type: 'warning'
-          })
-        }
+        // const res = await tableApi.getUserInfoByCookie(this.addForm)
+        // console.log('res---', res)
+        // if (res.code === 200) {
+        //   const userName = res.data.user_name
+        //   this.addForm.username = userName
+        //   this.addForm.desc = userName
+        // } else {
+        //   this.$message({
+        //     message: '查询用户名失败...cookie不可用',
+        //     type: 'warning'
+        //   })
+        // }
       } else {
         console.log('cookie错误，不包含winduser')
         this.$message({

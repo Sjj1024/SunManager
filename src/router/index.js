@@ -84,7 +84,7 @@ export const constantRoutes = [
         path: 'check',
         name: 'Check',
         component: () => import('@/views/1024views/watch/index'),
-        meta: { title: '91Porn号', icon: 'tree' }
+        meta: { title: '91图片号', icon: 'tree' }
       },
       {
         path: 'manage',
