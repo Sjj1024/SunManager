@@ -314,7 +314,7 @@
       >
         <template slot-scope="scope">
           <i
-            :ref="'ref' + scope.row.user_id"
+            :ref="'ref' + scope.row.user_name"
             class="el-icon-refresh refresh-info"
             @click="confirmLog(getInfoBtn, scope.row)"
           ></i>
@@ -332,10 +332,12 @@
             placement="right"
           >
             <el-button class="desc-btn">
-              <span :class="{'desc-box':true, 
+              <span :class="{
+                'desc-box':true, 
               'waring': scope.row.desc.indexOf('永久禁言') !== -1
-              }">
-                {{ scope.row.desc }}
+              }
+              ">
+                {{ scope.row.desc || scope.row.user_name }}
               </span>
             </el-button>
           </el-tooltip>
@@ -497,8 +499,8 @@ export default {
       this.$router.push(`/xiaoshen/detail/${id}`)
     },
     async getInfoBtn(userInfo) {
-      console.log('actionBtn---', this.$refs[`ref${userInfo.user_id}`])
-      this.$refs[`ref${userInfo.user_id}`].setAttribute(
+      console.log('actionBtn---', this.$refs[`ref${userInfo.user_name}`])
+      this.$refs[`ref${userInfo.user_name}`].setAttribute(
         'class',
         'el-icon-loading refresh-info'
       )
@@ -518,7 +520,7 @@ export default {
       } catch (error) {
         this.$message.error('更新失败:' + error)
       }
-      this.$refs[`ref${userInfo.user_id}`].setAttribute(
+      this.$refs[`ref${userInfo.user_name}`].setAttribute(
         'class',
         'el-icon-refresh refresh-info'
       )
@@ -573,14 +575,15 @@ export default {
       })
         .then(() => {
           fun(...params)
+          this.fetchData()
         })
         .catch(() => {
           this.$message({
             type: 'info',
             message: '已取消删除'
           })
+          this.fetchData()
         })
-      this.fetchData()
     },
     async autoUpdate(row) {
       try {

@@ -123,9 +123,15 @@
         size="medium"
       >取 消</el-button>
       <el-button
+        type="warning"
+        size="medium"
+        @click="tempAddUser"
+        :loading="tempLoading"
+      >暂 存</el-button>
+      <el-button
         type="primary"
         size="medium"
-        @click="addUser('addForm')"
+        @click="addUser"
         :loading="submitLoading"
       >添 加</el-button>
     </span>
@@ -141,6 +147,7 @@ export default {
     return {
       addDialog: false,
       submitLoading: false,
+      tempLoading: false,
       timeout: null,
       addForm: {
         username: '',
@@ -218,6 +225,27 @@ export default {
       }
       this.addDialog = true
     },
+    async tempAddUser() {
+      console.log('添加用户-')
+      this.tempLoading = true
+      try {
+        const res = await tableApi.tempAddUser(this.addForm)
+        console.log('res---', res)
+        if (res.code === 200) {
+          this.$message({
+            message: '恭喜你，暂存用户成功',
+            type: 'success'
+          })
+          this.cancelAdd()
+          this.$emit('reFetchDate')
+        } else {
+          this.$message.error('暂存用户失败:' + res.message)
+        }
+      } catch (error) {
+        this.$message.error('暂存用户失败:' + error)
+      }
+      this.tempLoading = false
+    },
     async addUser() {
       console.log('添加用户-')
       this.submitLoading = true
@@ -257,7 +285,7 @@ export default {
     },
     async getUserInfo(val) {
       console.log('val-------', val)
-      this.addForm.password = ""
+      this.addForm.password = ''
       if (val.indexOf('winduser') !== -1) {
         console.log('cookie正确，开始发送请求')
         this.$message({

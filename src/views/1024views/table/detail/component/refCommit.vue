@@ -31,29 +31,29 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="author"
+          prop="re_replay"
           align="center"
-          label="作者"
+          label="引用内容"
           width="120"
         >
           <template slot-scope="scope">
             <span
               class="title-link"
               @click="goSee(scope.row)"
-            >{{scope.row.author}}</span>
+            >{{scope.row.re_replay}}</span>
           </template>
-        </el-table-column>
-        <el-table-column
-          prop="pub_time"
-          label="回帖时间"
-          width="140"
-        >
         </el-table-column>
         <el-table-column
           prop="replay"
           label="回复内容"
           align="center"
           width="180"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="pub_time"
+          label="回帖时间"
+          width="140"
         >
         </el-table-column>
         <el-table-column
@@ -92,6 +92,7 @@
         background
         layout="total, sizes, prev, pager, next, jumper"
         :pager-count="11"
+        :page-sizes="[20, 30, 40, 50, 60, 70]"
         :total="pageTotal"
       >
       </el-pagination>
@@ -103,36 +104,16 @@
 import tableApi from '@/api/table'
 
 export default {
-  name: 'Myarticle',
+  name: 'RefCommit',
   data() {
     return {
-      formInline: {
-        number: '',
-        invcode: '',
-        isUsed: ''
-      },
-      addForm: {
-        username: '',
-        password: '1024xiaoshen@gmail.com',
-        email: '1024xiaoshen@gmail.com',
-        invcode: '',
-        cookie: '',
-        userAgent: '',
-        desc: ''
-      },
       tableData: [],
       addDialog: false,
       submitLoading: false,
       pageTotal: 0,
       pageNum: 1,
-      pageSize: 8,
-      listLoading: true,
-      rules: {
-        username: [{ validator: this.checkUsername, trigger: 'change' }],
-        password: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
-        ]
-      }
+      pageSize: 20,
+      listLoading: true
     }
   },
   created() {
@@ -150,7 +131,7 @@ export default {
             pageSize: this.pageSize,
             ...this.formInline
           }
-      tableApi.getCommitList(data).then((response) => {
+      tableApi.getRefCommitList(data).then((response) => {
         this.tableData = response.data.items
         this.pageTotal = response.data.total
         this.listLoading = false

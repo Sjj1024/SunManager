@@ -103,11 +103,11 @@
     <div class="inline">
       <div class="left">
         <span class="lable">贡献连接:</span>
-        <span>{{ base.contribute_link }}</span>
+        <span class="active">{{cl_home[1] }}/index.php{{ base.contribute_link.split('index.php')[1] }}</span>
       </div>
       <div class="right">
         <span class="lable">作品展示:</span>
-        <span @click="openMyLink">https://cl.2059x.xyz/user/{{ base.user_name }}</span>
+        <span @click="openMyLink" class="active">{{ cl_home[1] }}/user/{{ base.user_name }}</span>
       </div>
     </div>
     <div class="inline">
@@ -229,7 +229,7 @@
       <el-button
         type="primary"
         @click="getInfoBtn"
-      >刷新信息</el-button>
+      >更新信息</el-button>
       <el-button
         type="primary"
         @click="openIndex"
@@ -244,6 +244,7 @@
 
 <script>
 import tableApi from '@/api/table'
+import { mapState } from 'vuex'
 
 export default {
   name: 'BaseInfo',
@@ -273,38 +274,17 @@ export default {
         }
       ],
       base: {
-        able_invate: false,
-        article_number: 0,
-        authentication: '',
-        check_file_sha: null,
-        check_link: null,
-        check_status: null,
-        contribute: 0,
-        contribute_link: '',
-        cookie: '',
-        creat_time: '',
-        current_money: null,
-        desc: '',
-        email: '',
-        grade: '',
-        id: 0,
-        lease: '',
-        money: 0,
-        new_passwd: null,
-        password: '',
-        regular_money: null,
-        task_file_sha: null,
-        task_link: null,
-        task_status: null,
-        user_agent: '',
-        user_id: 0,
-        user_name: '',
-        weiwang: 0
-      }
+        contribute_link: ''
+      },
+      cl_home: ''
     }
+  },
+  computed: {
+    ...mapState('board', ['homes'])
   },
   async created() {
     this.fetchData()
+    this.initHomeUrl()
   },
   methods: {
     async fetchData() {
@@ -314,10 +294,6 @@ export default {
         const res = await tableApi.getUserById({ id })
         console.log('res---', res)
         if (res.code === 200) {
-          // this.$message({
-          //   message: '获取用户信息成功！',
-          //   type: 'success'
-          // })
           this.base = res.data
         } else {
           this.$message.error('获取失败:' + res.message)
@@ -326,10 +302,20 @@ export default {
         this.$message.error('获取失败:' + error)
       }
     },
+    // 初始化回家地址
+    initHomeUrl() {
+      if (this.homes) {
+        const home = this.homes.find((item) => {
+          return item.key === '1024地址'
+        })
+        this.cl_home = home && home.homes
+        console.log('初始化cl地址', this.cl_home)
+      } else {
+        console.log('没有拿到homes', this.homes)
+      }
+    },
     openIndex() {
-      const url = this.base.contribute_link
-        ? this.base.contribute_link.split('?')[0]
-        : ''
+      const url = this.cl_home[0]
       if (url) {
         console.log('跳转到曹刘主页:' + url)
         window.open(url, '_blank')
@@ -420,6 +406,11 @@ export default {
   .grow {
     margin-left: 5px;
     color: red;
+  }
+
+  .active {
+    color: #409eff;
+    cursor: pointer;
   }
 
   .original {

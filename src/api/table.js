@@ -24,6 +24,14 @@ function addUser(data) {
   })
 }
 
+function tempAddUser(data) {
+  return request({
+    url: '/api1/table/tempAddUser',
+    method: 'post',
+    data
+  })
+}
+
 function delUser(data) {
   return request({
     url: '/api1/table/delUser',
@@ -141,6 +149,16 @@ function getCommitList(data) {
 }
 
 
+function getRefCommitList(data) {
+  return request({
+    url: '/api1/table/getRefCommitList',
+    method: 'POST',
+    data
+  })
+}
+
+
+
 function payInvcodeSome(data) {
   return request({
     url: '/api1/table/payInvcode',
@@ -161,6 +179,7 @@ function updateAllUser(data) {
 export default {
   getList,
   addUser,
+  tempAddUser,
   delUser,
   addUpdateUser,
   getUserInfoByCookie,
@@ -176,5 +195,6 @@ export default {
   getInvcodeList,
   payInvcodeSome,
   getArticleList,
-  getCommitList
+  getCommitList,
+  getRefCommitList
 }

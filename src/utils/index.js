@@ -45,7 +45,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -114,4 +114,34 @@ export function param2Obj(url) {
     }
   })
   return obj
+}
+
+// 保存到localStorage中
+export function saveStore(key, val) {
+  if (val instanceof Object) {
+    val = JSON.stringify(val)
+  }
+  localStorage.setItem(key, val)
+}
+
+// 删除某个键
+export function getStore(key) {
+  let item = localStorage.getItem(key)
+  try {
+    item = JSON.parse(item)
+  } catch (error) {
+    console.log('解析store出错');
+  }
+  return item
+}
+
+
+// 删除某个键
+export function delStore(key) {
+  localStorage.removeItem(key)
+}
+
+// 清空本地存储
+export function clsStore(){
+  localStorage.clear()
 }

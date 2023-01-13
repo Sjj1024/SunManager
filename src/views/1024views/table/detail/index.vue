@@ -45,10 +45,10 @@
       name="five"
     >
       <keep-alive>
-        <Invcodes
+        <RefCommits
           v-if="activeName == 'five'"
           ref="invcodePanel"
-        ></Invcodes>
+        ></RefCommits>
       </keep-alive>
     </el-tab-pane>
     <el-tab-pane
@@ -71,10 +71,11 @@ import EditInfo from '@/views/1024views/table/detail/component/editInfo'
 import MyArticle from '@/views/1024views/table/detail/component/myArticle'
 import Invcodes from '@/views/1024views/table/detail/component/invcodes'
 import Commits from '@/views/1024views/table/detail/component/commit.vue'
+import RefCommits from '@/views/1024views/table/detail/component/refCommit.vue'
 
 export default {
   name: 'Detail',
-  components: { BaseInfo, EditInfo, MyArticle, Invcodes, Commits },
+  components: { BaseInfo, EditInfo, MyArticle, Invcodes, Commits, RefCommits },
   props: {
     person: {
       type: Object,
