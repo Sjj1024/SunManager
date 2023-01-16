@@ -103,11 +103,14 @@
     <div class="inline">
       <div class="left">
         <span class="lable">贡献连接:</span>
-        <span class="active">{{cl_home[1] }}/index.php{{ base.contribute_link.split('index.php')[1] }}</span>
+        <span class="active">{{cl_home[1] }}/index.php{{ base.contribute_link && base.contribute_link.split('index.php')[1] }}</span>
       </div>
       <div class="right">
         <span class="lable">作品展示:</span>
-        <span @click="openMyLink" class="active">{{ cl_home[1] }}/user/{{ base.user_name }}</span>
+        <span
+          @click="openMyLink"
+          class="active"
+        >{{ cl_home[1] }}/user/{{ base.user_name }}</span>
       </div>
     </div>
     <div class="inline">

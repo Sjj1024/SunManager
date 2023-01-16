@@ -286,12 +286,18 @@ export default {
     async getUserInfo(val) {
       console.log('val-------', val)
       this.addForm.password = ''
+      // 判断是不是手机端的
+      if (val.indexOf('ismob=1') !== -1) {
+        console.log('是手机端的cookie')
+        this.addForm.userAgent =
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'
+      }
       if (val.indexOf('winduser') !== -1) {
         console.log('cookie正确，开始发送请求')
-        this.$message({
-          message: 'cookie正确，开始获取用户信息...',
-          type: 'success'
-        })
+        // this.$message({
+        //   message: 'cookie正确，开始获取用户信息...',
+        //   type: 'success'
+        // })
         // const res = await tableApi.getUserInfoByCookie(this.addForm)
         // console.log('res---', res)
         // if (res.code === 200) {
