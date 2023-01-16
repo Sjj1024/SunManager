@@ -101,6 +101,7 @@
 
 <script>
 import tableApi from '@/api/table'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Myarticle',
@@ -135,6 +136,9 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters('board', ['clHome'])
+  },
   created() {
     this.fetchData()
   },
@@ -157,8 +161,8 @@ export default {
       })
     },
     goSee(row) {
-      console.log('查看文章')
-      window.open('https://cl.2059x.xyz/read.php?tid=5453480', '_black')
+      console.log('查看文章', row)
+      // window.open('https://cl.2059x.xyz/read.php?tid=5453480', '_black')
     },
     resetForm() {
       this.$refs.searchForm.resetFields()

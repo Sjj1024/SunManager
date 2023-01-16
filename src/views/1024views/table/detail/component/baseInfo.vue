@@ -103,14 +103,14 @@
     <div class="inline">
       <div class="left">
         <span class="lable">贡献连接:</span>
-        <span class="active">{{cl_home[1] }}/index.php{{ base.contribute_link && base.contribute_link.split('index.php')[1] }}</span>
+        <span class="active">{{ clHome }}/index.php{{ base.contribute_link && base.contribute_link.split('index.php')[1] }}</span>
       </div>
       <div class="right">
         <span class="lable">作品展示:</span>
         <span
           @click="openMyLink"
           class="active"
-        >{{ cl_home[1] }}/user/{{ base.user_name }}</span>
+        >{{ clHome }}/user/{{ base.user_name }}</span>
       </div>
     </div>
     <div class="inline">
@@ -247,7 +247,7 @@
 
 <script>
 import tableApi from '@/api/table'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'BaseInfo',
@@ -257,37 +257,35 @@ export default {
       important: [
         {
           value: 1,
-          label: '1级:非常重要禁止售卖，列表排名靠前'
+          label: '1级:非常重要禁止售卖，自己的Boss号'
         },
         {
           value: 2,
-          label: '2级:比较重要，自己大号产出自己用'
+          label: '2级:比较重要，自己产码小号/别人号'
         },
         {
           value: 3,
-          label: '3级:自己的三级账号，可以出邀请码'
+          label: '3级:普通三级账号，可产可卖邀请码'
         },
         {
           value: 4,
-          label: '4级:新手级别的账号，可自动升级'
+          label: '4级:新手级别的账号，自动升级/租售'
         },
         {
           value: 5,
-          label: '5级:已被删除或永久禁言的账号'
+          label: '5级:已被删除或永久禁言的账号，废了'
         }
       ],
       base: {
         contribute_link: ''
-      },
-      cl_home: ''
+      }
     }
   },
   computed: {
-    ...mapState('board', ['homes'])
+    ...mapGetters("board", ["clHome"])
   },
   async created() {
     this.fetchData()
-    this.initHomeUrl()
   },
   methods: {
     async fetchData() {
@@ -305,20 +303,8 @@ export default {
         this.$message.error('获取失败:' + error)
       }
     },
-    // 初始化回家地址
-    initHomeUrl() {
-      if (this.homes) {
-        const home = this.homes.find((item) => {
-          return item.key === '1024地址'
-        })
-        this.cl_home = home && home.homes
-        console.log('初始化cl地址', this.cl_home)
-      } else {
-        console.log('没有拿到homes', this.homes)
-      }
-    },
     openIndex() {
-      const url = this.cl_home[0]
+      const url = this.clhome
       if (url) {
         console.log('跳转到曹刘主页:' + url)
         window.open(url, '_blank')

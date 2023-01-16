@@ -7,6 +7,14 @@ export default {
   state: {
     homes: getStore("caoliu"),
   },
+  getters: {
+    clHome: state => {
+      const home = state.homes.find((item) => {
+        return item.key === '1024地址'
+      })
+      return home && home.homes[1]
+    }
+  },
   mutations:{
     set_homes(state, data){
       state.homes = data
