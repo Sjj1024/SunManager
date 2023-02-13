@@ -14,7 +14,7 @@
           <template slot-scope="scope">
             <span
               class="title-link"
-              @click="goSee(scope.row)"
+              @click="goArticle(scope.row)"
             >{{scope.row.title}}</span>
           </template>
         </el-table-column>
@@ -26,7 +26,7 @@
           <template slot-scope="scope">
             <span
               class="title-link"
-              @click="goSee(scope.row)"
+              @click="goCategory(scope.row)"
             >{{scope.row.category}}</span>
           </template>
         </el-table-column>
@@ -39,7 +39,7 @@
           <template slot-scope="scope">
             <span
               class="title-link"
-              @click="goSee(scope.row)"
+              @click="goAuthor(scope.row)"
             >{{scope.row.author}}</span>
           </template>
         </el-table-column>
@@ -160,9 +160,17 @@ export default {
         this.listLoading = false
       })
     },
-    goSee(row) {
+    goArticle(row) {
       console.log('查看文章', row)
-      // window.open('https://cl.2059x.xyz/read.php?tid=5453480', '_black')
+      window.open(`${this.clHome}/${row.link}`, '_black')
+    },
+    goAuthor(row) {
+      console.log('查看作者', row)
+      window.open(`${this.clHome}/${row.author_link}`, '_black')
+    },
+    goCategory(row) {
+      console.log('查看分类', row)
+      window.open(`${this.clHome}/${row.category_link}`, '_black')
     },
     resetForm() {
       this.$refs.searchForm.resetFields()

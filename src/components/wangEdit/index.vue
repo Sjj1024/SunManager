@@ -19,7 +19,7 @@
 <script>
 import Vue from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { DomEditor } from '@wangeditor/editor'
+
 
 export default Vue.extend({
   name: 'WangEdit',

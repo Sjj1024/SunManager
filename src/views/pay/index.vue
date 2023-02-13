@@ -8,12 +8,14 @@
         label="支付测试"
         name="first"
       >
-        <PayTest></PayTest>
+        <PayConfig></PayConfig>
       </el-tab-pane>
       <el-tab-pane
         label="配置管理"
         name="second"
-      >配置管理</el-tab-pane>
+      >
+        <PayTest></PayTest>
+      </el-tab-pane>
       <el-tab-pane
         label="角色管理"
         name="third"
@@ -28,9 +30,10 @@
 
 <script>
 import PayTest from './components/paytest.vue'
+import PayConfig from './components/config.vue'
 
 export default {
-  components: { PayTest },
+  components: { PayTest, PayConfig },
   data() {
     return {
       activeName: 'first'

@@ -41,16 +41,16 @@
             value="騎士"
           />
           <el-option
-            label="圣騎士"
-            value="圣騎士"
+            label="聖騎士"
+            value="聖騎士"
           />
           <el-option
             label="精靈王"
             value="精靈王"
           />
           <el-option
-            label="風云使者"
-            value="風云使者"
+            label="風雲使者"
+            value="風雲使者"
           />
           <el-option
             label="光明使者"
@@ -234,7 +234,7 @@
       <el-table-column
         label="贡献"
         align="center"
-        width="120"
+        width="128"
       >
         <template slot-scope="scope">
           <span>{{ scope.row.contribute }}點</span>
@@ -248,58 +248,45 @@
           </span>
         </template>
       </el-table-column>
-      <!-- <el-table-column
-        label="金钱"
-        align="center"
-      >
-        <template slot-scope="scope">
-          <span>{{ scope.row.money }} USD</span>
-        </template>
-      </el-table-column> -->
       <el-table-column
         align="center"
         label="可产邀请码"
+        width="120"
       >
-        <template slot-scope="scope"> {{ scope.row.able_invate }} </template>
+        <template slot-scope="scope"> {{ scope.row.able_invate || "不可邀请" }} </template>
       </el-table-column>
       <el-table-column
         align="center"
-        label="自动升级"
-        width="120"
+        label="自动升级/签到/监控"
+        width="160"
       >
         <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.task_status"
-            active-value="已开启"
-            inactive-value="未开启"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            @change="(val) => confirmLog(updateChange, val, scope.row)"
-          >
-          </el-switch>
           <span
-            :class="{'active':scope.row.task_status === '已开启'}"
-            @click="goWorkflows(scope.row)"
+            :class="{'active':scope.row.task_status === '已开启', 'disactive':scope.row.task_status === '未开启' || !scope.row.task_status}"
+            @click="toggleCommitTask(scope.row)"
           >
-            {{ scope.row.task_status }}
+            {{ scope.row.task_status || "未开启" }}
+          </span>
+          <span
+            :class="{'active':scope.row.sign_task_status === '已开启', 'disactive':scope.row.sign_task_status === '未开启' || !scope.row.sign_task_status}"
+            @click="toggleSignTask(scope.row)"
+          >
+            {{ scope.row.sign_task_status || "未开启" }}
+          </span>
+          <span
+            :class="{'active':scope.row.check_status === '已开启', 'disactive':scope.row.check_status === '未开启' || !scope.row.check_status}"
+            @click="toggleCheckTask(scope.row)"
+          >
+            {{ scope.row.check_status || "未开启" }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         align="center"
         label="自动监控"
         width="120"
       >
         <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.check_status"
-            active-value="已开启"
-            inactive-value="未开启"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            @change="(val) => confirmLog(checkChange, val, scope.row)"
-          >
-          </el-switch>
           <span
             :class="{'active':scope.row.check_status === '已开启', 'waring': scope.row.desc.indexOf('广告') !== -1}"
             @click="goWorkflows(scope.row.check_link)"
@@ -307,17 +294,21 @@
             {{ scope.row.check_status }}
           </span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         align="center"
         label="更新信息"
       >
         <template slot-scope="scope">
-          <i
+          <!-- <i
             :ref="'ref' + scope.row.user_name"
             class="el-icon-refresh refresh-info"
             @click="confirmLog(getInfoBtn, scope.row)"
-          ></i>
+          ></i> -->
+          <span
+            class="updateBtn"
+            @click="confirmLog(getInfoBtn, scope.row)"
+          >更新信息</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -328,7 +319,7 @@
           <el-tooltip
             class="item"
             effect="dark"
-            :content="scope.row.desc"
+            :content="scope.row.desc + scope.row.regist_time"
             placement="right"
           >
             <el-button class="desc-btn">
@@ -337,6 +328,7 @@
               'waring': scope.row.desc.indexOf('永久禁言') !== -1
               }
               ">
+                {{ scope.row.regist_time }}
                 {{ scope.row.desc || scope.row.user_name }}
               </span>
             </el-button>
@@ -399,16 +391,31 @@
       ref="regist"
       @reFetchDate="fetchData"
     ></RegistCaoliu>
+    <!-- 定时评论任务 -->
+    <CommitDialog
+      ref="commitDialog"
+      @reFetchDate="fetchData"
+    >
+    </CommitDialog>
+    <!-- 定时签到任务 -->
+    <SignDialog
+      ref="signDialog"
+      @reFetchDate="fetchData"
+    >
+    </SignDialog>
   </div>
 </template>
 
 <script>
 import tableApi from '@/api/table'
+import taskApi from '@/api/task'
 import RegistCaoliu from '@/components/RegistCl/index.vue'
+import SignDialog from '@/components/RegistCl/signDialog.vue'
+import CommitDialog from '@/components/RegistCl/commitDialog.vue'
 
 export default {
   name: 'Table',
-  components: { RegistCaoliu },
+  components: { RegistCaoliu, SignDialog, CommitDialog},
   data() {
     return {
       list: null,
@@ -450,6 +457,22 @@ export default {
     },
     goWorkflows(row) {
       console.log('actionBtn---', row)
+      if (row && row.task_status === '已开启') {
+        window.open(row.task_link, '_blank')
+      }
+      if (row && row.check_status === '已开启') {
+        window.open(row.check_link, '_blank')
+      }
+    },
+    toggleCommitTask(row) {
+      console.log('切换评论任务状态')
+      this.$refs.commitDialog.showSign(row)
+    },
+    toggleSignTask(row) {
+      this.$refs.signDialog.showSign(row)
+    },
+    toggleCheckTask(row) {
+      console.log('切换监控任务状态')
       if (row && row.task_status === '已开启') {
         window.open(row.task_link, '_blank')
       }
@@ -500,10 +523,10 @@ export default {
     },
     async getInfoBtn(userInfo) {
       console.log('actionBtn---', this.$refs[`ref${userInfo.user_name}`])
-      this.$refs[`ref${userInfo.user_name}`].setAttribute(
-        'class',
-        'el-icon-loading refresh-info'
-      )
+      // this.$refs[`ref${userInfo.user_name}`].setAttribute(
+      //   'class',
+      //   'el-icon-loading refresh-info'
+      // )
       try {
         this.$message({ message: '更新用户资料...', type: 'success' })
         const res = await tableApi.updateUserInfo(userInfo)
@@ -520,10 +543,10 @@ export default {
       } catch (error) {
         this.$message.error('更新失败:' + error)
       }
-      this.$refs[`ref${userInfo.user_name}`].setAttribute(
-        'class',
-        'el-icon-refresh refresh-info'
-      )
+      // this.$refs[`ref${userInfo.user_name}`].setAttribute(
+      //   'class',
+      //   'el-icon-refresh refresh-info'
+      // )
     },
     checkUsername(rule, value, callback) {
       if (this.timeout) {
@@ -750,6 +773,26 @@ export default {
 .active {
   color: #409eff;
   cursor: pointer;
+  border: 1px solid white;
+}
+
+.updateBtn {
+  color: #409eff;
+  cursor: pointer;
+}
+
+.active:hover {
+  border: 1px solid black;
+}
+
+.disactive:hover {
+  border: 1px solid black;
+}
+
+.disactive {
+  color: red;
+  cursor: pointer;
+  border: 1px solid white;
 }
 
 .waring {

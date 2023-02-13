@@ -19,7 +19,7 @@
       label="发布文章"
       name="second"
     >
-      <EditInfo v-if="activeName == 'second'"></EditInfo>
+      <PubArticle v-if="activeName == 'second'"></PubArticle>
     </el-tab-pane>
     <el-tab-pane
       label="我的文章"
@@ -67,7 +67,7 @@
 
 <script>
 import BaseInfo from '@/views/1024views/table/detail/component/baseInfo'
-import EditInfo from '@/views/1024views/table/detail/component/editInfo'
+import PubArticle from '@/views/1024views/table/detail/component/pubArticle.vue'
 import MyArticle from '@/views/1024views/table/detail/component/myArticle'
 import Invcodes from '@/views/1024views/table/detail/component/invcodes'
 import Commits from '@/views/1024views/table/detail/component/commit.vue'
@@ -75,7 +75,7 @@ import RefCommits from '@/views/1024views/table/detail/component/refCommit.vue'
 
 export default {
   name: 'Detail',
-  components: { BaseInfo, EditInfo, MyArticle, Invcodes, Commits, RefCommits },
+  components: { BaseInfo, PubArticle, MyArticle, Invcodes, Commits, RefCommits },
   props: {
     person: {
       type: Object,
