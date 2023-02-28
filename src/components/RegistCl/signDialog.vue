@@ -82,13 +82,13 @@ export default {
         'https://cl.6273x.xyz/htm_data/2302/7/5522451.html'
       this.caoliuSignForm.commit = '今日签到'
       var refreshHours = new Date().getHours()
-      var refreshMin = new Date().getMinutes() + 1
+      var refreshMin = new Date().getMinutes() + 2
       this.caoliuSignForm.corn = `${refreshMin} ${refreshHours} * * *`
       this.dialogVisible = true
     },
-    toggleSignTask() {
+    async toggleSignTask() {
       console.log('切换签到任务状态')
-      taskApi.addSignTask(this.caoliuSignForm)
+      await taskApi.addSignTask(this.caoliuSignForm)
       this.handleClose()
       this.$emit('reFetchDate')
     },
