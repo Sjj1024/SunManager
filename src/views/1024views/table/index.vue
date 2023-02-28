@@ -281,20 +281,6 @@
           </span>
         </template>
       </el-table-column>
-      <!-- <el-table-column
-        align="center"
-        label="自动监控"
-        width="120"
-      >
-        <template slot-scope="scope">
-          <span
-            :class="{'active':scope.row.check_status === '已开启', 'waring': scope.row.desc.indexOf('广告') !== -1}"
-            @click="goWorkflows(scope.row.check_link)"
-          >
-            {{ scope.row.check_status }}
-          </span>
-        </template>
-      </el-table-column> -->
       <el-table-column
         align="center"
         label="更新信息"
@@ -308,7 +294,7 @@
           <span
             class="updateBtn"
             @click="confirmLog(getInfoBtn, scope.row)"
-          >更新信息</span>
+          >更新并跳转</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -379,6 +365,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :page-sizes="[12, 24, 36, 48, 60, 72]"
+        :current-page="pageNum"
         background
         layout="total, sizes, prev, pager, next, jumper"
         :pager-count="13"
@@ -408,25 +395,26 @@
 
 <script>
 import tableApi from '@/api/table'
-import taskApi from '@/api/task'
 import RegistCaoliu from '@/components/RegistCl/index.vue'
 import SignDialog from '@/components/RegistCl/signDialog.vue'
 import CommitDialog from '@/components/RegistCl/commitDialog.vue'
+import { saveStore, getStore } from '@/utils'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Table',
-  components: { RegistCaoliu, SignDialog, CommitDialog},
+  components: { RegistCaoliu, SignDialog, CommitDialog },
   data() {
     return {
       list: null,
       pageTotal: 0,
-      pageNum: 1,
+      pageNum: getStore('pageNum') || 1,
       pageSize: 12,
       listLoading: true,
       timeout: null,
       loadingIcon: 'el-icon-video-play',
       isRefsh: false,
-      formInline: {
+      formInline: getStore('formInline') || {
         username: '',
         weiwang: '',
         level: '',
@@ -434,6 +422,9 @@ export default {
         yaoqing: ''
       }
     }
+  },
+  computed: {
+    ...mapGetters('board', ['clHome'])
   },
   created() {
     this.fetchData()
@@ -443,7 +434,11 @@ export default {
       this.listLoading = true
       const data = dataPage
         ? { ...dataPage, ...this.formInline }
-        : { pageNum: this.pageNum, pageSize: this.pageSize, ...this.formInline }
+        : {
+            pageNum: getStore('pageNum') || 1,
+            pageSize: this.pageSize,
+            ...this.formInline
+          }
       console.log('发送的参数是', data)
       tableApi.getList(data).then((response) => {
         this.list = response.data.items
@@ -453,6 +448,8 @@ export default {
     },
     onSubmit() {
       console.log('重新获取内容!')
+      saveStore('pageNum', 1)
+      saveStore('formInline', this.formInline)
       this.fetchData({ pageNum: 1, pageSize: 12 })
     },
     goWorkflows(row) {
@@ -482,6 +479,14 @@ export default {
     },
     resetForm(formName) {
       this.$refs.searchForm.resetFields()
+      saveStore('formInline', null)
+      this.formInline = {
+        username: '',
+        weiwang: '',
+        level: '',
+        status: '',
+        yaoqing: ''
+      }
       console.log('重制查询内容')
     },
     async updateAllUserinfo() {
@@ -507,6 +512,24 @@ export default {
         this.loadingIcon = 'el-icon-video-play'
       }
     },
+    dumpTargetIndex(userInfo) {
+      console.log('跳转到1024首页')
+      var caoliuUserAgent = userInfo.user_agent.replaceAll(';', '!!')
+      var caoliuCookies = userInfo.cookie.replaceAll(';', '!!')
+      console.log('caoliuUserAgent---', caoliuUserAgent)
+      console.log('caoliuCookies---', caoliuCookies)
+      document.cookie = `caoliuUrl=${this.clHome}`
+      document.cookie = `caoliuUserAgent=${caoliuUserAgent}`
+      document.cookie = `caoliuCookies=${caoliuCookies}`
+      // 打开首页
+      setTimeout(() => {
+        window.open(`${this.clHome}/index.php`, '_blank')
+      }, 500)
+      this.$message({
+        message: '正在加载中.....请稍等',
+        type: 'success'
+      })
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
       this.pageSize = val
@@ -514,6 +537,7 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
+      saveStore('pageNum', val)
       this.pageNum = val
       this.fetchData()
     },
@@ -523,10 +547,7 @@ export default {
     },
     async getInfoBtn(userInfo) {
       console.log('actionBtn---', this.$refs[`ref${userInfo.user_name}`])
-      // this.$refs[`ref${userInfo.user_name}`].setAttribute(
-      //   'class',
-      //   'el-icon-loading refresh-info'
-      // )
+      this.dumpTargetIndex(userInfo)
       try {
         this.$message({ message: '更新用户资料...', type: 'success' })
         const res = await tableApi.updateUserInfo(userInfo)

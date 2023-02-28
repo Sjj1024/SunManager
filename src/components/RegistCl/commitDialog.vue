@@ -28,6 +28,11 @@
         @click="handleClose"
       >暂 停</el-button>
       <el-button
+        <el-button
+        type="warning"
+        @click="handleClose"
+      >运 行</el-button>
+      <el-button
         type="primary"
         @click="toggleSignTask"
       >确 定</el-button>
@@ -69,8 +74,9 @@ export default {
       this.caoliuSignForm.cookie = row.cookie
       this.caoliuSignForm.user_agent = row.user_agent
       // var refreshHours = new Date().getHours()
-      var refreshMin = new Date().getMinutes() + 1
-      this.caoliuSignForm.corn = `${refreshMin} */3 * * *`
+      var refreshMin = new Date().getMinutes()
+      // refreshMin = refreshMin > 20
+      this.caoliuSignForm.corn = `${refreshMin} */2 * * *`
       this.dialogVisible = true
     },
     async toggleSignTask() {
@@ -78,7 +84,7 @@ export default {
       try {
         await taskApi.addCommitTask(this.caoliuSignForm)
       } catch (error) {
-        this.$message.error('错了哦：' + error);
+        this.$message.error('错了哦：' + error)
       }
       this.handleClose()
       this.$emit('reFetchDate')

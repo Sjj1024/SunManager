@@ -15,10 +15,12 @@ import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 // 引入语言
 import 'codemirror/mode/javascript/javascript.js'
+import 'codemirror/mode/python/python.js'
 // base16-dark主题
 import 'codemirror/theme/base16-dark.css'
 // bespin主题
 import 'codemirror/theme/bespin.css'
+import 'codemirror/theme/abbott.css'
 // require more codemirror resource...
 
 // component
@@ -29,15 +31,30 @@ export default {
   },
   data() {
     return {
-      code: `function foo(items, nada) {
-          for (var i=0; i<items.length; i++) {
-              alert(items[i] + "juhu\\n");
-          }	// Real Tab.
-      }`,
+      code: `
+import numpy as np
+cimport cython
+from libc.math cimport sqrt
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def pairwise_cython(double[:, ::1] X):
+    cdef int M = X.shape[0]
+    cdef int N = X.shape[1]
+    cdef double tmp, d
+    cdef double[:, ::1] D = np.empty((M, M), dtype=np.float64)
+    for i in range(M):
+        for j in range(M):
+            d = 0.0
+            for k in range(N):
+                tmp = X[i, k] - X[j, k]
+                d += tmp * tmp
+            D[i, j] = sqrt(d)
+    return np.asarray(D)`,
       cmOptions: {
         // codemirror options
         tabSize: 4,
-        mode: 'text/javascript',
+        mode: 'text/x-cython',
         theme: 'bespin',
         lineNumbers: true,
         line: true,

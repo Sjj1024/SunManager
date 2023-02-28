@@ -128,7 +128,11 @@ export function saveStore(key, val) {
 export function getStore(key) {
   let item = localStorage.getItem(key)
   try {
-    item = JSON.parse(item)
+    if (item) {
+      item = JSON.parse(item)
+    } else {
+      return item
+    }
   } catch (error) {
     console.log('解析store出错');
   }
@@ -142,6 +146,6 @@ export function delStore(key) {
 }
 
 // 清空本地存储
-export function clsStore(){
+export function clsStore() {
   localStorage.clear()
 }

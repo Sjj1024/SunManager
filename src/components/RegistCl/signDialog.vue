@@ -27,12 +27,17 @@
       <el-button @click="handleClose">取 消</el-button>
       <el-button
         type="danger"
-        @click="handleClose"
+        @click="delTask"
       >删 除</el-button>
       <el-button
         type="success"
         @click="handleClose"
       >暂 停</el-button>
+      <el-button
+        <el-button
+        type="warning"
+        @click="handleClose"
+      >运 行</el-button>
       <el-button
         type="primary"
         @click="toggleSignTask"
@@ -66,15 +71,6 @@ export default {
     handleClose() {
       console.log('关闭dialog')
       this.dialogVisible = false
-      // this.caoliuSignForm = {
-      //   id: '',
-      //   user_name: '',
-      //   cookie: '',
-      //   user_agent: '',
-      //   link: '',
-      //   commit: '',
-      //   corn: ''
-      // }
     },
     showSign(row) {
       console.log('dislogShow', row)
@@ -89,23 +85,15 @@ export default {
       var refreshMin = new Date().getMinutes() + 1
       this.caoliuSignForm.corn = `${refreshMin} ${refreshHours} * * *`
       this.dialogVisible = true
-      // if (row && row.sign_task_status === '已开启') {
-      //   taskApi.delSignTask(row)
-      //   this.dialogVisible = true
-      // } else {
-      //   this.caoliuSignForm.id = row.id
-      //   this.caoliuSignForm.user_name = row.user_name
-      //   this.caoliuSignForm.cookie = row.cookie
-      //   this.caoliuSignForm.user_agent = row.user_agent
-      //   var refreshHours = new Date().getHours()
-      //   var refreshMin = new Date().getMinutes() + 1
-      //   this.caoliuSignForm.corn = `${refreshMin} ${refreshHours} * * *`
-      //   this.dialogVisible = true
-      // }
     },
     toggleSignTask() {
       console.log('切换签到任务状态')
       taskApi.addSignTask(this.caoliuSignForm)
+      this.handleClose()
+      this.$emit('reFetchDate')
+    },
+    async delTask() {
+      await taskApi.delSignTask(this.caoliuSignForm)
       this.handleClose()
       this.$emit('reFetchDate')
     }

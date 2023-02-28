@@ -231,6 +231,10 @@
     <div class="inline">
       <el-button
         type="primary"
+        @click="dumpTargetIndex"
+      >跳转首页</el-button>
+      <el-button
+        type="primary"
         @click="getInfoBtn"
       >更新信息</el-button>
       <el-button
@@ -277,12 +281,14 @@ export default {
         }
       ],
       base: {
-        contribute_link: ''
+        contribute_link: '',
+        cookie: '',
+        user_agent: ''
       }
     }
   },
   computed: {
-    ...mapGetters("board", ["clHome"])
+    ...mapGetters('board', ['clHome'])
   },
   async created() {
     this.fetchData()
@@ -304,7 +310,7 @@ export default {
       }
     },
     openIndex() {
-      const url = this.clhome
+      const url = this.clHome
       if (url) {
         console.log('跳转到曹刘主页:' + url)
         window.open(url, '_blank')
@@ -332,6 +338,24 @@ export default {
       } catch (error) {
         this.$message.error('获取失败:' + error)
       }
+    },
+    dumpTargetIndex() {
+      console.log('跳转到1024首页')
+      var caoliuUserAgent = this.base.user_agent.replaceAll(';', '!!')
+      var caoliuCookies = this.base.cookie.replaceAll(';', '!!')
+      console.log('caoliuUserAgent---', caoliuUserAgent)
+      console.log('caoliuCookies---', caoliuCookies)
+      document.cookie = `caoliuUrl=${this.clHome}`
+      document.cookie = `caoliuUserAgent=${caoliuUserAgent}`
+      document.cookie = `caoliuCookies=${caoliuCookies}`
+      // 打开首页
+      setTimeout(() => {
+        window.open(`${this.clHome}/index.php`, '_blank')
+      }, 500)
+      this.$message({
+        message: '正在加载中.....请稍等',
+        type: 'success'
+      })
     },
     async getInfoBtn(userInfo) {
       console.log('actionBtn---', userInfo)

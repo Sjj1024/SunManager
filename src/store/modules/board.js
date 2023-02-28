@@ -12,7 +12,7 @@ export default {
       const home = state.homes.find((item) => {
         return item.key === '1024地址'
       })
-      return home && home.homes[1]
+      return home && home.homes[2]
     }
   },
   mutations:{
