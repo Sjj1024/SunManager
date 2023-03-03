@@ -48,6 +48,7 @@
 
 <script>
 import taskApi from '@/api/task'
+import { randomInt } from '@/utils'
 
 export default {
   name: 'SignDialog',
@@ -81,8 +82,9 @@ export default {
       this.caoliuSignForm.link =
         'https://cl.6273x.xyz/htm_data/2302/7/5522451.html'
       this.caoliuSignForm.commit = '今日签到'
-      var refreshHours = new Date().getHours()
-      var refreshMin = new Date().getMinutes() + 2
+      // var refreshHours = new Date().getHours()
+      var refreshHours = randomInt(17, 22)
+      var refreshMin = randomInt(1, 60)
       this.caoliuSignForm.corn = `${refreshMin} ${refreshHours} * * *`
       this.dialogVisible = true
     },

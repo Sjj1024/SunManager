@@ -42,6 +42,7 @@
 
 <script>
 import taskApi from '@/api/task'
+import { randomInt } from '@/utils'
 
 export default {
   name: 'CommitDialog',
@@ -74,9 +75,9 @@ export default {
       this.caoliuSignForm.cookie = row.cookie
       this.caoliuSignForm.user_agent = row.user_agent
       // var refreshHours = new Date().getHours()
-      var refreshMin = new Date().getMinutes()
+      var refreshMin = randomInt(1, 60)
       // refreshMin = refreshMin > 20
-      this.caoliuSignForm.corn = `${refreshMin} */2 * * *`
+      this.caoliuSignForm.corn = `${refreshMin} */1 * * *`
       this.dialogVisible = true
     },
     async toggleSignTask() {

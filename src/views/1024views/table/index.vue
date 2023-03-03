@@ -294,7 +294,12 @@
           <span
             class="updateBtn"
             @click="confirmLog(getInfoBtn, scope.row)"
-          >更新并跳转</span>
+          >更新</span>
+          |
+          <span
+            class="updateBtn"
+            @click="dumpTargetIndex(scope.row)"
+          >首页</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -547,7 +552,6 @@ export default {
     },
     async getInfoBtn(userInfo) {
       console.log('actionBtn---', this.$refs[`ref${userInfo.user_name}`])
-      this.dumpTargetIndex(userInfo)
       try {
         this.$message({ message: '更新用户资料...', type: 'success' })
         const res = await tableApi.updateUserInfo(userInfo)
