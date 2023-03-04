@@ -433,6 +433,7 @@ export default {
   },
   created() {
     this.fetchData()
+    window.addEventListener('keydown', this.handkeyCode, true) //开启监听键盘按下事件
   },
   methods: {
     fetchData(dataPage) {
@@ -450,6 +451,13 @@ export default {
         this.pageTotal = response.data.total
         this.listLoading = false
       })
+    },
+    handkeyCode(e) {
+      console.log(e) // 打印出按键后的信息
+      if (e.keyCode === 13) {
+        console.log('触发了回车/空格键')
+        this.onSubmit()
+      }
     },
     onSubmit() {
       console.log('重新获取内容!')
