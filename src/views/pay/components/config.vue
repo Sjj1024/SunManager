@@ -1,39 +1,86 @@
 <template>
   <div class="codeBox">
-    <codemirror
-      v-model="code"
-      :options="cmOptions"
-    ></codemirror>
+    <codemirror v-model="code" :options="cmOptions"></codemirror>
   </div>
 </template>
 
 <script>
 // require component
-import { codemirror } from 'vue-codemirror'
+import { codemirror } from "vue-codemirror";
 
 // require styles
-import 'codemirror/lib/codemirror.css'
+import "codemirror/lib/codemirror.css";
 // 引入语言
-import 'codemirror/mode/javascript/javascript.js'
-import 'codemirror/mode/python/python.js'
+import "codemirror/mode/javascript/javascript.js";
+import "codemirror/mode/python/python.js";
 // base16-dark主题
-import 'codemirror/theme/base16-dark.css'
+import "codemirror/theme/base16-dark.css";
 // import 'codemirror/theme/default.css'
 // bespin主题
-import 'codemirror/theme/bespin.css'
-import 'codemirror/theme/abbott.css'
+import "codemirror/theme/bespin.css";
+import "codemirror/theme/abbott.css";
 // require more codemirror resource...
+// keyMap
+import "codemirror/mode/clike/clike.js";
+import "codemirror/addon/edit/matchbrackets.js";
+import "codemirror/addon/comment/comment.js";
+import "codemirror/addon/dialog/dialog.js";
+import "codemirror/addon/dialog/dialog.css";
+import "codemirror/addon/search/searchcursor.js";
+import "codemirror/addon/search/search.js";
+import "codemirror/keymap/emacs.js";
+// 引入代码自动提示插件
+import "codemirror/addon/hint/show-hint.css";
+import "codemirror/addon/hint/sql-hint";
+import "codemirror/addon/hint/show-hint";
+
+import "codemirror/theme/monokai.css";
+import "codemirror/mode/python/python.js";
+import "codemirror/mode/yaml/yaml.js";
+
+// active-line.js
+import "codemirror/addon/selection/active-line.js";
+
+// styleSelectedText
+import "codemirror/addon/selection/mark-selection.js";
+import "codemirror/addon/search/searchcursor.js";
+
+// foldGutter
+import "codemirror/addon/fold/foldgutter.css";
+import "codemirror/addon/fold/brace-fold.js";
+import "codemirror/addon/fold/comment-fold.js";
+import "codemirror/addon/fold/foldcode.js";
+import "codemirror/addon/fold/foldgutter.js";
+import "codemirror/addon/fold/indent-fold.js";
+import "codemirror/addon/fold/markdown-fold.js";
+import "codemirror/addon/fold/xml-fold.js";
+
+// keyMap
+import "codemirror/mode/clike/clike.js";
+import "codemirror/addon/edit/matchbrackets.js";
+import "codemirror/addon/comment/comment.js";
+import "codemirror/addon/dialog/dialog.js";
+import "codemirror/addon/dialog/dialog.css";
+import "codemirror/addon/search/searchcursor.js";
+import "codemirror/addon/search/search.js";
+import "codemirror/keymap/sublime.js";
+import "codemirror/keymap/vim.js";
+
+// highlightSelectionMatches
+import "codemirror/addon/scroll/annotatescrollbar.js";
+import "codemirror/addon/search/matchesonscrollbar.js";
+import "codemirror/addon/search/searchcursor.js";
+import "codemirror/addon/search/match-highlighter.js";
 
 // component
 export default {
-  name: 'PayConfig',
+  name: "PayConfig",
   components: {
-    codemirror
+    codemirror,
   },
   data() {
     return {
-      code: `
-import numpy as np
+      code: `import numpy as np
 cimport cython
 from libc.math cimport sqrt
 
@@ -55,10 +102,9 @@ def pairwise_cython(double[:, ::1] X):
       cmOptions: {
         // codemirror options
         tabSize: 4,
-        mode: 'text/x-cython',
-        theme: 'default',
+        mode: "text/x-python",
+        theme: "default",
         lineNumbers: true,
-        line: true,
         // 高亮行功能
         styleActiveLine: true,
         // 自动括号匹配功能
@@ -66,26 +112,32 @@ def pairwise_cython(double[:, ::1] X):
         autofocus: false,
         autoRefresh: true,
         // #region 代码折叠
-        foldGutter: true,
+        foldGutter: false,
         showHint: true,
         lint: true,
+        autoCloseBrackets: true, // 在键入时自动关闭括号和引号
         hintOptions: {
           // 避免由于提示列表只有一个提示信息时，自动填充
-          completeSingle: false
+          completeSingle: false,
         },
-        readOnly: false // 只读
+        gutters: [
+          "CodeMirror-lint-markers",
+          "CodeMirror-linenumbers",
+          "CodeMirror-foldgutter"
+        ],
+        readOnly: false, // 只读
         // more codemirror options, 更多 codemirror 的高级配置...
-      }
-    }
+      },
+    };
   },
   methods: {},
   computed: {
     codemirror() {
-      return this.$refs.myCm.codemirror
-    }
+      return this.$refs.myCm.codemirror;
+    },
   },
-  mounted() {}
-}
+  mounted() {},
+};
 </script>
 
 <style lang="scss">
