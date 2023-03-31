@@ -18,6 +18,7 @@ import 'codemirror/mode/javascript/javascript.js'
 import 'codemirror/mode/python/python.js'
 // base16-dark主题
 import 'codemirror/theme/base16-dark.css'
+// import 'codemirror/theme/default.css'
 // bespin主题
 import 'codemirror/theme/bespin.css'
 import 'codemirror/theme/abbott.css'
@@ -55,7 +56,7 @@ def pairwise_cython(double[:, ::1] X):
         // codemirror options
         tabSize: 4,
         mode: 'text/x-cython',
-        theme: 'bespin',
+        theme: 'default',
         lineNumbers: true,
         line: true,
         // 高亮行功能

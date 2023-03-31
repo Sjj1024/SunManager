@@ -434,6 +434,9 @@ export default {
   created() {
     this.fetchData()
     window.addEventListener('keydown', this.handkeyCode, true) //开启监听键盘按下事件
+    // 输出route 和 router对象
+    console.log('this.router', this.$router)
+    console.log('this.route', this.$route)
   },
   methods: {
     fetchData(dataPage) {

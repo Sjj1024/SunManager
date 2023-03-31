@@ -38,6 +38,8 @@
 </template>
 
 <script>
+// import logo from "@/assets/logo.png"
+
 export default {
   name: 'SidebarLogo',
   props: {
@@ -49,7 +51,7 @@ export default {
   data() {
     return {
       title: '1115账号管理系统',
-      logo: 'https://img-blog.csdnimg.cn/02a34ffe637e4d5a918f818620ee8169.png'
+      logo: require("@/assets/logo.png")
     }
   }
 }
