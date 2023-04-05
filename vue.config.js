@@ -41,8 +41,8 @@ module.exports = {
     proxy: {
       //跨域代理
       '/api1': {
-        // target: 'http://localhost:5000',
-        target: 'http://192.168.191.244:5000',
+        target: 'http://localhost:5000',
+        // target: 'http://192.168.191.244:5000',
         // ws: true,
         // secure: false,
         changeOrigin: true, //是否开启跨域

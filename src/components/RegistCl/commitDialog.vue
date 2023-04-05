@@ -83,8 +83,10 @@ export default {
     async toggleSignTask() {
       console.log('切换评论任务状态')
       try {
-        await taskApi.addCommitTask(this.caoliuSignForm)
+        const res = await taskApi.addCommitTask(this.caoliuSignForm)
+        console.log("res-----", res);
       } catch (error) {
+        console.log("error-----", error);
         this.$message.error('错了哦：' + error)
       }
       this.handleClose()
