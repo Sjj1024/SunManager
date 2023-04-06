@@ -1,7 +1,7 @@
 <template>
   <!-- 添加用户 -->
   <el-dialog
-    title="添加草榴用户"
+    title="添加98堂用户"
     :visible.sync="addDialog"
     width="40%"
     top="3vh"
@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import tableApi from '@/api/table'
+import tangApi from '@/api/tang'
 
 export default {
   name: 'RegistCaoliu',
@@ -199,7 +199,7 @@ export default {
       this.timeout = setTimeout(async () => {
         if (value) {
           try {
-            const res = await tableApi.queryUsername({ username: value })
+            const res = await tangApi.queryUsername({ username: value })
             console.log('res----', res)
             if (res.code === 200) {
               this.$message({ message: '这个用户名很Good!', type: 'success' })
@@ -229,7 +229,7 @@ export default {
       console.log('添加用户-')
       this.tempLoading = true
       try {
-        const res = await tableApi.tempAddUser(this.addForm)
+        const res = await tangApi.tempAddUser(this.addForm)
         console.log('res---', res)
         if (res.code === 200) {
           this.$message({
@@ -250,7 +250,7 @@ export default {
       console.log('添加用户-')
       this.submitLoading = true
       try {
-        const res = await tableApi.addUser(this.addForm)
+        const res = await tangApi.addUser(this.addForm)
         console.log('res---', res)
         if (res.code === 200) {
           this.$message({
@@ -292,13 +292,13 @@ export default {
         this.addForm.userAgent =
           'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'
       }
-      if (val.indexOf('winduser') !== -1) {
+      if (val.indexOf('cPNj_2132_auth') !== -1) {
         console.log('cookie正确，开始发送请求')
         // this.$message({
         //   message: 'cookie正确，开始获取用户信息...',
         //   type: 'success'
         // })
-        // const res = await tableApi.getUserInfoByCookie(this.addForm)
+        // const res = await tangApi.getUserInfoByCookie(this.addForm)
         // console.log('res---', res)
         // if (res.code === 200) {
         //   const userName = res.data.user_name
@@ -311,9 +311,9 @@ export default {
         //   })
         // }
       } else {
-        console.log('cookie错误，不包含winduser')
+        console.log('cookie错误，不包含cPNj_2132_auth')
         this.$message({
-          message: 'cookie错误，不包含winduser',
+          message: 'cookie错误，不包含cPNj_2132_auth',
           type: 'warning'
         })
       }

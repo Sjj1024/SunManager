@@ -49,6 +49,16 @@ module.exports = {
         // pathRewrite: {
         //   '^/user': '', //让路径以/api开头的字段为空
         // },
+      },
+      '/repos': {
+        target: 'https://api.github.com/',
+        // target: 'http://192.168.191.244:5000',
+        // ws: true,
+        // secure: false,
+        changeOrigin: true, //是否开启跨域
+        // pathRewrite: {
+        //   '^/user': '', //让路径以/api开头的字段为空
+        // },
       }
     },
   },

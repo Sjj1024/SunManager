@@ -57,28 +57,35 @@ export const constantRoutes = [
   {
     path: '/xiaoshen',
     component: Layout,
-    redirect: '/xiaoshen/table',
+    redirect: '/xiaoshen/caoliu',
     name: 'xiaoshen',
     meta: { title: '1024管理', icon: 'el-icon-s-help' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/1024views/table/index'),
+        path: 'caoliu',
+        name: 'Caoliu',
+        component: () => import('@/views/1024views/caoliu/index'),
         meta: { title: '1024账号', icon: 'table' }
       },
       {
         path: "detail/:id",
         name: 'Detail',
         hidden: true,
-        component: () => import("@/views/1024views/table/detail/index"),
-        meta: { title: '帐号详情', icon: 'table' }
+        component: () => import("@/views/1024views/caoliu/detail/index"),
+        meta: { title: '1024帐号详情', icon: 'table' }
       },
       {
-        path: 'update',
-        name: 'Update',
-        component: () => import('@/views/1024views/update/index'),
+        path: 'tang98',
+        name: 'Tang98',
+        component: () => import('@/views/1024views/tang98/index'),
         meta: { title: '98堂账号', icon: 'tree' }
+      },
+      {
+        path: "tang/:id",
+        name: 'Detail',
+        hidden: true,
+        component: () => import("@/views/1024views/tang98/detail/index"),
+        meta: { title: '98帐号详情', icon: 'table' }
       },
       {
         path: 'check',

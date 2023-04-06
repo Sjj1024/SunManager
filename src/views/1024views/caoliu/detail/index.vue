@@ -66,12 +66,12 @@
 </template>
 
 <script>
-import BaseInfo from '@/views/1024views/table/detail/component/baseInfo'
-import PubArticle from '@/views/1024views/table/detail/component/pubArticle.vue'
-import MyArticle from '@/views/1024views/table/detail/component/myArticle'
-import Invcodes from '@/views/1024views/table/detail/component/invcodes'
-import Commits from '@/views/1024views/table/detail/component/commit.vue'
-import RefCommits from '@/views/1024views/table/detail/component/refCommit.vue'
+import BaseInfo from '@/views/1024views/caoliu/detail/component/baseInfo'
+import PubArticle from '@/views/1024views/caoliu/detail/component/pubArticle.vue'
+import MyArticle from '@/views/1024views/caoliu/detail/component/myArticle'
+import Invcodes from '@/views/1024views/caoliu/detail/component/invcodes'
+import Commits from '@/views/1024views/caoliu/detail/component/commit.vue'
+import RefCommits from '@/views/1024views/caoliu/detail/component/refCommit.vue'
 
 export default {
   name: 'Detail',
