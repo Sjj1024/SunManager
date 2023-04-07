@@ -4,7 +4,7 @@ export default {
   // 添加自动评论任务
   addCommitTask(data) {
     return request({
-      url: '/api1/task/addCaoliuCommit',
+      url: '/api1/task/addTangCommit',
       method: 'post',
       data
     })
@@ -13,7 +13,7 @@ export default {
   // 删除自动评论任务
   delCommitTask(data) {
     return request({
-      url: '/api1/task/delCaoliuCommit',
+      url: '/api1/task/delTangCommit',
       method: 'delete',
       data
     })

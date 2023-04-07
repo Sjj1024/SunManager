@@ -11,7 +11,9 @@
       :model="caoliuSignForm"
     >
       <el-form-item label="评论任务">
-        <el-input v-model="caoliuSignForm.corn"></el-input>
+        <el-input v-model="caoliuSignForm.corn">
+          <el-button slot="append" icon="el-icon-refresh" @click="refreshCorn" ></el-button>
+        </el-input>
       </el-form-item>
     </el-form>
     <span
@@ -75,7 +77,7 @@ export default {
       this.caoliuSignForm.user_agent = row.user_agent
       // var refreshHours = new Date().getHours()
       var refreshMin = randomInt(1, 60)
-      // refreshMin = refreshMin > 20
+      refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin
       this.caoliuSignForm.corn = `${refreshMin} */1 * * *`
       this.dialogVisible = true
     },
@@ -95,6 +97,13 @@ export default {
       await taskApi.delCommitTask(this.caoliuSignForm)
       this.handleClose()
       this.$emit('reFetchDate')
+    },
+    refreshCorn(){
+      console.log("重新刷新Corn表达式时间");
+      // var refreshHours = randomInt(17, 22);
+      var refreshMin = randomInt(1, 60);
+      refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin
+      this.caoliuSignForm.corn = `${refreshMin} */1 * * *`;
     }
   }
 }

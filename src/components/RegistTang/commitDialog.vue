@@ -8,10 +8,12 @@
     <el-form
       :label-position="labelPosition"
       label-width="80px"
-      :model="caoliuSignForm"
+      :model="tangSignForm"
     >
       <el-form-item label="评论任务">
-        <el-input v-model="caoliuSignForm.corn"></el-input>
+        <el-input v-model="tangSignForm.corn">
+          <el-button slot="append" icon="el-icon-refresh" @click="refreshCorn" ></el-button>
+        </el-input>
       </el-form-item>
     </el-form>
     <span
@@ -49,7 +51,7 @@ export default {
     return {
       dialogVisible: false,
       labelPosition: 'right',
-      caoliuSignForm: {
+      tangSignForm: {
         id: '',
         user_name: '',
         user_agent: '',
@@ -60,7 +62,7 @@ export default {
   // created() {
   //   var refreshHours = new Date().getHours()
   //   var refreshMin = new Date().getMinutes() + 1
-  //   this.caoliuSignForm.corn = `${refreshMin} ${refreshHours} * * *`
+  //   this.tangSignForm.corn = `${refreshMin} ${refreshHours} * * *`
   // },
   methods: {
     handleClose() {
@@ -69,20 +71,20 @@ export default {
     },
     showSign(row) {
       console.log('dislogShow', row)
-      this.caoliuSignForm.id = row.id
-      this.caoliuSignForm.user_name = row.user_name
-      this.caoliuSignForm.cookie = row.cookie
-      this.caoliuSignForm.user_agent = row.user_agent
+      this.tangSignForm.id = row.id
+      this.tangSignForm.user_name = row.user_name
+      this.tangSignForm.cookie = row.cookie
+      this.tangSignForm.user_agent = row.user_agent
       // var refreshHours = new Date().getHours()
-      var refreshMin = randomInt(1, 60)
-      // refreshMin = refreshMin > 20
-      this.caoliuSignForm.corn = `${refreshMin} */1 * * *`
+      var refreshMin = randomInt(1, 20)
+      refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin
+      this.tangSignForm.corn = `${refreshMin} */1 * * *`
       this.dialogVisible = true
     },
     async toggleSignTask() {
       console.log('切换评论任务状态')
       try {
-        const res = await taskApi.addCommitTask(this.caoliuSignForm)
+        const res = await taskApi.addCommitTask(this.tangSignForm)
         console.log("res-----", res);
       } catch (error) {
         console.log("error-----", error);
@@ -92,9 +94,16 @@ export default {
       this.$emit('reFetchDate')
     },
     async delTask() {
-      await taskApi.delCommitTask(this.caoliuSignForm)
+      await taskApi.delCommitTask(this.tangSignForm)
       this.handleClose()
       this.$emit('reFetchDate')
+    },
+    refreshCorn(){
+      console.log("重新刷新Corn表达式时间");
+      // var refreshHours = randomInt(17, 22);
+      var refreshMin = randomInt(1, 20)
+      refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin
+      this.tangSignForm.corn = `${refreshMin} */1 * * *`;
     }
   }
 }

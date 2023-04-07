@@ -14,10 +14,13 @@
         <el-input v-model="caoliuSignForm.link"></el-input>
       </el-form-item>
       <el-form-item label="签到内容">
-        <el-input v-model="caoliuSignForm.commit"></el-input>
+        <el-input v-model="caoliuSignForm.commit">
+        </el-input>
       </el-form-item>
       <el-form-item label="签到时间">
-        <el-input v-model="caoliuSignForm.corn"></el-input>
+        <el-input v-model="caoliuSignForm.corn">
+          <el-button slot="append" icon="el-icon-refresh" @click="refreshCorn" ></el-button>
+        </el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -83,6 +86,12 @@ export default {
       this.handleClose();
       this.$emit("reFetchDate");
     },
+    refreshCorn(){
+      console.log("重新刷新Corn表达式时间");
+      var refreshHours = randomInt(17, 22);
+      var refreshMin = randomInt(1, 60);
+      this.caoliuSignForm.corn = `${refreshMin} ${refreshHours} * * *`;
+    }
   },
 };
 </script>
