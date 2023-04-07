@@ -10,12 +10,6 @@
       label-width="80px"
       :model="caoliuSignForm"
     >
-      <el-form-item label="文章链接">
-        <el-input v-model="caoliuSignForm.link"></el-input>
-      </el-form-item>
-      <el-form-item label="签到内容">
-        <el-input v-model="caoliuSignForm.commit"></el-input>
-      </el-form-item>
       <el-form-item label="签到时间">
         <el-input v-model="caoliuSignForm.corn"></el-input>
       </el-form-item>
@@ -41,8 +35,6 @@ export default {
       dialogVisible: false,
       labelPosition: "right",
       caoliuSignForm: {
-        link: "https://cl.6273x.xyz/htm_data/2302/7/5522451.html",
-        commit: "今日签到",
         corn: "02 19 * * *",
       },
     };
@@ -63,9 +55,6 @@ export default {
       this.caoliuSignForm.user_name = row.user_name;
       this.caoliuSignForm.cookie = row.cookie;
       this.caoliuSignForm.user_agent = row.user_agent;
-      this.caoliuSignForm.link =
-        "https://cl.6273x.xyz/htm_data/2302/7/5522451.html";
-      this.caoliuSignForm.commit = "今日签到";
       // var refreshHours = new Date().getHours()
       var refreshHours = randomInt(17, 22);
       var refreshMin = randomInt(1, 60);
@@ -74,12 +63,12 @@ export default {
     },
     async toggleSignTask() {
       console.log("切换签到任务状态");
-      await taskApi.addSignTask(this.caoliuSignForm);
+      await taskApi.add98SignTask(this.caoliuSignForm);
       this.handleClose();
       this.$emit("reFetchDate");
     },
     async delTask() {
-      await taskApi.delSignTask(this.caoliuSignForm);
+      await taskApi.del98SignTask(this.caoliuSignForm);
       this.handleClose();
       this.$emit("reFetchDate");
     },

@@ -437,7 +437,7 @@ export default {
     return {
       list: null,
       pageTotal: 0,
-      pageNum: getStore('pageNum') || 1,
+      pageNum: getStore('pageNum98') || 1,
       pageSize: 12,
       listLoading: true,
       timeout: null,
@@ -468,7 +468,7 @@ export default {
       const data = dataPage
         ? { ...dataPage, ...this.formInline }
         : {
-            pageNum: getStore('pageNum') || 1,
+            pageNum: getStore('pageNum98') || 1,
             pageSize: this.pageSize,
             ...this.formInline
           }
@@ -488,7 +488,7 @@ export default {
     },
     onSubmit() {
       console.log('重新获取内容!')
-      saveStore('pageNum', 1)
+      saveStore('pageNum98', 1)
       saveStore('formInline', this.formInline)
       this.fetchData({ pageNum: 1, pageSize: 12 })
     },
@@ -577,7 +577,7 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
-      saveStore('pageNum', val)
+      saveStore('pageNum98', val)
       this.pageNum = val
       this.fetchData()
     },
