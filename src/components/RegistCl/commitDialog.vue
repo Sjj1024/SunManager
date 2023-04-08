@@ -31,7 +31,7 @@
       >暂 停</el-button>
       <el-button
         type="warning"
-        @click="handleClose"
+        @click="runTask"
       >运 行</el-button>
       <el-button
         type="primary"
@@ -95,6 +95,11 @@ export default {
     },
     async delTask() {
       await taskApi.del1024CommitTask(this.caoliuSignForm)
+      this.handleClose()
+      this.$emit('reFetchDate')
+    },
+    async runTask() {
+      await taskApi.run1024CommitTask(this.caoliuSignForm)
       this.handleClose()
       this.$emit('reFetchDate')
     },

@@ -203,7 +203,7 @@
       <el-button
         type="primary"
         @click="openIndex"
-      >跳到主页</el-button>
+      >个人主页</el-button>
       <el-button
         type="primary"
         @click="save"
@@ -273,7 +273,7 @@ export default {
       }
     },
     openIndex() {
-      const url = this.clHome
+      const url = localStorage.getItem("tangUrl")
       if (url) {
         console.log('跳转到曹刘主页:' + url)
         window.open(url, '_blank')

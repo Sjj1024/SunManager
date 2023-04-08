@@ -66,10 +66,21 @@ export default {
   },
 
 
-  // 立即运行98自动签到任务
+  // 立即运行98评论
   run98CommitTask(data) {
     return request({
       url: '/api1/task/runTangCommit',
+      method: 'post',
+      data
+    })
+  },
+
+
+
+  // 立即运行98评论
+  run1024CommitTask(data) {
+    return request({
+      url: '/api1/task/runCaoliuCommit',
       method: 'post',
       data
     })
