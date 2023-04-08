@@ -31,7 +31,7 @@
       >暂 停</el-button>
       <el-button
         type="warning"
-        @click="handleClose"
+        @click="runCommitNow"
       >运 行</el-button>
       <el-button
         type="primary"
@@ -84,7 +84,7 @@ export default {
     async toggleSignTask() {
       console.log('切换评论任务状态')
       try {
-        const res = await taskApi.addCommitTask(this.tangSignForm)
+        const res = await taskApi.add98CommitTask(this.tangSignForm)
         console.log("res-----", res);
       } catch (error) {
         console.log("error-----", error);
@@ -94,7 +94,12 @@ export default {
       this.$emit('reFetchDate')
     },
     async delTask() {
-      await taskApi.delCommitTask(this.tangSignForm)
+      await taskApi.del98CommitTask(this.tangSignForm)
+      this.handleClose()
+      this.$emit('reFetchDate')
+    },
+    async runCommitNow() {
+      await taskApi.run98CommitTask(this.tangSignForm)
       this.handleClose()
       this.$emit('reFetchDate')
     },

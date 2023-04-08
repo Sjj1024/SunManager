@@ -58,7 +58,7 @@ export default {
       this.tangSignForm.cookie = row.cookie;
       this.tangSignForm.user_agent = row.user_agent;
       // var refreshHours = new Date().getHours()
-      var refreshHours = randomInt(17, 22);
+      var refreshHours = randomInt(10, 21);
       var refreshMin = randomInt(1, 60);
       refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin
       this.tangSignForm.corn = `${refreshMin} ${refreshHours} * * *`;
@@ -83,7 +83,7 @@ export default {
     },
     refreshCorn(){
       console.log("重新刷新Corn表达式时间");
-      var refreshHours = randomInt(17, 22);
+      var refreshHours = randomInt(10, 21);
       var refreshMin = randomInt(1, 60);
       console.log("refreshMin", refreshMin);
       refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin

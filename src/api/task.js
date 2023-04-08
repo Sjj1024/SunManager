@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
 export default {
-  // 添加自动评论任务
-  addCommitTask(data) {
+  // 添加98自动评论任务
+  add98CommitTask(data) {
     return request({
       url: '/api1/task/addTangCommit',
       method: 'post',
@@ -10,8 +10,26 @@ export default {
     })
   },
 
+
+  add1024CommitTask(data) {
+    return request({
+      url: '/api1/task/addCaoliuCommit',
+      method: 'post',
+      data
+    })
+  },
+
   // 删除自动评论任务
-  delCommitTask(data) {
+  del1024CommitTask(data) {
+    return request({
+      url: '/api1/task/delCaoliuCommit',
+      method: 'delete',
+      data
+    })
+  },
+
+  // 删除自动评论任务
+  del98CommitTask(data) {
     return request({
       url: '/api1/task/delTangCommit',
       method: 'delete',
@@ -42,6 +60,16 @@ export default {
   run98SignTask(data) {
     return request({
       url: '/api1/task/runTangSign',
+      method: 'post',
+      data
+    })
+  },
+
+
+  // 立即运行98自动签到任务
+  run98CommitTask(data) {
+    return request({
+      url: '/api1/task/runTangCommit',
       method: 'post',
       data
     })

@@ -84,7 +84,7 @@ export default {
     async toggleSignTask() {
       console.log('切换评论任务状态')
       try {
-        const res = await taskApi.addCommitTask(this.caoliuSignForm)
+        const res = await taskApi.add1024CommitTask(this.caoliuSignForm)
         console.log("res-----", res);
       } catch (error) {
         console.log("error-----", error);
@@ -94,7 +94,7 @@ export default {
       this.$emit('reFetchDate')
     },
     async delTask() {
-      await taskApi.delCommitTask(this.caoliuSignForm)
+      await taskApi.del1024CommitTask(this.caoliuSignForm)
       this.handleClose()
       this.$emit('reFetchDate')
     },
