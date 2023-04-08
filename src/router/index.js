@@ -65,20 +65,20 @@ export const constantRoutes = [
         path: 'caoliu',
         name: 'Caoliu',
         component: () => import('@/views/1024views/caoliu/index'),
-        meta: { title: '1024账号', icon: 'table' }
+        meta: { title: '1024账号', icon: 'el-icon-cherry' }
       },
       {
         path: "detail/:id",
         name: 'Detail',
         hidden: true,
         component: () => import("@/views/1024views/caoliu/detail/index"),
-        meta: { title: '1024帐号详情', icon: 'table' }
+        meta: { title: '1024帐号详情', icon: 'el-icon-ship' }
       },
       {
         path: 'tang98',
         name: 'Tang98',
         component: () => import('@/views/1024views/tang98/index'),
-        meta: { title: '98堂账号', icon: 'tree' }
+        meta: { title: '98堂账号', icon: 'el-icon-ship' }
       },
       {
         path: "tang/:id",
@@ -91,13 +91,13 @@ export const constantRoutes = [
         path: 'check',
         name: 'Check',
         component: () => import('@/views/1024views/watch/index'),
-        meta: { title: '91图片号', icon: 'tree' }
+        meta: { title: '91图片号', icon: 'el-icon-tickets' }
       },
       {
         path: 'manage',
         name: 'Manage',
         component: () => import('@/views/tree/index'),
-        meta: { title: '91视频号', icon: 'tree' }
+        meta: { title: '91视频号', icon: 'el-icon-video-play' }
       }
     ]
   },

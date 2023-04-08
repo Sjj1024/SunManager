@@ -87,24 +87,6 @@
         </div>
       </div>
     </div>
-    <!-- 热门导航 -->
-    <div class="tabBox">
-      <h3 class="tabTitle" style="background-color: rgb(0, 108, 130)">
-        {{ hotUrls.title }}
-      </h3>
-      <div class="aBox">
-        <a
-          class="alink"
-          :href="item.url"
-          target="_blank"
-          id="caoliu"
-          v-for="(item, index) in hotUrls.data"
-          :key="index"
-          >{{ item.title }}
-        </a>
-      </div>
-    </div>
-    <!-- 普通导航 -->
     <div class="tabBox" v-for="(val, key, index) in navigations" :key="key">
       <h3 class="tabTitle" style="background-color: rgb(0, 108, 130)">
         {{ val.title }}
@@ -269,6 +251,12 @@ export default {
       this.shareContent = this.realJsonLoc.data.share
       this.hotUrls = this.realJsonLoc.data.navigation.hotbox
       this.navigations = this.realJsonLoc.data.navigation
+      // 存储98堂的地址，用于主页跳转
+      var tang98Url = this.hotUrls.data.find(item => item.title === "98色花堂1")
+      // tangUrl在主页已经存储到Cookie中
+      console.log("tangUrl--------", tang98Url);
+      document.cookie = `tangUrl=${tang98Url.url}`
+      localStorage.setItem("tangUrl", tang98Url.url)
     },
   },
 };
