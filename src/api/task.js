@@ -38,6 +38,15 @@ export default {
     })
   },
 
+  // 立即运行98自动签到任务
+  run98SignTask(data) {
+    return request({
+      url: '/api1/task/runTangSign',
+      method: 'post',
+      data
+    })
+  },
+
   // 删除自动签到任务
   del98SignTask(data) {
     return request({

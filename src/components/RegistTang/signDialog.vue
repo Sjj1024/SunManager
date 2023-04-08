@@ -20,7 +20,7 @@
       <el-button @click="handleClose">取 消</el-button>
       <el-button type="danger" @click="delTask">删 除</el-button>
       <el-button type="success" @click="handleClose">暂 停</el-button>
-      <el-button type="warning" @click="handleClose">运 行</el-button>
+      <el-button type="warning" @click="runSignTask">运 行</el-button>
       <el-button type="primary" @click="toggleSignTask">确 定</el-button>
     </span>
   </el-dialog>
@@ -60,12 +60,19 @@ export default {
       // var refreshHours = new Date().getHours()
       var refreshHours = randomInt(17, 22);
       var refreshMin = randomInt(1, 60);
+      refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin
       this.tangSignForm.corn = `${refreshMin} ${refreshHours} * * *`;
       this.dialogVisible = true;
     },
     async toggleSignTask() {
       console.log("切换签到任务状态");
       await taskApi.add98SignTask(this.tangSignForm);
+      this.handleClose();
+      this.$emit("reFetchDate");
+    },
+    async runSignTask(){
+      console.log("立即运行签到任务");
+      await taskApi.run98SignTask(this.tangSignForm)
       this.handleClose();
       this.$emit("reFetchDate");
     },
@@ -78,6 +85,8 @@ export default {
       console.log("重新刷新Corn表达式时间");
       var refreshHours = randomInt(17, 22);
       var refreshMin = randomInt(1, 60);
+      console.log("refreshMin", refreshMin);
+      refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin
       this.tangSignForm.corn = `${refreshMin} ${refreshHours} * * *`;
     }
   },
