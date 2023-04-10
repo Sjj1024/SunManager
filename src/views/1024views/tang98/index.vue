@@ -326,9 +326,6 @@ export default {
       },
     };
   },
-  computed: {
-    ...mapGetters("board", ["clHome"]),
-  },
   created() {
     this.fetchData();
     window.addEventListener("keydown", this.handkeyCode, true); //开启监听键盘按下事件
