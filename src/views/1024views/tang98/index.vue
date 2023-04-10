@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-form
       :inline="true"
-      :model="formInline"
+      :model="formInline98"
       size="medium"
       ref="searchForm"
       class="demo-form-inline"
@@ -317,7 +317,7 @@ export default {
       timeout: null,
       loadingIcon: "el-icon-video-play",
       isRefsh: false,
-      formInline: getStore("formInline") || {
+      formInline: getStore("formInline98") || {
         username: "",
         weiwang: "",
         level: "",
@@ -363,7 +363,7 @@ export default {
     onSubmit() {
       console.log("重新获取内容!");
       saveStore("pageNum98", 1);
-      saveStore("formInline", this.formInline);
+      saveStore("formInline98", this.formInline);
       this.fetchData({ pageNum: 1, pageSize: 12 });
     },
     goWorkflows(row) {
@@ -393,7 +393,7 @@ export default {
     },
     resetForm(formName) {
       this.$refs.searchForm.resetFields();
-      saveStore("formInline", null);
+      saveStore("formInline98", null);
       this.formInline = {
         username: "",
         weiwang: "",
