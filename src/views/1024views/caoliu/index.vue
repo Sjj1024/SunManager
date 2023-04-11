@@ -66,8 +66,13 @@
           placeholder="可产"
           clearable
         >
-          <el-option label="是" value="可以购买" />
-          <el-option label="否" value="不可以" />
+          <el-option label="可以购买" value="可以购买" />
+          <el-option label="等级不足" value="等级不足" />
+          <el-option label="贡献不足" value="贡献不足" />
+          <el-option label="无权限购买" value="无权限购买" />
+          <el-option label="不可邀请" value="不可邀请" />
+          <el-option label="两步认证未启用" value="两步认证未启用" />
+          <el-option label="否:被永久禁言" value="否:被永久禁言" />
         </el-select>
       </el-form-item>
       <el-form-item>
