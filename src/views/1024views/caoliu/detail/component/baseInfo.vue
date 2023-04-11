@@ -23,7 +23,11 @@
       </div>
       <div class="right">
         <span class="lable">邮箱:</span>
-        <span>{{ base.email }}</span>
+        <el-input
+          class="input-box"
+          v-model="base.email"
+          placeholder="请输入内容"
+        ></el-input>
       </div>
     </div>
     <div class="inline">
