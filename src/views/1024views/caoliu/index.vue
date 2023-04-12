@@ -104,14 +104,14 @@
       class="table-box"
       element-loading-text="Loading"
     >
-      <el-table-column align="center" label="用户名">
+      <el-table-column align="center" label="用户名" width="120">
         <template slot-scope="scope">
           <span class="username" @click="detailBtn(scope.row.id)">{{
             scope.row.user_name
           }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="200" label="等级 / 原级 / 量级">
+      <el-table-column align="center" width="180" label="等级 / 原级 / 量级">
         <template slot-scope="scope">
           <span
             :class="{
@@ -136,7 +136,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="威望 / 贡献 / 金钱" align="center" width="260">
+      <el-table-column label="威望 / 贡献" align="center" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.weiwang }}點</span>
           <span v-if="scope.row.original" class="grow">
@@ -154,28 +154,17 @@
             }}</span>
             <i class="el-icon-top"></i>
           </span>
-          /
-          <span>{{ scope.row.money }}</span>
-          <span class="grow">U</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column
-        label="贡献"
-        align="center"
-        width="128"
-      >
+      <el-table-column label="金钱 / 活期 / 定期" align="center" width="230">
         <template slot-scope="scope">
-          <span>{{ scope.row.contribute }}點</span>
-          <span
-            v-if="scope.row.original"
-            class="grow"
-          >
-            <span v-if="scope.row.original.gongxian">{{ scope.row.contribute - scope.row.original.gongxian }}</span>
-            <span v-if="scope.row.original.contribute">{{ scope.row.contribute - scope.row.original.contribute }}</span>
-            <i class="el-icon-top"></i>
-          </span>
+          <span>{{ scope.row.money }}U</span>
+          /
+          <span>{{ scope.row.current_money || 0}}U</span>
+          /
+          <span>{{ scope.row.regular_money || 0 }}U</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column align="center" label="可产邀请码" width="120">
         <template slot-scope="scope">
           {{ scope.row.able_invate || "不可邀请" }}
