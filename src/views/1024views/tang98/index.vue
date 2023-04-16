@@ -399,6 +399,7 @@ export default {
         yaoqing: "",
       };
       console.log("重制查询内容");
+      this.fetchData({ pageNum: 1, pageSize: 12 });
     },
     async updateAllUserinfo() {
       console.log("更新所有用户资料");
