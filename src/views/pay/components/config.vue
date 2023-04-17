@@ -104,7 +104,8 @@ def pairwise_cython(double[:, ::1] X):
         tabSize: 4,
         mode: "text/x-python",
         theme: "default",
-        lineNumbers: true,
+        lineNumbers: false,
+        line:false,
         // 高亮行功能
         styleActiveLine: true,
         // 自动括号匹配功能

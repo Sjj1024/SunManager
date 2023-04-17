@@ -22,21 +22,21 @@
           class="select-w"
           clearable
         >
-          <el-option label="Lv1初涉江湖" value="Lv1初涉江湖" />
-          <el-option label="Lv2无名之辈" value="Lv2无名之辈" />
-          <el-option label="Lv3江湖小虾" value="Lv3江湖小虾" />
-          <el-option label="Lv4锋芒毕露" value="Lv4锋芒毕露" />
-          <el-option label="Lv5小有名气" value="Lv5小有名气" />
-          <el-option label="Lv6后起之秀" value="Lv6后起之秀" />
-          <el-option label="Lv7四方游侠" value="Lv7四方游侠" />
-          <el-option label="Lv8武林高手" value="Lv8武林高手" />
-          <el-option label="Lv9风尘奇侠" value="Lv9风尘奇侠" />
-          <el-option label="Lv10闻名一方" value="Lv10闻名一方" />
-          <el-option label="Lv11英雄豪杰" value="Lv11英雄豪杰" />
-          <el-option label="Lv12声名远扬" value="Lv12声名远扬" />
-          <el-option label="Lv13人中龙凤" value="Lv13人中龙凤" />
-          <el-option label="Lv14一代宗师" value="Lv14一代宗师" />
-          <el-option label="Lv15孤独求败" value="Lv15孤独求败" />
+          <el-option label="Lv1初涉江湖" value="Lv1 初涉江湖" />
+          <el-option label="Lv2无名之辈" value="Lv2 无名之辈" />
+          <el-option label="Lv3江湖小虾" value="Lv3 江湖小虾" />
+          <el-option label="Lv4锋芒毕露" value="Lv4 锋芒毕露" />
+          <el-option label="Lv5小有名气" value="Lv5 小有名气" />
+          <el-option label="Lv6后起之秀" value="Lv6 后起之秀" />
+          <el-option label="Lv7四方游侠" value="Lv7 四方游侠" />
+          <el-option label="Lv8武林高手" value="Lv8 武林高手" />
+          <el-option label="Lv9风尘奇侠" value="Lv9 风尘奇侠" />
+          <el-option label="Lv10闻名一方" value="Lv10 闻名一方" />
+          <el-option label="Lv11英雄豪杰" value="Lv11 英雄豪杰" />
+          <el-option label="Lv12声名远扬" value="Lv12 声名远扬" />
+          <el-option label="Lv13人中龙凤" value="Lv13 人中龙凤" />
+          <el-option label="Lv14一代宗师" value="Lv14 一代宗师" />
+          <el-option label="Lv15孤独求败" value="Lv15 孤独求败" />
         </el-select>
       </el-form-item>
       <el-form-item label="金钱" prop="weiwang">
