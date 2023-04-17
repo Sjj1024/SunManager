@@ -72,8 +72,9 @@
           placeholder="可产"
           clearable
         >
-          <el-option label="是" value="可以购买" />
-          <el-option label="否" value="不可以" />
+          <el-option label="可以" value="可以" />
+          <el-option label="金币不足" value="金币不足" />
+          <el-option label="等级不足" value="等级不足" />
         </el-select>
       </el-form-item>
       <el-form-item>
