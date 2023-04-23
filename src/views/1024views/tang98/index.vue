@@ -318,7 +318,7 @@ export default {
       timeout: null,
       loadingIcon: "el-icon-video-play",
       isRefsh: false,
-      formInline: getStore("formInline98") || {
+      formInline98: getStore("formInline98") || {
         username: "",
         weiwang: "",
         level: "",

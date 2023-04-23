@@ -1,6 +1,11 @@
 <template>
   <div class="codeBox">
-    <codemirror v-model="code" :options="cmOptions"></codemirror>
+    <codemirror
+      ref="myCm"
+      @ready="onCmReady"
+      v-model="code"
+      :options="cmOptions"
+    ></codemirror>
   </div>
 </template>
 
@@ -31,8 +36,13 @@ import "codemirror/addon/search/search.js";
 import "codemirror/keymap/emacs.js";
 // 引入代码自动提示插件
 import "codemirror/addon/hint/show-hint.css";
+import "codemirror/addon/hint/show-hint.js";
+import "codemirror/addon/hint/javascript-hint";
+import "codemirror/addon/hint/xml-hint";
 import "codemirror/addon/hint/sql-hint";
-import "codemirror/addon/hint/show-hint";
+import "codemirror/addon/hint/anyword-hint";
+import "codemirror/addon/hint/css-hint";
+import "codemirror/addon/hint/html-hint";
 
 import "codemirror/theme/monokai.css";
 import "codemirror/mode/python/python.js";
@@ -105,7 +115,7 @@ def pairwise_cython(double[:, ::1] X):
         mode: "text/x-python",
         theme: "default",
         lineNumbers: false,
-        line:false,
+        line: false,
         // 高亮行功能
         styleActiveLine: true,
         // 自动括号匹配功能
@@ -119,12 +129,12 @@ def pairwise_cython(double[:, ::1] X):
         autoCloseBrackets: true, // 在键入时自动关闭括号和引号
         hintOptions: {
           // 避免由于提示列表只有一个提示信息时，自动填充
-          completeSingle: false,
+          completeSingle: true,
         },
         gutters: [
           "CodeMirror-lint-markers",
           "CodeMirror-linenumbers",
-          "CodeMirror-foldgutter"
+          "CodeMirror-foldgutter",
         ],
         readOnly: false, // 只读
         // more codemirror options, 更多 codemirror 的高级配置...
@@ -137,7 +147,30 @@ def pairwise_cython(double[:, ::1] X):
       return this.$refs.myCm.codemirror;
     },
   },
-  mounted() {},
+  // mounted() {
+  //   // 这里的 cm 对象就是 codemirror 对象，等于 this.$refs.myCm.codemirror
+  //   this.$refs.myCm.codemirror.on("inputRead", (cm, obj) => {
+  //     if (obj.text && obj.text.length > 0) {
+  //       let c = obj.text[0].charAt(obj.text[0].length - 1);
+  //       if ((c >= "a" && c <= "z") || (c >= "A" && c <= "Z")) {
+  //         cm.showHint({ completeSingle: false });
+  //       }
+  //     }
+  //   });
+  // },
+  methods: {
+    onCmReady(cm) {
+      // 这里的 cm 对象就是 codemirror 对象，等于 this.$refs.myCm.codemirror
+      this.$refs.myCm.codemirror.on("inputRead", (cm, obj) => {
+        if (obj.text && obj.text.length > 0) {
+          let c = obj.text[0].charAt(obj.text[0].length - 1);
+          if ((c >= "a" && c <= "z") || (c >= "A" && c <= "Z")) {
+            cm.showHint({ completeSingle: false });
+          }
+        }
+      });
+    },
+  },
 };
 </script>
 
