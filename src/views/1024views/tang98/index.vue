@@ -328,6 +328,8 @@ export default {
     };
   },
   created() {
+    // 方式首页设置cookie不及时导致跳转首页失败
+    document.cookie = `tangUrl=${localStorage.getItem('tangUrl')}`
     this.fetchData();
     window.addEventListener("keydown", this.handkeyCode, true); //开启监听键盘按下事件
     // 输出route 和 router对象
