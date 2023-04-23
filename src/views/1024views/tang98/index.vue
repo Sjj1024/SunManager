@@ -10,14 +10,14 @@
       <el-form-item label="用户名" prop="username">
         <el-input
           class="select-u"
-          v-model="formInline.username"
+          v-model="formInline98.username"
           placeholder="用户名"
           clearable
         />
       </el-form-item>
       <el-form-item label="用户组" prop="level">
         <el-select
-          v-model="formInline.level"
+          v-model="formInline98.level"
           placeholder="用户组"
           class="select-w"
           clearable
@@ -42,7 +42,7 @@
       <el-form-item label="金钱" prop="weiwang">
         <el-input
           class="select-w"
-          v-model.number="formInline.weiwang"
+          v-model.number="formInline98.weiwang"
           placeholder="金钱"
           clearable
         />
@@ -50,7 +50,7 @@
       <el-form-item label="状态" prop="status">
         <el-select
           class="select-w"
-          v-model="formInline.status"
+          v-model="formInline98.status"
           placeholder="状态"
           @change=""
           clearable
@@ -68,7 +68,7 @@
       <el-form-item label="可产邀请码" prop="yaoqing">
         <el-select
           class="select-w"
-          v-model="formInline.yaoqing"
+          v-model="formInline98.yaoqing"
           placeholder="可产"
           clearable
         >
@@ -338,11 +338,11 @@ export default {
     fetchData(dataPage) {
       this.listLoading = true;
       const data = dataPage
-        ? { ...dataPage, ...this.formInline }
+        ? { ...dataPage, ...this.formInline98 }
         : {
             pageNum: getStore("pageNum98") || 1,
             pageSize: this.pageSize,
-            ...this.formInline,
+            ...this.formInline98,
           };
       console.log("发送的参数是", data);
       tangApi.getList(data).then((response) => {
@@ -361,7 +361,7 @@ export default {
     onSubmit() {
       console.log("重新获取内容!");
       saveStore("pageNum98", 1);
-      saveStore("formInline98", this.formInline);
+      saveStore("formInline98", this.formInline98);
       this.fetchData({ pageNum: 1, pageSize: 12 });
     },
     goWorkflows(row) {
@@ -392,7 +392,7 @@ export default {
     resetForm(formName) {
       this.$refs.searchForm.resetFields();
       saveStore("formInline98", null);
-      this.formInline = {
+      this.formInline98 = {
         username: "",
         weiwang: "",
         level: "",
