@@ -7,13 +7,20 @@
   >
     <el-form
       :label-position="labelPosition"
-      label-width="80px"
+      label-width="70px"
+      :inline="true"
       :model="tangSignForm"
     >
       <el-form-item label="评论任务">
         <el-input v-model="tangSignForm.corn">
           <el-button slot="append" icon="el-icon-refresh" @click="refreshCorn" ></el-button>
         </el-input>
+      </el-form-item>
+      <el-form-item label="时间">
+        <el-radio-group v-model="tangSignForm.run_time">
+          <el-radio-button label="White"></el-radio-button>
+          <el-radio-button label="Black"></el-radio-button>
+        </el-radio-group>
       </el-form-item>
     </el-form>
     <span
@@ -55,7 +62,8 @@ export default {
         id: '',
         user_name: '',
         user_agent: '',
-        corn: ''
+        corn: '',
+        run_time: "White",
       }
     }
   },
@@ -68,6 +76,13 @@ export default {
     handleClose() {
       console.log('关闭dialog')
       this.dialogVisible = false
+      this.tangSignForm = {
+        id: '',
+        user_name: '',
+        user_agent: '',
+        corn: '',
+        run_time: "White",
+      }
     },
     showSign(row) {
       console.log('dislogShow', row)
