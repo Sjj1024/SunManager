@@ -166,7 +166,7 @@
           {{ scope.row.able_invate || "不可邀请" }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="自动升级/签到/监控" width="160">
+      <el-table-column align="center" label="自动升级/签到/评分" width="160">
         <template slot-scope="scope">
           <span
             :class="{
@@ -189,6 +189,7 @@
           >
             {{ scope.row.sign_task_status || "未开启" }}
           </span>
+          <!-- 评分 -->
           <span
             :class="{
               active: scope.row.check_status === '已开启',
@@ -293,12 +294,15 @@
     <CommitDialog ref="commitDialog" @reFetchDate="fetchData"> </CommitDialog>
     <!-- 定时签到任务 -->
     <SignDialog ref="signDialog" @reFetchDate="fetchData"> </SignDialog>
+    <!-- 评分任务 -->
+    <ScoreDialog ref="scoreDialog" @reFetchDate="fetchData"></ScoreDialog>
   </div>
 </template>
 
 <script>
 import tangApi from "@/api/tang";
 import RegistTang from "@/components/RegistTang/index.vue";
+import ScoreDialog from "@/components/RegistTang/scoreDialog.vue"
 import SignDialog from "@/components/RegistTang/signDialog.vue";
 import CommitDialog from "@/components/RegistTang/commitDialog.vue";
 import { saveStore, getStore } from "@/utils";
@@ -306,7 +310,7 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Table",
-  components: { RegistTang, SignDialog, CommitDialog },
+  components: { RegistTang, SignDialog, CommitDialog, ScoreDialog},
   data() {
     return {
       list: null,
@@ -383,13 +387,8 @@ export default {
       this.$refs.signDialog.showSign(row);
     },
     toggleCheckTask(row) {
-      console.log("切换监控任务状态");
-      if (row && row.task_status === "已开启") {
-        window.open(row.task_link, "_blank");
-      }
-      if (row && row.check_status === "已开启") {
-        window.open(row.check_link, "_blank");
-      }
+      console.log("自动评分任务");
+      this.$refs.scoreDialog.showSign(row);
     },
     resetForm(formName) {
       this.$refs.searchForm.resetFields();

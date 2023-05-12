@@ -141,7 +141,6 @@ def pairwise_cython(double[:, ::1] X):
       },
     };
   },
-  methods: {},
   computed: {
     codemirror() {
       return this.$refs.myCm.codemirror;
@@ -165,7 +164,7 @@ def pairwise_cython(double[:, ::1] X):
         if (obj.text && obj.text.length > 0) {
           let c = obj.text[0].charAt(obj.text[0].length - 1);
           if ((c >= "a" && c <= "z") || (c >= "A" && c <= "Z")) {
-            cm.showHint({ completeSingle: false });
+            cm.showHint({ completeSingle: true });
           }
         }
       });
