@@ -37,6 +37,25 @@ export default {
     })
   },
 
+  // 添加98自动签到任务
+  add98PingTask(data) {
+    return request({
+      url: '/api1/task/addTangPing',
+      method: 'post',
+      data
+    })
+  },
+
+
+  // 删除自动评分任务
+  del98PingTask(data) {
+    return request({
+      url: '/api1/task/delTangPing',
+      method: 'delete',
+      data
+    })
+  },
+
   // 添加自动签到任务
   addSignTask(data) {
     return request({
@@ -70,6 +89,16 @@ export default {
   run98CommitTask(data) {
     return request({
       url: '/api1/task/runTangCommit',
+      method: 'post',
+      data
+    })
+  },
+
+
+  // 立即运行98评分任务
+  run98PingTask(data) {
+    return request({
+      url: '/api1/task/runTangPing',
       method: 'post',
       data
     })

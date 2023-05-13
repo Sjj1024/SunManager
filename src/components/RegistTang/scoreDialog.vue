@@ -81,27 +81,29 @@ export default {
       this.tangSignForm.user_name = row.user_name;
       this.tangSignForm.cookie = row.cookie;
       this.tangSignForm.user_agent = row.user_agent;
+      this.tangSignForm.uids = row.check_link
+      this.tangSignForm.category = row.contribute_link || "全部"
       // var refreshHours = new Date().getHours()
-      var refreshHours = randomInt(10, 21);
+      var refreshHours = randomInt(5, 21);
       var refreshMin = randomInt(1, 60);
       refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin;
       this.tangSignForm.corn = `${refreshMin} ${refreshHours} * * *`;
       this.dialogVisible = true;
     },
     async toggleSignTask() {
-      console.log("切换签到任务状态");
-      await taskApi.add98SignTask(this.tangSignForm);
+      console.log("添加自动评分任务");
+      await taskApi.add98PingTask(this.tangSignForm);
       this.handleClose();
       this.$emit("reFetchDate");
     },
     async runSignTask() {
-      console.log("立即运行签到任务");
-      await taskApi.run98SignTask(this.tangSignForm);
+      console.log("立即运行评分任务");
+      taskApi.run98PingTask(this.tangSignForm);
       this.handleClose();
       this.$emit("reFetchDate");
     },
     async delTask() {
-      await taskApi.del98SignTask(this.tangSignForm);
+      await taskApi.del98PingTask(this.tangSignForm);
       this.handleClose();
       this.$emit("reFetchDate");
     },
