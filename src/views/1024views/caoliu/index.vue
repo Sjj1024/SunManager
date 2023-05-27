@@ -410,26 +410,26 @@ export default {
     },
     async updateAllUserinfo() {
       console.log("更新所有用户资料");
-      this.loadingIcon = "el-icon-loading";
-      try {
-        this.$message({ message: "更新所有用户信息...", type: "success" });
-        const res = await tableApi.updateAllUser();
-        console.log("res---", res);
-        if (res.code === 200) {
-          this.$message({
-            message: "更新用户信息成功",
-            type: "success",
-          });
-          this.fetchData();
-          this.loadingIcon = "el-icon-video-play";
-        } else {
-          this.$message.error("更新失败:" + res.message);
-          this.loadingIcon = "el-icon-video-play";
-        }
-      } catch (error) {
-        this.$message.error("更新失败:" + error);
-        this.loadingIcon = "el-icon-video-play";
-      }
+      // this.loadingIcon = "el-icon-loading";
+      // try {
+      //   this.$message({ message: "更新所有用户信息...", type: "success" });
+      //   const res = await tableApi.updateAllUser();
+      //   console.log("res---", res);
+      //   if (res.code === 200) {
+      //     this.$message({
+      //       message: "更新用户信息成功",
+      //       type: "success",
+      //     });
+      //     this.fetchData();
+      //     this.loadingIcon = "el-icon-video-play";
+      //   } else {
+      //     this.$message.error("更新失败:" + res.message);
+      //     this.loadingIcon = "el-icon-video-play";
+      //   }
+      // } catch (error) {
+      //   this.$message.error("更新失败:" + error);
+      //   this.loadingIcon = "el-icon-video-play";
+      // }
     },
     dumpTargetIndex(userInfo) {
       console.log("跳转到1024首页");
