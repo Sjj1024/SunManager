@@ -80,9 +80,7 @@ export default {
       this.caoliuSignForm.cookie = row.cookie;
       this.caoliuSignForm.user_agent = row.user_agent;
       // var refreshHours = new Date().getHours()
-      var refreshMin = randomInt(1, 60);
-      refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin;
-      this.caoliuSignForm.corn = `${refreshMin} */1 * * *`;
+      this.refreshCorn()
       this.dialogVisible = true;
     },
     async toggleSignTask() {

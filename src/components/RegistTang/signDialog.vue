@@ -58,10 +58,7 @@ export default {
       this.tangSignForm.cookie = row.cookie;
       this.tangSignForm.user_agent = row.user_agent;
       // var refreshHours = new Date().getHours()
-      var refreshHours = randomInt(10, 21);
-      var refreshMin = randomInt(1, 60);
-      refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin
-      this.tangSignForm.corn = `${refreshMin} ${refreshHours} * * *`;
+      this.refreshCorn()
       this.dialogVisible = true;
     },
     async toggleSignTask() {
@@ -83,9 +80,10 @@ export default {
     },
     refreshCorn(){
       console.log("重新刷新Corn表达式时间");
-      var refreshHours = randomInt(10, 21);
+      var refreshHours = randomInt(5, 23);
       var refreshMin = randomInt(1, 60);
       console.log("refreshMin", refreshMin);
+      refreshHours = refreshHours < 10 ? `0${refreshHours}` : refreshHours
       refreshMin = refreshMin < 10 ? `0${refreshMin}` : refreshMin
       this.tangSignForm.corn = `${refreshMin} ${refreshHours} * * *`;
     }
