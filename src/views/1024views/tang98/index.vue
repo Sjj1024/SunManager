@@ -117,7 +117,10 @@
         <template slot-scope="scope">
           <span
             :class="{
-              waring: scope.row.grade === '禁止申诉',
+              waring:
+                scope.row.grade === '禁止申诉' ||
+                scope.row.grade === '禁止发言' ||
+                scope.row.grade === '禁止访问',
             }"
           >
             {{ scope.row.grade }} /
@@ -302,7 +305,7 @@
 <script>
 import tangApi from "@/api/tang";
 import RegistTang from "@/components/RegistTang/index.vue";
-import ScoreDialog from "@/components/RegistTang/scoreDialog.vue"
+import ScoreDialog from "@/components/RegistTang/scoreDialog.vue";
 import SignDialog from "@/components/RegistTang/signDialog.vue";
 import CommitDialog from "@/components/RegistTang/commitDialog.vue";
 import { saveStore, getStore } from "@/utils";
@@ -310,7 +313,7 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Table",
-  components: { RegistTang, SignDialog, CommitDialog, ScoreDialog},
+  components: { RegistTang, SignDialog, CommitDialog, ScoreDialog },
   data() {
     return {
       list: null,
@@ -333,7 +336,7 @@ export default {
   },
   created() {
     // 方式首页设置cookie不及时导致跳转首页失败
-    document.cookie = `tangUrl=${localStorage.getItem('tangUrl')}`
+    document.cookie = `tangUrl=${localStorage.getItem("tangUrl")}`;
     this.fetchData();
     window.addEventListener("keydown", this.handkeyCode, true); //开启监听键盘按下事件
     // 输出route 和 router对象
