@@ -88,7 +88,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="金钱" align="center" width="100">
+      <el-table-column label="金钱" align="center" width="130">
         <template slot-scope="scope">
           <span>{{ scope.row.weiwang }}(+{{ Math.floor(scope.row.money / 12) }})</span>
           <span v-if="scope.row.original" class="grow">
@@ -115,7 +115,7 @@
         <template slot-scope="scope">
           <span>{{ scope.row.money }}</span>
           <span class="grow">
-            可兑{{ Math.floor(scope.row.money / 12) }}金钱
+            ({{ Math.floor(scope.row.money / 12) }}金钱)
           </span>
         </template>
       </el-table-column>
