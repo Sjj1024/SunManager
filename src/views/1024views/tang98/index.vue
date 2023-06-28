@@ -90,7 +90,7 @@
       </el-table-column>
       <el-table-column label="金钱" align="center" width="130">
         <template slot-scope="scope">
-          <span>{{ scope.row.weiwang }}(+{{ Math.floor(scope.row.money / 12) }})</span>
+          <span>{{ scope.row.weiwang + Math.floor(scope.row.money / 12) }}(+{{ Math.floor(scope.row.money / 12) }})</span>
           <span v-if="scope.row.original" class="grow">
             <span>{{ scope.row.weiwang - scope.row.original.weiwang }}</span>
             <i class="el-icon-top"></i>
