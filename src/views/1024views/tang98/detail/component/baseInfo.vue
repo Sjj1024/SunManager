@@ -6,18 +6,15 @@
         <span>{{ base.user_name }}</span>
       </div>
       <div class="right">
-        <span class="lable">ID:</span>
-        <span>{{ base.id }}</span>
+        <span class="lable">用户ID:</span>
+        <span>{{ base.user_id }}</span>
       </div>
     </div>
     <div class="inline">
       <div class="left">
         <span class="lable">用户组:</span>
         <span>{{ base.grade }}</span>
-        <span
-          v-if="base.original"
-          class="original"
-        >
+        <span v-if="base.original" class="original">
           <span> / {{ base.original.dengji || base.original.grade }}</span>
         </span>
       </div>
@@ -30,10 +27,7 @@
       <div class="left">
         <span class="lable">金钱:</span>
         <span>{{ base.weiwang }}</span>
-        <span
-          v-if="base.original"
-          class="grow"
-        >
+        <span v-if="base.original" class="grow">
           <span>{{ base.weiwang - base.original.weiwang }}</span>
           <i class="el-icon-top"></i>
         </span>
@@ -41,10 +35,7 @@
       <div class="right">
         <span class="lable">发帖/评论:</span>
         <span>{{ base.article_number }}</span>
-        <span
-          v-if="base.original"
-          class="grow"
-        >
+        <span v-if="base.original" class="grow">
           <span v-if="base.original.fatie">&nbsp;{{ base.article_number - base.original.fatie }}</span>
           <span v-if="base.original.article_number">&nbsp;{{ base.article_number - base.original.article_number }}</span>
           <i class="el-icon-top"></i>
@@ -55,23 +46,17 @@
       <div class="left">
         <span class="lable">积分:</span>
         <span>{{ base.contribute }}</span>
-        <span
-          v-if="base.original"
-          class="grow"
-        >
+        <span v-if="base.original" class="grow">
           <span v-if="base.original.gongxian">{{ base.contribute - base.original.gongxian }}</span>
           <span v-if="base.original.contribute">{{ base.contribute - base.original.contribute }}</span>
           <i class="el-icon-top"></i>
         </span>
       </div>
       <div class="right">
-        <span class="lable">色币:</span>
+        <span class="lable">评分:</span>
         <span>{{ base.money }}</span>
-        <span
-          v-if="base.original"
-          class="grow"
-        >
-          <span>{{ base.money - base.original.money }}</span>
+        <span v-if="base.original" class="grow">
+          ({{ Math.floor(scope.row.money / 12) }}金钱)
           <i class="el-icon-top"></i>
         </span>
       </div>
@@ -89,125 +74,66 @@
     <div class="inline">
       <div class="left">
         <span class="lable">旧密码:</span>
-        <el-input
-          class="input-box"
-          v-model="base.password"
-          placeholder="请输入内容"
-        ></el-input>
+        <el-input class="input-box" v-model="base.password" placeholder="请输入内容"></el-input>
       </div>
       <div class="right">
         <span class="lable">新密码:</span>
-        <el-input
-          class="input-box"
-          v-model="base.new_passwd"
-          placeholder="请输入内容"
-        ></el-input>
+        <el-input class="input-box" v-model="base.new_passwd" placeholder="请输入内容"></el-input>
       </div>
     </div>
     <div class="inline">
       <div class="left">
         <span class="lable">租售信息:</span>
-        <el-input
-          class="input-box"
-          v-model="base.lease"
-          placeholder="请输入内容"
-        ></el-input>
+        <el-input class="input-box" v-model="base.lease" placeholder="请输入内容"></el-input>
       </div>
       <div class="right">
         <span class="lable">描述信息:</span>
-        <el-input
-          class="input-box"
-          v-model="base.desc"
-        >
+        <el-input class="input-box" v-model="base.desc">
         </el-input>
       </div>
     </div>
     <div class="inline">
       <div class="left">
         <span class="lable">账号量级:</span>
-        <el-select
-          v-model="base.important"
-          placeholder="请选择"
-          class="input-box"
-        >
-          <el-option
-            v-for="item in important"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
+        <el-select v-model="base.important" placeholder="请选择" class="input-box">
+          <el-option v-for="item in important" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </div>
       <div class="right">
         <span class="lable">两步认证:</span>
-        <el-input
-          class="input-box"
-          v-model="base.authentication"
-          placeholder="请输入内容"
-        ></el-input>
+        <el-input class="input-box" v-model="base.authentication" placeholder="请输入内容"></el-input>
       </div>
     </div>
     <div class="inline more-height">
       <div class="left">
         <span class="lable">可否邀请:</span>
         <span style="margin-right:10px;">{{ base.able_invate }}</span>
-        <el-button
-          v-if="base.able_invate === '可以购买'"
-          type="primary"
-          size="small"
-          @click="payInvcode"
-        >购买邀请码</el-button>
+        <el-button v-if="base.able_invate === '可以购买'" type="primary" size="small" @click="payInvcode">购买邀请码</el-button>
       </div>
       <div class="right">
         <span class="lable">Cookie:</span>
-        <el-input
-          type="textarea"
-          :rows="2"
-          v-model="base.cookie"
-          class="more-box"
-        >
+        <el-input type="textarea" :rows="2" v-model="base.cookie" class="more-box">
         </el-input>
       </div>
     </div>
     <div class="inline more-height">
       <div class="left">
         <span class="lable">已被删除:</span>
-        <el-switch
-          v-model="base.isDeleted"
-          inactive-color="#13ce66"
-          active-color="#ff4949"
-        >
+        <el-switch v-model="base.isDeleted" inactive-color="#13ce66" active-color="#ff4949">
         </el-switch>
       </div>
       <div class="right">
         <span class="lable">UserAgent:</span>
-        <el-input
-          type="textarea"
-          :rows="2"
-          v-model="base.user_agent"
-          class="more-box"
-        >
+        <el-input type="textarea" :rows="2" v-model="base.user_agent" class="more-box">
         </el-input>
       </div>
     </div>
     <div class="inline">
-      <el-button
-        type="primary"
-        @click="dumpTargetIndex"
-      >跳转首页</el-button>
-      <el-button
-        type="primary"
-        @click="getInfoBtn"
-      >更新信息</el-button>
-      <el-button
-        type="primary"
-        @click="openIndex"
-      >个人主页</el-button>
-      <el-button
-        type="primary"
-        @click="save"
-      >保存信息</el-button>
+      <el-button type="primary" @click="dumpTargetIndex">跳转首页</el-button>
+      <el-button type="primary" @click="getInfoBtn">更新信息</el-button>
+      <el-button type="primary" @click="openIndex">个人主页</el-button>
+      <el-button type="primary" @click="save">保存信息</el-button>
     </div>
   </div>
 </template>
@@ -378,6 +304,7 @@ export default {
 @import '~@/styles/variables.scss';
 
 .base-box {
+
   // height: 2000px;
   .grow {
     margin-left: 5px;
@@ -397,17 +324,20 @@ export default {
     display: flex;
     flex-direction: row;
     margin-bottom: 10px;
+
     .left {
       width: 40%;
       height: 32px;
       line-height: 32px;
     }
+
     .right {
       width: 60%;
       height: 32px;
       line-height: 32px;
       display: flex;
     }
+
     .lable {
       display: inline-block;
       min-width: 70px;
@@ -416,22 +346,27 @@ export default {
       line-height: 32px;
       margin-right: 10px;
     }
+
     .more-text {
       overflow-wrap: anywhere;
       line-height: normal;
     }
+
     .more-box {
       font-size: 12px;
     }
+
     .input-box {
       width: 400px;
       padding: 5px;
+
       ::v-deep .el-input__inner {
         height: $inputBox;
         line-height: $inputBox;
       }
     }
   }
+
   .more-height {
     height: 55px;
   }
