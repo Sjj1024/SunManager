@@ -56,7 +56,7 @@
         <span class="lable">评分:</span>
         <span>{{ base.money }}</span>
         <span v-if="base.original" class="grow">
-          ({{ Math.floor(scope.row.money / 12) }}金钱)
+          ({{ Math.floor(base.money / 12) }}金钱)
           <i class="el-icon-top"></i>
         </span>
       </div>
