@@ -1,27 +1,11 @@
 <template>
   <div class="app-container">
-    <el-form
-      :inline="true"
-      :model="formInline98"
-      size="medium"
-      ref="searchForm"
-      class="demo-form-inline"
-    >
+    <el-form :inline="true" :model="formInline98" size="medium" ref="searchForm" class="demo-form-inline">
       <el-form-item label="用户名" prop="username">
-        <el-input
-          class="select-u"
-          v-model="formInline98.username"
-          placeholder="用户名"
-          clearable
-        />
+        <el-input class="select-u" v-model="formInline98.username" placeholder="用户名" clearable />
       </el-form-item>
       <el-form-item label="用户组" prop="level">
-        <el-select
-          v-model="formInline98.level"
-          placeholder="用户组"
-          class="select-w"
-          clearable
-        >
+        <el-select v-model="formInline98.level" placeholder="用户组" class="select-w" clearable>
           <el-option label="Lv1初涉江湖" value="Lv1 初涉江湖" />
           <el-option label="Lv2无名之辈" value="Lv2 无名之辈" />
           <el-option label="Lv3江湖小虾" value="Lv3 江湖小虾" />
@@ -40,21 +24,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="金钱" prop="weiwang">
-        <el-input
-          class="select-w"
-          v-model.number="formInline98.weiwang"
-          placeholder="金钱"
-          clearable
-        />
+        <el-input class="select-w" v-model.number="formInline98.weiwang" placeholder="金钱" clearable />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select
-          class="select-w"
-          v-model="formInline98.status"
-          placeholder="状态"
-          @change=""
-          clearable
-        >
+        <el-select class="select-w" v-model="formInline98.status" placeholder="状态" @change="" clearable>
           <el-option label="1级账号" value="1" />
           <el-option label="2级账号" value="2" />
           <el-option label="3级账号" value="3" />
@@ -66,46 +39,24 @@
         </el-select>
       </el-form-item>
       <el-form-item label="可产邀请码" prop="yaoqing">
-        <el-select
-          class="select-w"
-          v-model="formInline98.yaoqing"
-          placeholder="可产"
-          clearable
-        >
+        <el-select class="select-w" v-model="formInline98.yaoqing" placeholder="可产" clearable>
           <el-option label="可以" value="可以" />
           <el-option label="金币不足" value="金币不足" />
           <el-option label="等级不足" value="等级不足" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size="medium" @click="onSubmit"
-          >查询</el-button
-        >
+        <el-button type="primary" size="medium" @click="onSubmit">查询</el-button>
         <el-button size="medium" @click="resetForm">重置</el-button>
-        <el-button
-          type="primary"
-          :icon="loadingIcon"
-          @click="updateAllUserinfo"
-        ></el-button>
+        <el-button type="primary" :icon="loadingIcon" @click="updateAllUserinfo"></el-button>
       </el-form-item>
       <el-form-item class="add-btn">
-        <el-button
-          class="export-btn"
-          size="medium"
-          icon="el-icon-plus"
-          type="primary"
-          @click="addUser"
-        >
+        <el-button class="export-btn" size="medium" icon="el-icon-plus" type="primary" @click="addUser">
           添加用户
         </el-button>
       </el-form-item>
     </el-form>
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      class="table-box"
-      element-loading-text="Loading"
-    >
+    <el-table v-loading="listLoading" :data="list" class="table-box" element-loading-text="Loading">
       <el-table-column align="center" label="用户名">
         <template slot-scope="scope">
           <span class="username" @click="detailBtn(scope.row.id)">{{
@@ -115,35 +66,31 @@
       </el-table-column>
       <el-table-column align="center" width="200" label="用户组 / 原组 / 量级">
         <template slot-scope="scope">
-          <span
-            :class="{
-              waring:
-                scope.row.grade === '禁止申诉' ||
-                scope.row.grade === '禁止发言' ||
-                scope.row.grade === '禁止访问',
-            }"
-          >
+          <span :class="{
+                waring:
+                  scope.row.grade === '禁止申诉' ||
+                  scope.row.grade === '禁止发言' ||
+                  scope.row.grade === '禁止访问',
+              }">
             {{ scope.row.grade }} /
           </span>
           <span v-if="scope.row.original" class="original">
             {{ scope.row.original.dengji || scope.row.original.grade }}
           </span>
-          <span
-            :class="{
-              one: scope.row.important === 1,
-              two: scope.row.important === 2,
-              three: scope.row.important === 3,
-              fore: scope.row.important === 4,
-              five: scope.row.important === 5,
-            }"
-          >
+          <span :class="{
+            one: scope.row.important === 1,
+            two: scope.row.important === 2,
+            three: scope.row.important === 3,
+            fore: scope.row.important === 4,
+            five: scope.row.important === 5,
+          }">
             {{ scope.row.important }} 级
           </span>
         </template>
       </el-table-column>
       <el-table-column label="金钱" align="center" width="100">
         <template slot-scope="scope">
-          <span>{{ scope.row.weiwang }}</span>
+          <span>{{ scope.row.weiwang }}(+{{ Math.floor(scope.row.money / 12) }})</span>
           <span v-if="scope.row.original" class="grow">
             <span>{{ scope.row.weiwang - scope.row.original.weiwang }}</span>
             <i class="el-icon-top"></i>
@@ -164,6 +111,14 @@
           </span>
         </template>
       </el-table-column>
+      <el-table-column label="评分" align="center" width="128">
+        <template slot-scope="scope">
+          <span>{{ scope.row.money }}</span>
+          <span class="grow">
+            可兑{{ Math.floor(scope.row.money / 12) }}金钱
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="可产邀请码" width="120">
         <template slot-scope="scope">
           {{ scope.row.able_invate || "不可邀请" }}
@@ -171,36 +126,27 @@
       </el-table-column>
       <el-table-column align="center" label="自动升级/签到/评分" width="160">
         <template slot-scope="scope">
-          <span
-            :class="{
-              active: scope.row.task_status === '已开启',
-              disactive:
-                scope.row.task_status === '未开启' || !scope.row.task_status,
-            }"
-            @click="toggleCommitTask(scope.row)"
-          >
+          <span :class="{
+            active: scope.row.task_status === '已开启',
+            disactive:
+              scope.row.task_status === '未开启' || !scope.row.task_status,
+          }" @click="toggleCommitTask(scope.row)">
             {{ scope.row.task_status || "未开启" }}
           </span>
-          <span
-            :class="{
-              active: scope.row.sign_task_status === '已开启',
-              disactive:
-                scope.row.sign_task_status === '未开启' ||
-                !scope.row.sign_task_status,
-            }"
-            @click="toggleSignTask(scope.row)"
-          >
+          <span :class="{
+            active: scope.row.sign_task_status === '已开启',
+            disactive:
+              scope.row.sign_task_status === '未开启' ||
+              !scope.row.sign_task_status,
+          }" @click="toggleSignTask(scope.row)">
             {{ scope.row.sign_task_status || "未开启" }}
           </span>
           <!-- 评分 -->
-          <span
-            :class="{
-              active: scope.row.check_status === '已开启',
-              disactive:
-                scope.row.check_status === '未开启' || !scope.row.check_status,
-            }"
-            @click="toggleCheckTask(scope.row)"
-          >
+          <span :class="{
+            active: scope.row.check_status === '已开启',
+            disactive:
+              scope.row.check_status === '未开启' || !scope.row.check_status,
+          }" @click="toggleCheckTask(scope.row)">
             {{ scope.row.check_status || "未开启" }}
           </span>
         </template>
@@ -212,30 +158,19 @@
             class="el-icon-refresh refresh-info"
             @click="confirmLog(getInfoBtn, scope.row)"
           ></i> -->
-          <span class="updateBtn" @click="confirmLog(getInfoBtn, scope.row)"
-            >更新</span
-          >
+          <span class="updateBtn" @click="confirmLog(getInfoBtn, scope.row)">更新</span>
           |
-          <span class="updateBtn" @click="dumpTargetIndex(scope.row)"
-            >首页</span
-          >
+          <span class="updateBtn" @click="dumpTargetIndex(scope.row)">首页</span>
         </template>
       </el-table-column>
       <el-table-column label="描述信息" align="center">
         <template slot-scope="scope">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="scope.row.desc + scope.row.regist_time"
-            placement="right"
-          >
+          <el-tooltip class="item" effect="dark" :content="scope.row.desc + scope.row.regist_time" placement="right">
             <el-button class="desc-btn">
-              <span
-                :class="{
-                  'desc-box': true,
-                  waring: scope.row.desc.indexOf('永久禁言') !== -1,
-                }"
-              >
+              <span :class="{
+                'desc-box': true,
+                waring: scope.row.desc.indexOf('永久禁言') !== -1,
+              }">
                 {{ scope.row.regist_time }}
                 {{ scope.row.desc || scope.row.user_name }}
               </span>
@@ -279,16 +214,9 @@
     </el-table>
     <!-- 分页组件 -->
     <div class="page-box">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :page-sizes="[12, 24, 36, 48, 60, 72]"
-        :current-page="pageNum"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        :pager-count="13"
-        :total="pageTotal"
-      >
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :page-sizes="[12, 24, 36, 48, 60, 72]" :current-page="pageNum" background
+        layout="total, sizes, prev, pager, next, jumper" :pager-count="13" :total="pageTotal">
       </el-pagination>
     </div>
     <!-- 添加用户 -->
@@ -349,10 +277,10 @@ export default {
       const data = dataPage
         ? { ...dataPage, ...this.formInline98 }
         : {
-            pageNum: getStore("pageNum98") || 1,
-            pageSize: this.pageSize,
-            ...this.formInline98,
-          };
+          pageNum: getStore("pageNum98") || 1,
+          pageSize: this.pageSize,
+          ...this.formInline98,
+        };
       console.log("发送的参数是", data);
       tangApi.getList(data).then((response) => {
         this.list = response.data.items;
@@ -666,6 +594,7 @@ export default {
   height: 100vh;
   // overflow: auto;
   overflow-y: scroll;
+
   .add-btn {
     float: right;
   }
@@ -685,9 +614,11 @@ export default {
   ::v-deep .el-dialog__footer {
     text-align: center;
   }
+
   .select-w {
     width: 110px;
   }
+
   .select-u {
     width: 150px;
   }
@@ -760,6 +691,7 @@ export default {
   cursor: pointer;
   color: #409eff;
 }
+
 .el-icon-arrow-down {
   font-size: 12px;
 }
